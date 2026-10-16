@@ -368,12 +368,12 @@ table.t tr.tot td{font-weight:800}
 <script>
 /* ========== EDIT THESE PLACEHOLDERS ========== */
 const CONFIG = {
-  email: "[bizguard@gmail.com]",
-  messenger: "[Biz Guard]",
+  email: "[EMAIL ADDRESS]",
+  messenger: "[PAGE NAME]",
   shop: "[SHOP NAME]",
   updated: "[DATE]",
-  place: "[Rizal]",
-  school: "[Far Eastern University]",
+  place: "[BARANGAY / CITY]",
+  school: "[SCHOOL NAME]",
   admin: "BizGuard"
 };
 /* ============================================ */
@@ -666,7 +666,7 @@ function dashBodyLive(r, d) {
   <div class="dash-main"><div class="card chart-card"><div class="chart-top"><h2>Sales by ${wk ? 'week' : 'month'}</h2><small>Completed orders under each ${wk ? 'week' : 'month'}</small></div><div class="chart-scroll"><div class="bars" role="img" aria-label="Sales chart">${bars}</div></div></div>
   <aside class="attn"><h2>Needs your attention</h2>${al.length ? al.map(a => `<div class="it"><b>${a[0]}</b><p>${a[1]}</p><a href="${a[3]}">${a[2]} ${ic('arrow')}</a></div>`).join('') : '<div class="it"><b>Nothing needs your attention right now</b><p>Check again after your next report is loaded.</p></div>'}</aside></div>
   <div class="dash-bottom">
-  <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Best sellers</h2><small style="color:var(--muted)">Items sold</small></div><div class="rank">${best.length ? best.map((b, i) => `<div class="r"><div class="rt"><span>${i + 1} · ${esc(b[0])}</span><span>${b[1]}</span></div><div class="track"><i style="width:${(b[1] / bm * 100).toFixed(1)}%"></i></div></div>`).join('') : '<p class="hint">Your sales report needs an item or product column to show best sellers.</p>'}</div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Best sellers</h2><small style="color:var(--muted)">Items sold</small></div><div class="rank">${best.length ? best.map((b, i) => `<div class="r"><div class="rt"><span>${i + 1} · ${esc(b[0])}</span><span>${b[1]}</span></div><div class="track"><i style="width:${(b[1] / bm * 100).toFixed(1)}%"></i></div></div>`).join('') : '<p class="hint">Best sellers need a report that lists item names. The GrabMerchant transaction report does not include them.</p>'}</div></div>
   <div class="card"><h2>Grab ads</h2>${aS || aO ? `<div class="ads3"><div><small>Spent</small><b>${pr(aS)}</b></div><div><small>Orders from ads</small><b>${aO}</b></div><div><small>Cost per order</small><b>${aO ? pr(aS / aO) : '—'}</b></div></div>` : '<p class="hint" style="margin:12px 0">No Grab ads report loaded yet.</p>'}${cL && cP ? `<small style="color:var(--muted)">Cost per order from ads</small><div class="cmp" style="margin-top:12px"><div class="ct"><span>${nm(prev)}</span><span>${pr(cP)}</span></div><div class="track"><i style="width:${(cP / cm * 100).toFixed(0)}%"></i></div></div><div class="cmp"><div class="ct"><span style="font-weight:800">${nm(last)}</span><span class="${cL > cP ? 'red' : ''}">${pr(cL)} ${cL > cP ? '▲' : ''}</span></div><div class="track"><i class="hi" style="width:${(cL / cm * 100).toFixed(0)}%"></i></div></div>` : ''}<a class="more" href="#/roi">Open the ROI Calculator ${ic('arrow')}</a></div>
   <div class="card"><h2>Cancellations &amp; refunds</h2>${prev ? `<table class="t"><thead><tr><th scope="col">Type</th><th scope="col">${nm(prev)}</th><th scope="col">${nm(last)}</th><th scope="col">Change</th></tr></thead><tbody><tr><td>Canceled orders</td><td>${cp}</td><td><b>${cl}</b></td><td>${dl(cl, cp)}</td></tr><tr><td>Refunds</td><td>${rq}</td><td><b>${rl}</b></td><td>${dl(rl, rq)}</td></tr><tr class="tot"><td>Total</td><td>${cp + rq}</td><td>${cl + rl}</td><td>${dl(cl + rl, cp + rq)}</td></tr></tbody></table>` : '<p class="hint" style="margin-top:12px">Needs at least two months of data.</p>'}<a class="more" href="#/replies?issue=other">Reply to an upset customer ${ic('arrow')}</a></div></div>
   <div class="note-bar"><b>Need newer numbers?</b> &nbsp;<a class="link-u" href="#/upload">Upload your latest Grab report</a>, or send it to the BizGuard team at ${esc(CONFIG.email)} or on Messenger: ${esc(CONFIG.messenger)}.</div>`;
@@ -1002,10 +1002,15 @@ function parseCSV(t) {
   return rows;
 }
 function analyze(rows, type, name) {
+  let assumed = false;
+  if (rows.length && /^\d/.test(String(rows[0][0]).trim()) && !isNaN(parseDate(rows[0][0]))) {
+    const hd = type === 'ads' ? ['Date', 'Campaign', 'Spend', 'Orders'] : ['Date', 'Order ID', 'Status', 'Items', 'Amount'];
+    if (rows[0].length === hd.length) { rows = [hd, ...rows]; assumed = true; }
+  }
   if (rows.length < 2) return { error: 'This file has no data rows. Check that it is the right report.' };
   const head = rows[0].map(h => h.trim().toLowerCase()), data = rows.slice(1);
-  let di = head.findIndex(h => /date/.test(h)); if (di < 0) di = head.findIndex(h => /time|created|completed/.test(h));
-  const ai = (() => { for (const w of (type === 'ads' ? ['spend', 'spent', 'cost', 'amount'] : ['total', 'amount', 'sales', 'subtotal', 'price', 'fare'])) { const i = head.findIndex(h => h.includes(w)); if (i >= 0) return i; } return -1; })();
+  let di = head.findIndex(h => /created/.test(h)); if (di < 0) di = head.findIndex(h => /date|time|completed/.test(h) && !/transfer|updat|settle/.test(h));
+  const ai = (() => { for (const w of (type === 'ads' ? ['spend', 'spent', 'cost', 'amount'] : ['net sales', 'amount', 'total', 'sales', 'subtotal', 'price', 'fare'])) { const i = head.findIndex(h => h.includes(w)); if (i >= 0) return i; } return -1; })();
   const dayFirst = di >= 0 && data.some(r => { const m = String(r[di]).match(/^\s*(\d{1,2})[\/\-.](\d{1,2})[\/\-.]\d{2,4}/); return m && +m[1] > 12; });
   const missing = [], si0 = head.findIndex(h => /status|state/.test(h));
   if (ai >= 0) data.forEach((r, i) => { if (num(r[ai] || '') === null && !(si0 >= 0 && /cancel|void|fail|reject|refund|return/i.test(r[si0] || ''))) missing.push({ row: i + 2, text: r.slice(0, 4).join(', ') + ' (no amount)' }); });
@@ -1015,23 +1020,39 @@ function analyze(rows, type, name) {
     const f = (t, y) => new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric', ...(y ? { year: 'numeric' } : {}) });
     range = `${f(mn)} – ${f(mx, true)}`;
   }
-  return { name, range, count: data.length, missing, skipped: false, warn: ai < 0 ? "We couldn't find an amount column. Check the column names in the file." : di < 0 ? "We couldn't find a date column. Check the column names in the file." : null, type, agg: di >= 0 && ai >= 0 ? aggregate(data, head, type, di, ai, dayFirst) : null };
+  return { name, range, count: data.length, missing, skipped: false, warn: assumed ? 'No header row found, so we assumed these columns: ' + (type === 'ads' ? 'Date, Campaign, Spend, Orders' : 'Date, Order ID, Status, Items, Amount') + '.' : ai < 0 ? "We couldn't find an amount column. Check the column names in the file." : di < 0 ? "We couldn't find a date column. Check the column names in the file." : null, type, agg: di >= 0 && ai >= 0 ? aggregate(data, head, type, di, ai, dayFirst) : null };
 }
-function aggregate(data, head, type, di, ai, df) {
-  const si = head.findIndex(h => /status|state/.test(h)), ii = head.findIndex(h => /item|menu|product/.test(h) && !/price|amount|total|cost|qty|quantity|count|id/.test(h)), oi = head.findIndex(h => /orders|conversions/.test(h));
+function rollup(ords) {
   const A = { m: {}, w: {}, it: {}, c: {}, r: {} };
-  data.forEach(r => {
-    const t = parseDate(r[di], df); if (isNaN(t)) return;
-    const dt = new Date(t), k = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0'), a = num(r[ai] || ''), st = si >= 0 ? (r[si] || '').toLowerCase() : '';
-    if (type === 'ads') { if (a === null) return; const x = A.m[k] = A.m[k] || [0, 0]; x[0] += a; x[1] += oi >= 0 ? (num(r[oi]) || 0) : 0; return; }
-    if (/cancel|void|fail|reject/.test(st)) { A.c[k] = (A.c[k] || 0) + 1; return; }
-    if (/refund|return/.test(st)) { A.r[k] = (A.r[k] || 0) + 1; return; }
-    if (a === null) return;
-    const x = A.m[k] = A.m[k] || [0, 0]; x[0] += a; x[1]++;
-    const w = A.w[k] = A.w[k] || [[0, 0], [0, 0], [0, 0], [0, 0]], b = w[Math.min(3, Math.floor((dt.getDate() - 1) / 7))]; b[0] += a; b[1]++;
-    if (ii >= 0) { const it = A.it[k] = A.it[k] || {}; (r[ii] || '').split(/[;|]/).forEach(p => { const n = p.replace(/\s*x\s*\d+\s*$/i, '').trim(), q = +((p.match(/x\s*(\d+)\s*$/i) || [])[1] || 1); if (n) it[n] = (it[n] || 0) + q; }); }
+  ords.forEach(([id, d, st, a, it]) => {
+    const k = d.slice(0, 7), day = +d.slice(8, 10);
+    if (st === 'x') { A.c[k] = (A.c[k] || 0) + 1; return; }
+    if (st === 'r') { A.r[k] = (A.r[k] || 0) + 1; return; }
+    const m = A.m[k] = A.m[k] || [0, 0]; m[0] += a; m[1]++;
+    const w = A.w[k] = A.w[k] || [[0, 0], [0, 0], [0, 0], [0, 0]], b = w[Math.min(3, Math.floor((day - 1) / 7))]; b[0] += a; b[1]++;
+    if (it) { const t = A.it[k] = A.it[k] || {}; it.split(/[;|]/).forEach(p => { const n = p.replace(/\s*x\s*\d+\s*$/i, '').trim(), q = +((p.match(/x\s*(\d+)\s*$/i) || [])[1] || 1); if (n) t[n] = (t[n] || 0) + q; }); }
   });
   return A;
+}
+function aggregate(data, head, type, di, ai, df) {
+  const f = (re, ex) => head.findIndex(h => re.test(h) && !(ex && ex.test(h)));
+  const si = f(/status|state/), ii = f(/item|menu|product/, /price|amount|total|cost|qty|quantity|count|id|refund/), oi = f(/orders|conversions/), ti = f(/^type$/), ci = f(/cancellation reason/), ri = f(/reason for refund/);
+  const idi = f(/short order id/) >= 0 ? f(/short order id/) : f(/order id/) >= 0 ? f(/order id/) : f(/transaction id/);
+  const ord = [], seen = {}, am = {};
+  data.forEach(r => {
+    const t = parseDate(r[di], df); if (isNaN(t)) return;
+    const dt = new Date(t), k = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0'), a = num(r[ai] || '');
+    if (type === 'ads') { if (a === null) return; const x = am[k] = am[k] || [0, 0]; x[0] += a; x[1] += oi >= 0 ? (num(r[oi]) || 0) : 0; return; }
+    const st = si >= 0 ? (r[si] || '').toLowerCase() : '', ty = ti >= 0 ? (r[ti] || '').toLowerCase().trim() : '';
+    const code = /cancel|void|fail|reject/.test(st) || (ci >= 0 && (r[ci] || '').trim()) ? 'x' : /refund|return/.test(st) || (ri >= 0 && (r[ri] || '').trim()) ? 'r' : 'c';
+    if (ty && !/grabfood|grabmart|order/.test(ty) && code === 'c') return;
+    if (code === 'c' && a === null) return;
+    const iso = k + '-' + String(dt.getDate()).padStart(2, '0'), items = ii >= 0 ? (r[ii] || '') : '';
+    let id = idi >= 0 && (r[idi] || '').trim() ? r[idi].trim() : null;
+    if (!id) { const b = iso + '|' + a + '|' + items; seen[b] = (seen[b] || 0) + 1; id = b + '|' + seen[b]; }
+    ord.push([id, iso, code, a || 0, items]);
+  });
+  return type === 'ads' ? { m: am, w: {}, it: {}, c: {}, r: {}, ord: [] } : { ...rollup(ord), ord };
 }
 function adminPanel() {
   const biz = store.get('bg_biz', BIZ0), b = biz.find(x => x.id === ad.sel), f = ad.file, el = $('#lpanel');
@@ -1076,7 +1097,8 @@ function readAny(file) {
       try {
         if (typeof XLSX === 'undefined') throw 0;
         const wb = XLSX.read(new Uint8Array(r.result), { type: 'array', cellDates: true, dateNF: 'yyyy-mm-dd' });
-        ok(XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]], { dateNF: 'yyyy-mm-dd' }));
+        const sn = wb.SheetNames.find(n => /transaction/i.test(n)) || wb.SheetNames.find(n => { const c = XLSX.utils.sheet_to_csv(wb.Sheets[n]).split('\n')[0].toLowerCase(); return /date|created/.test(c) && /amount|total|sales/.test(c); }) || wb.SheetNames[0];
+        ok(XLSX.utils.sheet_to_csv(wb.Sheets[sn], { dateNF: 'yyyy-mm-dd' }));
       } catch (e) { no(new Error('We could not open that Excel file. Save it as CSV and try again.')); }
     };
     x ? r.readAsArrayBuffer(file) : r.readAsText(file);

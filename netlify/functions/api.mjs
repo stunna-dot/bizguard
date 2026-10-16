@@ -11,6 +11,19 @@ const hash = (pw, salt) => crypto.scryptSync(pw, salt, 32).toString('hex');
 const pub = x => { const { salt, hash: h, ...r } = x; return r; };
 const today = () => new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'Asia/Manila' });
 
+const rollup = ords => {
+  const A = { m: {}, w: {}, it: {}, c: {}, r: {} };
+  for (const [d, st, a, it] of Object.values(ords)) {
+    const k = d.slice(0, 7), day = +d.slice(8, 10);
+    if (st === 'x') { A.c[k] = (A.c[k] || 0) + 1; continue; }
+    if (st === 'r') { A.r[k] = (A.r[k] || 0) + 1; continue; }
+    const m = A.m[k] = A.m[k] || [0, 0]; m[0] += a; m[1]++;
+    const w = A.w[k] = A.w[k] || [[0, 0], [0, 0], [0, 0], [0, 0]], b = w[Math.min(3, Math.floor((day - 1) / 7))]; b[0] += a; b[1]++;
+    if (it) { const t = A.it[k] = A.it[k] || {}; it.split(/[;|]/).forEach(p => { const n = p.replace(/\s*x\s*\d+\s*$/i, '').trim(), q = +((p.match(/x\s*(\d+)\s*$/i) || [])[1] || 1); if (n) t[n] = (t[n] || 0) + q; }); }
+  }
+  return A;
+};
+
 export const make = getS => async req => {
   if (req.method !== 'POST') return J(405, { error: 'POST only' });
   const store = getS(), b = await req.json().catch(() => ({}));
@@ -66,6 +79,17 @@ export const make = getS => async req => {
   if (b.op === 'publish') {
     const A = b.agg; if (!A || !A.m) return J(400, { error: 'No data to publish.' });
     const d = x.data = x.data || {};
+    if (b.type !== 'ads' && Array.isArray(A.ord)) {
+      if (!A.ord.length || A.ord.length > 100000) return J(400, { error: 'No orders found in this file.' });
+      const k = 'orders:' + x.id, all = (await store.get(k, { type: 'json' })) || {};
+      for (const o of A.ord) {
+        if (!Array.isArray(o) || typeof o[0] !== 'string' || !/^\d{4}-\d\d-\d\d$/.test(o[1]) || !['c', 'x', 'r'].includes(o[2]) || !Number.isFinite(+o[3])) continue;
+        all[o[0].slice(0, 80)] = [o[1], o[2], +o[3], String(o[4] || '').slice(0, 300)];
+      }
+      await store.setJSON(k, all);
+      const R = rollup(all); d.sales = { months: R.m, weeks: R.w }; d.items = R.it; d.canc = R.c; d.ref = R.r;
+      x.last = today(); x.lastAt = new Date().toISOString(); x.status = 'ok'; await save(); return J(200, { ok: true, orders: Object.keys(all).length });
+    }
     if (b.type === 'ads') d.ads = { ...d.ads, ...A.m };
     else {
       d.sales = { months: { ...(d.sales && d.sales.months), ...A.m }, weeks: { ...(d.sales && d.sales.weeks), ...A.w } };
@@ -94,7 +118,7 @@ export const make = getS => async req => {
     if (String(b.pw || '').length < 6) return J(400, { error: 'The password needs at least 6 characters.' });
     delete x.resetReq; x.salt = crypto.randomBytes(8).toString('hex'); x.hash = hash(String(b.pw), x.salt); await save(); return J(200, { ok: true });
   }
-  if (b.op === 'del') { list.splice(list.indexOf(x), 1); await save(); return J(200, { ok: true }); }
+  if (b.op === 'del') { list.splice(list.indexOf(x), 1); await save(); try { await store.delete('orders:' + x.id); await store.delete('saved:' + x.id); } catch {} return J(200, { ok: true }); }
   return J(400, { error: 'Unknown request.' });
 };
 export default make(() => getStore('bizguard'));
