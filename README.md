@@ -51,6 +51,10 @@ Saved campaigns and creator checks are stored on the owner's account, so they ap
 
 Several files can be dropped or chosen at once on the Upload report page. Files that cannot be read are marked and skipped; the rest go through with one click. All files in one drop must be the same report type.
 
+## Sales vs ads reports
+The site cannot choose the report type for you: you pick Sales transactions or Grab ads report in step 1. It does check the file, though. A file with Order ID / Net Sales columns is refused as an ads report, and a file with Spend / Campaign columns is refused as a sales report.
+Uploaded the wrong thing? Owners can use Remove Grab ads data or Delete all my data on the Upload report page. The admin has Clear data for each business.
+
 ## Real GrabMerchant reports
 The GrabMerchant .xlsx report has several sheets (Summary, Transactions, Transfers, Guide). BizGuard reads the Transactions sheet.
 Sales use the Net Sales column (the sale amount before Grab's commission), dates come from Created On, and orders are told apart by Short Order ID.

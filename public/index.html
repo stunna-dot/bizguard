@@ -1010,8 +1010,11 @@ function analyze(rows, type, name) {
   if (rows.length < 2) return { error: 'This file has no data rows. Check that it is the right report.' };
   const head = rows[0].map(h => h.trim().toLowerCase()), data = rows.slice(1);
   let di = head.findIndex(h => /created/.test(h)); if (di < 0) di = head.findIndex(h => /date|time|completed/.test(h) && !/transfer|updat|settle/.test(h));
-  const ai = (() => { for (const w of (type === 'ads' ? ['spend', 'spent', 'cost', 'amount'] : ['net sales', 'amount', 'total', 'sales', 'subtotal', 'price', 'fare'])) { const i = head.findIndex(h => h.includes(w)); if (i >= 0) return i; } return -1; })();
+  const ai = (() => { for (const w of (type === 'ads' ? ['spend', 'spent', 'cost', 'budget'] : ['net sales', 'amount', 'total', 'sales', 'subtotal', 'price', 'fare'])) { const i = head.findIndex(h => h.includes(w)); if (i >= 0) return i; } return -1; })();
   const dayFirst = di >= 0 && data.some(r => { const m = String(r[di]).match(/^\s*(\d{1,2})[\/\-.](\d{1,2})[\/\-.]\d{2,4}/); return m && +m[1] > 12; });
+  const looksSales = head.some(h => /order id|transaction id|net sales/.test(h)), looksAds = !looksSales && head.some(h => /spend|impression|click|campaign|budget/.test(h));
+  if (type === 'ads' && looksSales) return { error: 'This looks like a Sales transactions report, not a Grab ads report. Choose "Sales transactions" and upload it again.' };
+  if (type === 'sales' && looksAds) return { error: 'This looks like a Grab ads report, not a sales report. Choose "Grab ads report" and upload it again.' };
   const missing = [], si0 = head.findIndex(h => /status|state/.test(h));
   if (ai >= 0) data.forEach((r, i) => { if (num(r[ai] || '') === null && !(si0 >= 0 && /cancel|void|fail|reject|refund|return/i.test(r[si0] || ''))) missing.push({ row: i + 2, text: r.slice(0, 4).join(', ') + ' (no amount)' }); });
   let range = 'Dates not found', mn = Infinity, mx = -Infinity;
@@ -1081,7 +1084,7 @@ function adminPanel() {
   <button class="btn btn-green btn-block" data-action="ad-publish" ${f ? '' : 'disabled'}>Publish to owner's dashboard</button>
   <button class="btn btn-outline btn-block" style="margin-top:10px" data-action="ad-preview">Preview dashboard</button>
   <p class="hint" style="margin-top:12px">The owner sees the new data as soon as you publish.</p>
-  <div class="row-btns" style="margin-top:14px"><button class="btn btn-outline btn-sm" data-action="ad-edit">Edit business</button><button class="btn btn-outline btn-sm" data-action="ad-reset">Reset password</button><button class="btn btn-outline btn-sm" data-action="ad-del">Delete business</button></div>`;
+  <div class="row-btns" style="margin-top:14px"><button class="btn btn-outline btn-sm" data-action="ad-clear">Clear data</button><button class="btn btn-outline btn-sm" data-action="ad-edit">Edit business</button><button class="btn btn-outline btn-sm" data-action="ad-reset">Reset password</button><button class="btn btn-outline btn-sm" data-action="ad-del">Delete business</button></div>`;
   const fin = $('#fin'), drop = $('#drop');
   fin.addEventListener('change', () => readFile(fin.files[0]));
   drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
@@ -1180,12 +1183,13 @@ function uploadPage() {
   <p class="intro">Download your weekly report from GrabMerchant and drop your files here. You can upload several CSV or Excel files at once.</p>
   <div class="split"><div class="card" id="upanel"></div><div>
     <div class="card"><h2>${b ? esc(b.name) : 'Your shop'}</h2><p class="hint" style="font-size:15px;margin-top:6px">${b && b.lastAt ? 'Last updated ' + esc(b.last) : 'No report uploaded yet.'}</p><p class="hint" style="font-size:15px;margin-top:10px">Uploading again is safe: new orders are added and orders you already uploaded are updated, never counted twice.</p></div>
+    <div class="card" style="margin-top:16px"><h2>Start over</h2><p class="hint" style="font-size:15px;margin:6px 0 14px">Uploaded the wrong report? Remove it here and upload again.</p><div class="row-btns"><button class="btn btn-outline btn-sm" data-action="up-clearads">Remove Grab ads data</button><button class="btn btn-outline btn-sm" data-action="up-clearall">Delete all my data</button></div></div>
     <div class="card" style="margin-top:16px"><h2>Change password</h2>
       <div class="field" style="margin-top:14px"><label class="lbl" for="pw-old">Current password</label><input class="input" id="pw-old" type="password" autocomplete="current-password"></div>
       <div class="field"><label class="lbl" for="pw-new">New password</label><input class="input" id="pw-new" type="password" autocomplete="new-password"><div class="hint">At least 6 characters</div></div>
       <div class="err" id="pw-err" hidden></div><button class="btn btn-outline" data-action="up-chpw">Change password</button></div>
   </div></div></div></main>`;
-  up.files = []; up.rows = false; upPanel();
+  up.type = 'sales'; up.files = []; up.rows = false; upPanel();
 }
 
 /* ---------- actions ---------- */
@@ -1293,6 +1297,19 @@ const actions = {
   async 'up-chpw'() {
     const er = $('#pw-err');
     try { await api('chpw', { old: $('#pw-old').value, pw: $('#pw-new').value }); $('#pw-old').value = $('#pw-new').value = ''; er.hidden = true; toast('Password changed'); } catch (x) { er.textContent = x.message; er.hidden = false; }
+  },
+  async 'ad-clear'() {
+    if (!LIVE) return toast('This needs the server.');
+    if (!confirm('Delete all uploaded sales and ads data for this business? Its login stays.')) return;
+    try { await api('clear', { bizId: ad.sel }); await refresh(); ad.file = null; adminList(); adminPanel(); toast('Data cleared'); } catch (e) { toast(e.message); }
+  },
+  async 'up-clearads'() {
+    if (!confirm('Remove all Grab ads data from your dashboard? Your sales stay.')) return;
+    try { await api('clearads'); await refresh(); toast('Grab ads data removed'); } catch (e) { toast(e.message); }
+  },
+  async 'up-clearall'() {
+    if (!confirm('Delete everything you uploaded, sales and ads? This cannot be undone.')) return;
+    try { await api('clear'); await refresh(); toast('All your uploaded data was deleted'); } catch (e) { toast(e.message); }
   },
   'ad-edit'() {
     const b = store.get('bg_biz', []).find(x => x.id === ad.sel); if (!LIVE || !b) return toast('This needs the server.');

@@ -63,7 +63,7 @@ export const make = getS => async req => {
       return J(200, { pub: String(o.pub || ''), priv: String(o.priv || '') });
     } catch { return J(502, { error: 'The reply writer is not available right now, so template replies were used.' }); }
   }
-  const ownerOk = me.role === 'owner' && ['publish', 'chpw', 'sget', 'sset'].includes(b.op);
+  const ownerOk = me.role === 'owner' && ['publish', 'chpw', 'sget', 'sset', 'clear', 'clearads'].includes(b.op);
   if (me.role !== 'admin' && !ownerOk) return J(403, { error: 'Admin only.' });
   if (ownerOk) b.bizId = me.biz;
   if (b.op === 'add') {
@@ -103,6 +103,8 @@ export const make = getS => async req => {
     const k = 'saved:' + x.id, cur = (await store.get(k, { type: 'json' })) || { campaigns: [], checks: [] };
     cur[b.kind] = b.list.slice(0, 50); await store.setJSON(k, cur); return J(200, { ok: true });
   }
+  if (b.op === 'clear') { x.data = null; x.status = 'none'; x.last = '—'; delete x.lastAt; await save(); try { await store.delete('orders:' + x.id); } catch {} return J(200, { ok: true }); }
+  if (b.op === 'clearads') { if (x.data) delete x.data.ads; await save(); return J(200, { ok: true }); }
   if (b.op === 'edit') {
     const name = String(b.name || '').trim(), login = String(b.login || '').toLowerCase().replace(/\s+/g, '');
     if (!name || !login) return J(400, { error: 'Enter the name and the login.' });
