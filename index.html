@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BizGuard — see how your Grab store is really doing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f3f5f0; --surface:#ffffff; --surface2:#f3f5f0; --ink:#0e2420; --muted:#52635e; --line:#dfe4de;
+  --accent:#0f5c4b; --mint:#e1eee8; --field:#ffffff; --field-line:#8a9692; --bar:#0f5c4b; --track:#e3e8e2;
+  --warn-bg:#fde9c3; --warn-ink:#5d4000; --red:#a63a1a;
+  --g900:#0a3b32; --g700:#0f5c4b; --yellow:#f2b13e;
+  --display:'Bricolage Grotesque','Segoe UI','Helvetica Neue',Arial,sans-serif;
+  --body:'Figtree','Segoe UI','Helvetica Neue',Arial,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1512; --surface:#12221d; --surface2:#1a2e28; --ink:#eaf2ee; --muted:#9db0a9; --line:#26413a;
+    --accent:#5fd0aa; --mint:#1d3a32; --field:#0f1d19; --field-line:#5d746c; --bar:#1f8a6e; --track:#25403a;
+    --warn-bg:#3d3012; --warn-ink:#f6d98f; --red:#ff8f6b; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1512; --surface:#12221d; --surface2:#1a2e28; --ink:#eaf2ee; --muted:#9db0a9; --line:#26413a;
+  --accent:#5fd0aa; --mint:#1d3a32; --field:#0f1d19; --field-line:#5d746c; --bar:#1f8a6e; --track:#25403a;
+  --warn-bg:#3d3012; --warn-ink:#f6d98f; --red:#ff8f6b; color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth;background:var(--bg)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;letter-spacing:-.015em;line-height:1.08;margin:0}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+svg{display:block}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px;border-radius:6px}
+.container{max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid transparent;border-radius:12px;padding:12px 20px;font-weight:700;font-size:16px;text-decoration:none;line-height:1.2;transition:filter .15s,background .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn-yellow{background:var(--yellow);color:#1a1405}
+.btn-green{background:var(--g700);color:#fff}
+.btn-outline{background:transparent;color:var(--ink);border-color:var(--field-line)}
+.btn-outline:hover{background:var(--surface2);filter:none}
+.btn-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+.btn-light:hover{background:rgba(255,255,255,.1);filter:none}
+.btn-lg{padding:16px 24px;border-radius:14px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.link-u{font-weight:700;text-decoration:underline;text-underline-offset:4px}
+
+.logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:22px;color:#fff;text-decoration:none;letter-spacing:-.01em}
+.logo .ic{width:26px;height:26px;stroke:var(--yellow)}
+.pubnav{display:flex;align-items:center;justify-content:space-between;padding:26px 0;gap:16px}
+.pubnav nav{display:flex;align-items:center;gap:28px;color:#fff;font-weight:600;font-size:15px}
+.pubnav nav a{text-decoration:none}
+.pubnav nav a:not(.btn):hover{text-decoration:underline;text-underline-offset:5px}
+.pubnav nav .btn{padding:10px 18px;font-size:15px;color:#1a1405}
+.app-header{background:var(--g900);color:#fff}
+.app-header .container{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px}
+.app-header nav{display:flex;align-items:stretch;gap:6px;overflow-x:auto;scrollbar-width:none}
+.app-header nav::-webkit-scrollbar{display:none}
+.app-header nav a{color:#d3e4de;text-decoration:none;font-weight:600;font-size:15px;padding:12px 14px;border-radius:10px 10px 0 0;white-space:nowrap}
+.app-header nav a:hover{color:#fff}
+.app-header nav a[aria-current="page"]{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 -3px 0 var(--yellow)}
+.app-header .btn{padding:9px 16px;font-size:15px;flex:none}
+.app-header .left{display:flex;align-items:center;gap:24px;min-width:0}
+.badge-admin{background:var(--yellow);color:#1a1405;font-weight:800;font-size:12px;letter-spacing:.06em;padding:4px 10px;border-radius:8px;margin-left:4px}
+.admin-who{display:flex;align-items:center;gap:14px;font-size:15px;color:#d3e4de}
+
+.hero{background-color:var(--g900);background-image:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px);background-size:26px 26px;color:#fff;padding-bottom:clamp(48px,8vw,96px)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,72px);align-items:center;padding-top:clamp(16px,3vw,40px)}
+.pill{display:inline-block;background:rgba(255,255,255,.1);color:#fff;font-size:13.5px;font-weight:600;padding:8px 14px;border-radius:999px;margin-bottom:26px}
+.hero h1{font-size:clamp(42px,6.4vw,72px);line-height:1;letter-spacing:-.025em}
+.hero h1 .y{color:var(--yellow);display:block}
+.hero .lead{font-size:18px;line-height:1.55;color:#d3e4de;max-width:34em;margin:26px 0 34px}
+.hero .cta{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.hero .cta .link-u{color:#fff}
+.sample{background:var(--surface);color:var(--ink);border-radius:28px;padding:24px;box-shadow:0 30px 60px rgba(0,0,0,.28)}
+.sample-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.sample-head h3{font-family:var(--body);font-size:17px;font-weight:700;letter-spacing:0}
+.tag{display:inline-block;background:var(--mint);color:var(--accent);font-size:11.5px;font-weight:800;letter-spacing:.07em;padding:5px 10px;border-radius:999px;text-transform:uppercase;white-space:nowrap}
+.tag.warn{background:var(--warn-bg);color:var(--warn-ink)}
+.tag.dark{background:rgba(255,255,255,.14);color:#fff}
+.mini-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mini-kpi{background:var(--surface2);border-radius:16px;padding:14px 16px}
+.mini-kpi small{display:block;color:var(--muted);font-size:13.5px}
+.mini-kpi b{display:block;font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.mini-kpi span{font-size:13px;font-weight:700;color:var(--accent)}
+.bars{display:flex;align-items:flex-end;gap:12px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:0}
+.bar{width:100%;border-radius:8px 8px 4px 4px;background:var(--bar)}
+.bar.hi{background:var(--yellow)}
+.bar-lbl{font-size:13px;color:var(--muted);margin-top:8px}
+.bar-lbl.hi{color:var(--ink);font-weight:800}
+.alert-bar{display:flex;align-items:center;gap:10px;background:var(--warn-bg);color:var(--warn-ink);font-weight:600;font-size:14.5px;border-radius:12px;padding:12px 14px;margin-top:16px}
+.sec{padding:clamp(56px,8vw,96px) 0}
+.sec.white{background:var(--surface)}
+.sec.line-t{border-top:1px solid var(--line)}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.sec h2{font-size:clamp(32px,4.4vw,48px);max-width:12em;letter-spacing:-.02em}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.step{border-top:2px solid var(--ink);padding-top:22px}
+.step .n{font-family:var(--display);font-size:52px;font-weight:800;color:var(--accent);line-height:1}
+.step h3{font-family:var(--body);font-size:19px;font-weight:700;letter-spacing:0;margin:16px 0 8px}
+.step p{color:var(--muted)}
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.feat{background:var(--surface2);border-radius:20px;padding:22px}
+.feat .ico{width:40px;height:40px;background:var(--g700);color:#fff;border-radius:10px;display:grid;place-items:center;margin-bottom:34px}
+.feat h3{font-family:var(--body);font-size:18px;font-weight:700;letter-spacing:0;margin-bottom:6px}
+.feat p{color:var(--muted);font-size:15.5px}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.tool{display:block;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;text-decoration:none;transition:border-color .15s}
+.tool:hover{border-color:var(--accent)}
+.tool small{display:block;font-size:12.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.tool b{font-family:var(--display);font-size:22px;line-height:1.2;font-weight:800;letter-spacing:-.01em}
+.cta-band{background:var(--g700);color:#fff;border-radius:28px;padding:clamp(28px,5vw,56px);display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-top:64px}
+.cta-band h2{font-size:clamp(28px,3.6vw,40px);max-width:none}
+.cta-band p{color:#d3e4de;max-width:30em;margin:14px 0 14px}
+.cta-band .contact{font-weight:700;display:flex;gap:22px;flex-wrap:wrap}
+.foot{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:14.5px}
+.foot .container{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.foot .logo{color:var(--ink);font-size:18px}
+.foot .logo .ic{stroke:var(--accent);width:22px;height:22px}
+.foot nav{display:flex;gap:18px}
+.foot nav a{color:var(--accent);font-weight:600}
+
+.login-wrap{min-height:100vh;background-color:var(--g900);background-image:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px);background-size:26px 26px;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+.login-card{background:var(--surface);color:var(--ink);border-radius:28px;padding:32px;width:100%;max-width:460px;margin-top:34px;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.login-card h1{font-size:36px}
+.login-card .sub{color:var(--muted);font-size:17px;margin:6px 0 24px}
+.noacct{background:var(--surface2);border-radius:16px;padding:18px;margin-top:22px;font-size:15.5px}
+.noacct b{display:block}
+.noacct p{color:var(--muted);margin:6px 0 8px}
+.noacct .c{font-weight:700;color:var(--ink)}
+
+.lbl{display:block;font-weight:600;font-size:15px;margin-bottom:8px}
+.lbl-row{display:flex;justify-content:space-between;align-items:baseline}
+.lbl-row a{color:var(--accent);font-weight:600;font-size:15px}
+.hint{font-size:13.5px;color:var(--muted);margin-top:6px}
+.err{font-size:13.5px;color:var(--red);font-weight:600;margin-top:6px}
+.input{width:100%;background:var(--field);color:var(--ink);border:1px solid var(--field-line);border-radius:12px;padding:14px 16px;font:inherit;font-size:16px}
+.input::placeholder{color:#8c9a95}
+.input:focus{outline:3px solid var(--yellow);outline-offset:1px;border-color:var(--ink)}
+textarea.input{min-height:110px;resize:vertical}
+.money{position:relative}
+.money span{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600;pointer-events:none}
+.money .input{padding-left:36px}
+.field{margin-bottom:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid var(--field-line);background:var(--field);color:var(--ink);border-radius:999px;padding:10px 18px;font-weight:600;font-size:15px}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--g700);color:#fff;border-color:var(--g700)}
+
+.page{padding:clamp(28px,4vw,44px) 0 72px}
+.back{display:inline-flex;align-items:center;gap:8px;color:var(--accent);font-weight:600;font-size:15px;text-decoration:none;margin-bottom:22px}
+.back .ic{width:16px;height:16px}
+.page h1{font-size:clamp(34px,5vw,48px);letter-spacing:-.02em}
+.page .intro{color:var(--muted);font-size:17px;max-width:40em;margin-top:12px}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px}
+.card h2{font-family:var(--body);font-size:17px;font-weight:700;letter-spacing:0}
+.step-h{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.step-h .num{width:30px;height:30px;border-radius:50%;background:var(--mint);color:var(--accent);display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+.step-h h2{font-family:var(--body);font-size:17px;font-weight:700}
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start;margin-top:30px}
+.panel-dark{background:var(--g900);color:#fff;border-radius:22px;padding:26px}
+.panel-dark h2{font-family:var(--body);font-size:17px;font-weight:700}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sticky{position:sticky;top:16px}
+
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:5px}
+.seg button{border:0;background:transparent;color:var(--ink);font-weight:600;font-size:15px;padding:10px 16px;border-radius:10px}
+.seg button[aria-pressed="true"]{background:var(--g700);color:#fff}
+.eyebrow-s{font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.subline{display:flex;align-items:center;gap:10px;color:var(--muted);flex-wrap:wrap;margin-top:8px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.kpi small{display:block;color:var(--muted);font-size:14.5px}
+.kpi b{display:block;font-family:var(--display);font-size:clamp(28px,3vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.2;margin:2px 0}
+.kpi span{font-size:13.5px;color:var(--muted)}
+.up{color:var(--accent);font-weight:700}
+.down{color:var(--red);font-weight:700}
+.dash-main{display:grid;grid-template-columns:1.9fr 1fr;gap:16px;margin-top:16px}
+.chart-card{padding:24px 26px}
+.chart-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.chart-top small{color:var(--muted);font-size:14px}
+.chart-scroll{overflow-x:auto}
+.chart-scroll .bars{min-width:420px;gap:clamp(10px,2vw,22px);padding-top:8px}
+.chart-scroll .bar-col .v{font-size:13px;color:var(--muted);margin-bottom:8px;white-space:nowrap}
+.chart-scroll .bar-col .v.hi{color:var(--ink);font-weight:800}
+.chart-scroll .bar-col .m{font-weight:800;margin-top:14px;font-size:15px}
+.chart-scroll .bar-col .o{font-size:13px;color:var(--muted);margin-top:8px;white-space:nowrap}
+.attn{background:var(--g900);color:#fff;border-radius:22px;padding:26px}
+.attn h2{font-family:var(--body);font-size:18px;font-weight:700;margin-bottom:16px}
+.attn .it{border-top:1px solid rgba(255,255,255,.16);padding:18px 0 16px}
+.attn .it b{display:block;font-size:17px;margin-bottom:6px}
+.attn .it p{color:#d3e4de;font-size:15px}
+.attn .it a{display:inline-flex;gap:6px;align-items:center;margin-top:12px;color:var(--yellow);font-weight:700;text-underline-offset:4px}
+.attn .it a .ic{width:16px;height:16px}
+.dash-bottom{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.dash-bottom .card{padding:24px}
+.rank{margin-top:16px}
+.rank .r{margin-bottom:14px}
+.rank .r .rt{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
+.track{height:8px;border-radius:99px;background:var(--track);overflow:hidden}
+.track i{display:block;height:100%;background:var(--bar);border-radius:99px}
+.track i.hi{background:var(--yellow)}
+.ads3{display:grid;grid-template-columns:repeat(3,auto);gap:14px;margin:16px 0 18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.ads3 small{display:block;color:var(--muted);font-size:13px}
+.ads3 b{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:-.01em}
+.cmp{margin-bottom:12px}
+.cmp .ct{display:flex;justify-content:space-between;font-weight:600;margin-bottom:6px}
+.cmp .red{color:var(--red);font-weight:800}
+.card .more{display:inline-flex;gap:6px;align-items:center;margin-top:12px;font-weight:700;color:var(--accent);text-underline-offset:4px}
+.card .more .ic{width:16px;height:16px}
+table.t{width:100%;border-collapse:collapse;margin-top:14px;font-size:15.5px}
+table.t th{font-weight:500;color:var(--muted);text-align:right;padding:8px 6px;font-size:14px}
+table.t th:first-child,table.t td:first-child{text-align:left;padding-left:0}
+table.t td{text-align:right;padding:13px 6px;border-top:1px solid var(--line)}
+table.t tr.tot td{font-weight:800}
+.note-bar{background:var(--mint);border-radius:14px;padding:14px 18px;margin-top:16px;font-size:15px}
+.preview-bar{background:var(--yellow);color:#1a1405;font-weight:700;padding:10px 0;font-size:15px}
+.preview-bar .container{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+.big-roi{font-family:var(--display);font-weight:800;font-size:clamp(64px,9vw,92px);letter-spacing:-.03em;line-height:1;color:var(--yellow);margin:6px 0 14px}
+.big-roi.neg{color:#ffb4a0}
+.verdict{display:inline-block;background:var(--mint);color:#0a3b32;font-weight:700;font-size:14.5px;padding:7px 14px;border-radius:999px}
+.verdict.neg{background:#ffd9cd;color:#6b200a}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;margin:22px 0}
+.statgrid div{padding:16px 0 16px 18px;border-top:1px solid rgba(255,255,255,.16)}
+.statgrid div:nth-child(odd){padding-left:0;padding-right:18px;border-right:1px solid rgba(255,255,255,.16)}
+.statgrid small{display:block;color:#cfe0da;font-size:14px}
+.statgrid b{font-family:var(--display);font-size:28px;font-weight:800;letter-spacing:-.01em}
+.next-box{background:rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.next-box b{display:block;margin-bottom:4px}
+.next-box p{color:#e0ece8;font-size:15.5px}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap}
+.formula{list-style:none;margin:14px 0 0;padding:0;font-size:15px}
+.formula li{display:flex;gap:14px;margin-bottom:8px}
+.formula b{min-width:140px;flex:none}
+.formula span{color:var(--muted)}
+.saved-list{margin-top:14px}
+.saved-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.saved-row small{color:var(--muted);display:block}
+.saved-row .x{border:0;background:none;color:var(--muted);text-decoration:underline;font-size:14px}
+
+.bubble{background:#fff;color:#14231f;border-radius:16px;padding:16px 18px;font-size:16px;line-height:1.5;margin:10px 0 12px;white-space:pre-wrap}
+.rlabel{color:#cfe0da;font-size:14px;font-weight:600;margin-top:18px}
+.nsteps{list-style:none;padding:0;margin:14px 0 0;counter-reset:s}
+.nsteps li{display:flex;gap:14px;margin-bottom:14px;counter-increment:s}
+.nsteps li::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--mint);color:var(--accent);font-weight:800;font-size:14px;display:grid;place-items:center;flex:none}
+.avoid{background:var(--warn-bg);color:var(--warn-ink);border-radius:16px;padding:16px 18px;display:flex;gap:12px;margin-top:16px;font-size:15.5px}
+.avoid .ic{margin-top:2px}
+
+.checklist .grp{margin-top:26px}
+.checklist .grp:first-of-type{margin-top:18px}
+.grp h3{font-size:20px;margin-bottom:6px}
+.grp h3 small{font-family:var(--body);font-size:14px;font-weight:500;color:var(--muted);margin-left:8px;letter-spacing:0}
+.chk{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line);cursor:pointer}
+.chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:2px solid var(--field-line);border-radius:5px;background:var(--field);flex:none;margin:2px 0 0;display:grid;place-items:center;cursor:pointer}
+.chk input:checked{background:var(--g700);border-color:var(--g700)}
+.chk input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.chk b{display:block;font-weight:600;font-size:16px}
+.chk span{display:block;color:var(--muted);font-size:14.5px;margin-top:2px}
+.score{font-family:var(--display);font-weight:800;font-size:clamp(52px,7vw,68px);letter-spacing:-.02em;line-height:1;margin:6px 0 4px}
+.meter{height:8px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;margin:14px 0}
+.meter i{display:block;height:100%;background:var(--yellow);border-radius:99px;transition:width .25s}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.levels i{height:12px;border-radius:99px;display:block}
+.levels i.l{background:#cfe7dc}.levels i.m{background:var(--yellow)}.levels i.h{background:#c8532f}
+.levels i.on{outline:2px solid #fff;outline-offset:2px}
+.levels-l{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:13.5px;color:#cfe0da;margin-bottom:18px}
+.levels-l span.on{color:#fff;font-weight:800}
+.lvl-h{font-family:var(--display);font-size:28px;font-weight:800;margin-bottom:8px}
+.lvl-h.low{color:#8fe3bd}.lvl-h.medium{color:var(--yellow)}.lvl-h.high{color:#ff9d7e}
+.fix{background:rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;margin:16px 0 18px}
+.fix b{display:block;margin-bottom:8px}
+.fix ul{margin:0;padding-left:20px}
+.fix li{margin-bottom:6px}
+.legend{font-size:13.5px;color:#cfe0da;margin-top:14px}
+.c3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.split.creator{grid-template-columns:1.3fr .7fr}
+
+.admin-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;align-items:start;margin-top:26px}
+.biz-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.biz-top .input{max-width:260px}
+.biz-table{width:100%;border-collapse:collapse}
+.biz-table th{text-align:left;font-weight:500;color:var(--muted);font-size:14px;padding:10px 12px}
+.biz-table td{padding:14px 12px;border-top:1px solid var(--line);vertical-align:middle}
+.biz-table tr.sel td{background:var(--mint)}
+.biz-table td b{display:block}
+.biz-table td small{color:var(--muted)}
+.biz-table td:last-child,.biz-table th:last-child{text-align:right}
+.status{display:inline-block;font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--mint);color:var(--accent);white-space:nowrap}
+.status.needs{background:var(--warn-bg);color:var(--warn-ink)}
+.status.none{background:var(--track);color:var(--muted)}
+.btn-sm{padding:9px 16px;font-size:14.5px;border-radius:10px}
+.load-panel{border:2px solid var(--g700);border-radius:22px;padding:24px;background:var(--surface)}
+.load-panel h2{font-size:24px;margin:4px 0 16px}
+.drop{border:2px dashed var(--field-line);border-radius:18px;background:var(--mint);padding:28px 16px;text-align:center;margin:16px 0}
+.drop.over{border-color:var(--accent)}
+.drop .ic{width:26px;height:26px;margin:0 auto 10px}
+.drop b{display:block;margin-bottom:14px}
+.filename{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:700;margin-bottom:10px;word-break:break-all}
+.checks{list-style:none;margin:0 0 14px;padding:0}
+.checks li{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:15.5px}
+.checks .ic{width:20px;height:20px;margin-top:2px}
+.checks .ok{color:var(--accent)}
+.checks .bad{color:#8a5a00}
+:root[data-theme="dark"] .checks .bad{color:#f6d98f}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .checks .bad{color:#f6d98f}}
+.rowlist{background:var(--surface2);border-radius:12px;padding:12px 14px;font-size:14px;margin-bottom:14px;font-family:ui-monospace,Menlo,Consolas,monospace;overflow-x:auto}
+.rowlist div{white-space:nowrap}
+.divider{border-top:1px solid var(--line);margin:18px 0}
+
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#10231e;color:#fff;padding:12px 20px;border-radius:12px;font-weight:600;font-size:15px;opacity:0;pointer-events:none;transition:.2s;z-index:100;max-width:90vw;text-align:center;border:1px solid rgba(255,255,255,.2)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.modal-bg{position:fixed;inset:0;background:rgba(5,20,16,.6);display:grid;place-items:center;padding:20px;z-index:90}
+.modal{background:var(--surface);color:var(--ink);border-radius:22px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.modal h2{font-size:26px;margin-bottom:18px}
+.modal pre{white-space:pre-wrap;background:var(--surface2);border-radius:12px;padding:16px;font:inherit;font-size:15px;margin:0 0 16px}
+
+@media (max-width:980px){
+  .hero-grid,.split,.split.creator,.admin-grid,.dash-main{grid-template-columns:1fr}
+  .steps,.tools{grid-template-columns:1fr}
+  .feats{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .dash-bottom{grid-template-columns:1fr}
+  .c3{grid-template-columns:1fr}
+  .sticky{position:static}
+}
+@media (max-width:640px){
+  .pubnav nav a:not(.btn){display:none}
+  .feats,.grid2,.mini-kpis{grid-template-columns:1fr}
+  .kpis{gap:10px}
+  .app-header .container{flex-wrap:wrap;padding-top:12px;padding-bottom:0}
+  .app-header .left{width:100%;order:2}
+  .app-header .logo{order:1}
+  .app-header .btn{order:1}
+  .formula b{min-width:110px}
+  .biz-table th:nth-child(2),.biz-table td:nth-child(2){display:none}
+  .admin-who span{display:none}
+}
+@media print{
+  .app-header,.back,.row-btns,#toast,.preview-bar{display:none!important}
+  body{background:#fff}
+  .panel-dark{background:#fff;color:#000;border:1px solid #000}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ========== EDIT THESE PLACEHOLDERS ========== */
+const CONFIG = {
+  email: "[EMAIL ADDRESS]",
+  messenger: "[PAGE NAME]",
+  shop: "[SHOP NAME]",
+  updated: "[DATE]",
+  place: "[BARANGAY / CITY]",
+  school: "[SCHOOL NAME]",
+  admin: "BizGuard"
+};
+/* ============================================ */
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const peso = n => (n < 0 ? '−' : '') + '₱' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2});
+const num = v => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); return isNaN(n) ? null : n; };
+const today = () => new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+
+const mem = {};
+let DB = null, LIVE = false, CAN_EDIT = false, TOKEN = null;
+const API = '/.netlify/functions/api';
+try { TOKEN = JSON.parse(localStorage.getItem('bg_token')); } catch (e) {}
+async function api(op, body) {
+  const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ op, token: TOKEN, ...body }) });
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401 && op !== 'login' && TOKEN) { TOKEN = null; store.set('bg_token', null); store.set('bg_session', null); go('#/login'); }
+  if (!r.ok) throw new Error(j.error || 'Something went wrong. Try again.');
+  return j;
+}
+const canSave = () => LIVE && TOKEN && session() === 'owner';
+async function loadSaved() { if (!canSave()) return; try { const j = await api('sget'); store.set('bg_campaigns', j.campaigns || []); store.set('bg_checks', j.checks || []); } catch (e) {} }
+function pushSaved(kind) { if (canSave()) api('sset', { kind, list: store.get(kind === 'checks' ? 'bg_checks' : 'bg_campaigns', []) }).catch(() => toast('Could not save to your account.')); }
+async function refresh() { try { const j = await api('list'); mem.bg_biz = j.list; return true; } catch (e) { TOKEN = null; store.set('bg_token', null); return false; } }
+const sha = async s => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)))].map(b => b.toString(16).padStart(2, '0')).join('');
+const store = {
+  get(k, d) { if (k in mem) return mem[k]; try { const v = localStorage.getItem(k); if (v != null) return JSON.parse(v); } catch (e) {} return d; },
+  set(k, v) { mem[k] = v; try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (k === 'bg_biz' && DB) DB.doc('app/biz').set({ v: JSON.stringify(v) }).catch(() => toast('Could not save. Check your connection and try again.')); }
+};
+
+const P = {
+  logo: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8 7.5 9.5 4.4-1.5 7.5-4.9 7.5-9.5V6L12 3z"/><path d="m8.8 12 2.4 2.4 4.2-4.6"/>',
+  bars: '<path d="M5 20V12M10 20V5M15 20v-6M20 20V9"/>',
+  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3z"/>',
+  trend: '<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  ban: '<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  back: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  warn: '<path d="M12 3.5 2.5 20h19L12 3.5z"/><path d="M12 10v4M12 17.4v.1"/>',
+  upload: '<path d="M12 16V4M6.5 9.5 12 4l5.5 5.5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+  checkc: '<circle cx="12" cy="12" r="9"/><path d="m8 12.3 2.8 2.8L16 9.6"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>'
+};
+const ic = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2800);
+}
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); toast('Copied'); return; } catch (e) {}
+  try {
+    const ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove();
+    toast(ok ? 'Copied' : 'Could not copy. Select the text and copy it yourself.');
+  } catch (e) { toast('Could not copy. Select the text and copy it yourself.'); }
+}
+function openModal(title, body) {
+  closeModal();
+  const m = document.createElement('div'); m.className = 'modal-bg'; m.id = 'modal';
+  m.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><h2>${esc(title)}</h2>${body}</div>`;
+  m.addEventListener('mousedown', e => { if (e.target === m) closeModal(); });
+  document.body.appendChild(m);
+  const f = $('input,select,button', m); if (f) f.focus();
+  return m;
+}
+function closeModal() { const m = $('#modal'); if (m) m.remove(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+const session = () => store.get('bg_session', null);
+const go = h => { location.hash = h; };
+
+const logoLink = (href = '#/') => `<a class="logo" href="${href}" aria-label="BizGuard home">${ic('logo')}BizGuard</a>`;
+function appHeader(active) {
+  const items = [['dashboard', 'Dashboard'], ['roi', 'ROI Calculator'], ['replies', 'Complaint Replies'], ['creator', 'Creator Checklist']];
+  if (LIVE && session() === 'owner') items.splice(1, 0, ['upload', 'Upload report']);
+  return `<header class="app-header"><div class="container">${logoLink('#/dashboard')}
+  <div class="left"><nav aria-label="Main">${items.map(([k, l]) => `<a href="#/${k}" ${k === active ? 'aria-current="page"' : ''}>${l}</a>`).join('')}</nav></div>
+  <button class="btn btn-light" data-action="logout">Log out</button></div></header>`;
+}
+const backLink = `<a class="back" href="#/dashboard">${ic('back')}Back to dashboard</a>`;
+
+/* ---------- LANDING ---------- */
+const MONTHS = [['May', 24.5], ['Jun', 27.8], ['Jul', 26.1], ['Aug', 31.2], ['Sep', 35.6], ['Oct', 38.4]];
+function landing() {
+  const max = 38.4, H = 84;
+  const bars = MONTHS.map(([m, v], i) => `<div class="bar-col"><div class="bar ${i === 5 ? 'hi' : ''}" style="height:${Math.round(v / max * H)}px"></div><div class="bar-lbl ${i === 5 ? 'hi' : ''}">${m}</div></div>`).join('');
+  const s = session();
+  return `
+  <section class="hero"><div class="container">
+    <div class="pubnav">${logoLink()}<nav aria-label="Main">
+      <a href="#/" data-scroll="how">How it works</a><a href="#/" data-scroll="tools">Tools</a>
+      <a class="btn btn-yellow" href="${s ? (s === 'admin' ? '#/admin' : '#/dashboard') : '#/login'}">${s ? 'Dashboard' : 'Log in'}</a></nav></div>
+    <div class="hero-grid">
+      <div>
+        <span class="pill">For GrabFood and GrabMart merchant-partners</span>
+        <h1>See how your Grab store is <span class="y">really doing.</span></h1>
+        <p class="lead">BizGuard turns your Grab sales and ads data into simple charts — sales, best sellers, ad returns, and cancellations — so you can see what's working and what needs attention.</p>
+        <div class="cta"><a class="btn btn-yellow btn-lg" href="#/login">Log in to your dashboard ${ic('arrow')}</a>
+        <a class="link-u" href="#/" data-scroll="how">How to get started</a></div>
+      </div>
+      <div class="sample" aria-label="Sample dashboard preview">
+        <div class="sample-head"><h3>Business performance</h3><span class="tag">Sample data</span></div>
+        <div class="mini-kpis">
+          <div class="mini-kpi"><small>Sales · 6 months</small><b>₱183,600</b><span>▲ 7.9% in October</span></div>
+          <div class="mini-kpi"><small>Completed orders</small><b>722</b><span>▲ 5.7% in October</span></div>
+        </div>
+        <div class="bars" style="margin-top:18px;gap:10px">${bars}</div>
+        <div class="alert-bar">${ic('warn')}Canceled orders almost doubled in October</div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="sec" id="how"><div class="container">
+    <div class="eyebrow">How it works</div>
+    <h2>You share your Grab data. We do the rest.</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Send us your Grab reports</h3><p>Share your sales and ads reports from GrabMerchant with the BizGuard team by email, Messenger, or in person.</p></div>
+      <div class="step"><div class="n">2</div><h3>We check and load your data</h3><p>Our team cleans your data and sets up your dashboard, so you never have to deal with files.</p></div>
+      <div class="step"><div class="n">3</div><h3>Log in and see your dashboard</h3><p>Charts and plain-language alerts show what's going up, what's going down, and what to do next.</p></div>
+    </div>
+  </div></section>
+
+  <section class="sec white line-t"><div class="container">
+    <div class="eyebrow">Your dashboard</div>
+    <h2>Everything about your Grab store, on one page</h2>
+    <div class="feats">
+      <div class="feat"><div class="ico">${ic('bars')}</div><h3>Sales &amp; orders</h3><p>Monthly sales, completed orders, and how much each customer spends per order.</p></div>
+      <div class="feat"><div class="ico">${ic('star')}</div><h3>Best sellers</h3><p>Which items customers order the most, so you know what to keep in stock and promote.</p></div>
+      <div class="feat"><div class="ico">${ic('trend')}</div><h3>Grab ads returns</h3><p>How much you spend on Grab ads and how many orders they bring in.</p></div>
+      <div class="feat"><div class="ico">${ic('ban')}</div><h3>Cancellations &amp; refunds</h3><p>Canceled orders and refunds, month by month, so problems don't go unnoticed.</p></div>
+    </div>
+  </div></section>
+
+  <section class="sec line-t" id="tools"><div class="container">
+    <div class="eyebrow">Tools</div>
+    <h2>When your dashboard shows a problem, fix it here</h2>
+    <div class="tools">
+      <a class="tool" href="#/roi"><small>ROI calculator</small><b>Check if an ad earned back what you spent.</b></a>
+      <a class="tool" href="#/replies"><small>Crisis &amp; complaint response generator</small><b>Get a calm reply for an upset customer.</b></a>
+      <a class="tool" href="#/creator"><small>Creator vetting &amp; risk checklist</small><b>Check a creator before you pay for a post.</b></a>
+    </div>
+    <div class="cta-band">
+      <div><h2>Want BizGuard for your Grab store?</h2>
+        <p>Send your Grab reports to the BizGuard team and we'll set up your account.</p>
+        <div class="contact"><span>Email: ${esc(CONFIG.email)}</span><span>Messenger: ${esc(CONFIG.messenger)}</span></div></div>
+      <a class="btn btn-yellow btn-lg" href="#/login">Log in to your dashboard ${ic('arrow')}</a>
+    </div>
+  </div></section>
+
+  <footer class="foot"><div class="container">
+    <a class="logo" href="#/">${ic('logo')}BizGuard</a>
+    <span>A research prototype for micro-enterprises in ${esc(CONFIG.place)} · ${esc(CONFIG.school)}</span>
+    <nav aria-label="Footer"><a href="#/login">Log in</a><a href="#/" data-scroll="how">How it works</a><a href="#/" data-scroll="tools">Tools</a></nav>
+  </div></footer>`;
+}
+
+/* ---------- LOGIN ---------- */
+function login() {
+  app.innerHTML = `<div class="login-wrap">${logoLink()}
+  <div class="login-card"><h1>Log in</h1><p class="sub">See how your Grab store is doing.</p>
+  <form id="lf" novalidate>
+    <div class="field"><label class="lbl" for="lid">Email or mobile number</label>
+      <input class="input" id="lid" autocomplete="username" placeholder="e.g. 0917 123 4567"></div>
+    <div class="field"><div class="lbl-row"><label class="lbl" for="lpw">Password</label><a href="#/login" data-action="forgot">Forgot password?</a></div>
+      <input class="input" id="lpw" type="password" autocomplete="current-password"></div>
+    <div class="err" id="lerr" role="alert" hidden></div>
+    <button class="btn btn-green btn-block btn-lg" type="submit" style="margin-top:6px">Log in</button>
+  </form>
+  <div class="noacct"><b>No account yet?</b><p>The BizGuard team creates your account after you share your Grab reports with us.</p>
+  <div class="c">Email: ${esc(CONFIG.email)} · Messenger: ${esc(CONFIG.messenger)}</div></div></div></div>`;
+  $('#lf').addEventListener('submit', async e => {
+    e.preventDefault();
+    const id = $('#lid').value.trim(), pw = $('#lpw').value, err = $('#lerr');
+    const fail = m => { err.textContent = m; err.hidden = false; };
+    if (!id) return fail('Enter your email or mobile number.');
+    if (!pw) return fail('Enter your password.');
+    let role = 'owner';
+    if (LIVE) {
+      try { const j = await api('login', { id, pw }); TOKEN = j.token; store.set('bg_token', j.token); role = j.role; if (j.bizId) store.set('bg_owner', j.bizId); await refresh(); }
+      catch (e) { return fail(e.message); }
+    } else role = /admin/i.test(id) ? 'admin' : 'owner';
+    store.set('bg_session', role);
+    const next = store.get('bg_next', null); store.set('bg_next', null);
+    if (role === 'admin') return go('#/admin');
+    go(next && !/admin/.test(next) ? next : '#/dashboard');
+  });
+}
+
+/* ---------- DASHBOARD ---------- */
+const SALES_NOTE = '<span class="up">▲ 7.9%</span>';
+const DASH = {
+  '6m': {
+    period: 'May–October 2026', chartTitle: 'Sales by month', chartNote: 'Completed orders under each month',
+    labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'], sales: [24.5, 27.8, 26.1, 31.2, 35.6, 38.4], orders: [98, 110, 104, 122, 140, 148],
+    kpis: [['Sales', '₱183,600', `₱38,400 in Oct · ${SALES_NOTE}`], ['Completed orders', '722', '148 in Oct · <span class="up">▲ 5.7%</span>'], ['Average order', '₱254', '₱259 in Oct · <span class="up">▲ ₱5</span>']],
+    best: [['Chicken silog', 214], ['Pork sisig rice', 168], ['Iced coffee', 142], ['Pancit canton', 97], ['Halo-halo', 71]],
+    ads: ['₱21,600', '180', '₱120']
+  },
+  month: {
+    period: 'October 2026', chartTitle: 'Sales by week', chartNote: 'Completed orders under each week',
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], sales: [8.6, 9.4, 9.9, 10.5], orders: [33, 36, 38, 41],
+    kpis: [['Sales', '₱38,400', `Up from ₱35,600 in Sep · ${SALES_NOTE}`], ['Completed orders', '148', 'Up from 140 · <span class="up">▲ 5.7%</span>'], ['Average order', '₱259', 'Up from ₱254 · <span class="up">▲ ₱5</span>']],
+    best: [['Chicken silog', 52], ['Pork sisig rice', 41], ['Iced coffee', 35], ['Pancit canton', 24], ['Halo-halo', 17]],
+    ads: ['₱8,680', '62', '₱140']
+  },
+  year: {
+    period: 'January–October 2026', chartTitle: 'Sales by month', chartNote: 'Completed orders under each month',
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'], sales: [18.2, 19.6, 21.9, 22.4, 24.5, 27.8, 26.1, 31.2, 35.6, 38.4], orders: [76, 81, 88, 90, 98, 110, 104, 122, 140, 148],
+    kpis: [['Sales', '₱265,700', `₱38,400 in Oct · ${SALES_NOTE}`], ['Completed orders', '1,057', '148 in Oct · <span class="up">▲ 5.7%</span>'], ['Average order', '₱251', '₱259 in Oct · <span class="up">▲ ₱8</span>']],
+    best: [['Chicken silog', 336], ['Pork sisig rice', 262], ['Iced coffee', 228], ['Pancit canton', 151], ['Halo-halo', 112]],
+    ads: ['₱34,800', '300', '₱116']
+  }
+};
+let dashRange = '6m';
+
+function dashBody(r) {
+  const d = DASH[r], max = Math.max(...d.sales), H = 190;
+  const bars = d.labels.map((l, i) => {
+    const hi = i === d.labels.length - 1;
+    return `<div class="bar-col"><div class="v ${hi ? 'hi' : ''}">₱${d.sales[i].toFixed(1)}k</div><div class="bar ${hi ? 'hi' : ''}" style="height:${Math.round(d.sales[i] / max * H)}px"></div><div class="m">${l}</div><div class="o">${d.orders[i]} orders</div></div>`;
+  }).join('');
+  const bmax = d.best[0][1];
+  return `
+  <div class="kpis">
+    ${d.kpis.map(k => `<div class="kpi"><small>${k[0]}</small><b>${k[1]}</b><span>${k[2]}</span></div>`).join('')}
+    <div class="kpi"><small>Canceled orders in Oct</small><b>9</b><span>Up from 5 · <span class="down">▲ 4</span></span></div>
+  </div>
+  <div class="dash-main">
+    <div class="card chart-card"><div class="chart-top"><h2>${d.chartTitle}</h2><small>${d.chartNote}</small></div>
+      <div class="chart-scroll"><div class="bars" role="img" aria-label="${d.chartTitle}: ${d.labels.map((l, i) => l + ' ₱' + d.sales[i] + 'k').join(', ')}">${bars}</div></div></div>
+    <aside class="attn"><h2>Needs your attention</h2>
+      <div class="it"><b>Canceled orders almost doubled</b><p>9 in October, up from 5 in September.</p><a href="#/replies?issue=other">Prepare customer replies ${ic('arrow')}</a></div>
+      <div class="it"><b>Your Grab ads cost more per order</b><p>₱140 per order in October, up from ₱105 in September.</p><a href="#/roi">Check if your ads still pay off ${ic('arrow')}</a></div>
+      <div class="it"><b>Refunds doubled</b><p>4 in October, up from 2 in September.</p><a href="#/replies?issue=refund">Reply to refund requests ${ic('arrow')}</a></div>
+    </aside>
+  </div>
+  <div class="dash-bottom">
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Best sellers</h2><small style="color:var(--muted)">Items sold</small></div>
+      <div class="rank">${d.best.map((b, i) => `<div class="r"><div class="rt"><span>${i + 1} · ${b[0]}</span><span>${b[1]}</span></div><div class="track"><i style="width:${(b[1] / bmax * 100).toFixed(1)}%"></i></div></div>`).join('')}</div></div>
+    <div class="card"><h2>Grab ads</h2>
+      <div class="ads3"><div><small>Spent</small><b>${d.ads[0]}</b></div><div><small>Orders from ads</small><b>${d.ads[1]}</b></div><div><small>Cost per order</small><b>${d.ads[2]}</b></div></div>
+      <small style="color:var(--muted)">Cost per order from ads</small>
+      <div class="cmp" style="margin-top:12px"><div class="ct"><span>September</span><span>₱105</span></div><div class="track"><i style="width:75%"></i></div></div>
+      <div class="cmp"><div class="ct"><span style="font-weight:800">October</span><span class="red">₱140 ▲</span></div><div class="track"><i class="hi" style="width:100%"></i></div></div>
+      <a class="more" href="#/roi">Open the ROI Calculator ${ic('arrow')}</a></div>
+    <div class="card"><h2>Cancellations &amp; refunds</h2>
+      <table class="t"><thead><tr><th scope="col">Type</th><th scope="col">Sep</th><th scope="col">Oct</th><th scope="col">Change</th></tr></thead><tbody>
+        <tr><td>Canceled orders</td><td>5</td><td><b>9</b></td><td class="down">▲ 4</td></tr>
+        <tr><td>Refunds</td><td>2</td><td><b>4</b></td><td class="down">▲ 2</td></tr>
+        <tr class="tot"><td>Total</td><td>7</td><td>13</td><td class="down">▲ 6</td></tr></tbody></table>
+      <a class="more" href="#/replies?issue=other">Reply to an upset customer ${ic('arrow')}</a></div>
+  </div>
+  <div class="note-bar"><b>Need newer numbers?</b> &nbsp;Send your latest Grab reports to the BizGuard team at ${esc(CONFIG.email)} or on Messenger: ${esc(CONFIG.messenger)}.</div>`;
+}
+let livePeriod = '';
+const pct = (a, b) => b ? (a - b) / b * 100 : 0;
+const arr = p => `<span class="${p >= 0 ? 'up' : 'down'}">${p >= 0 ? '▲' : '▼'} ${Math.abs(p).toFixed(1)}%</span>`;
+const sumA = a => a.reduce((x, y) => x + y, 0), pr = x => peso(Math.round(x));
+function dashBodyLive(r, d) {
+  const S = d.sales, keys = Object.keys(S.months).sort(), last = keys[keys.length - 1], prev = keys[keys.length - 2];
+  const dt = k => new Date(k + '-15T00:00:00'), nm = k => dt(k).toLocaleString('en-US', { month: 'short' });
+  const fu = dt(last).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  const sel = r === 'month' ? [last] : r === 'year' ? keys.filter(k => k.slice(0, 4) === last.slice(0, 4)) : keys.slice(-6);
+  const wk = r === 'month' && S.weeks && S.weeks[last] ? S.weeks[last] : null;
+  const lab = wk ? wk.map((_, i) => 'Week ' + (i + 1)) : sel.map(nm);
+  const sal = wk ? wk.map(w => w[0]) : sel.map(k => S.months[k][0]), ord = wk ? wk.map(w => w[1]) : sel.map(k => S.months[k][1]);
+  livePeriod = r === 'month' || sel.length < 2 ? fu : nm(sel[0]) + '–' + fu;
+  const tS = sumA(sal), tO = sumA(ord), L = S.months[last], Pm = prev ? S.months[prev] : null;
+  const C = d.canc || {}, R = d.ref || {}, ads = d.ads || {}, cl = C[last] || 0, cp = C[prev] || 0, rl = R[last] || 0, rq = R[prev] || 0;
+  const sub = (a, b, f) => `${f(a)} in ${nm(last)}${Pm ? ' · ' + arr(pct(a, b)) : ''}`;
+  const kp = [['Sales', pr(tS), sub(L[0], Pm && Pm[0], pr)], ['Completed orders', tO.toLocaleString('en-US'), sub(L[1], Pm && Pm[1], x => x)], ['Average order', pr(tS / (tO || 1)), `${pr(L[0] / (L[1] || 1))} in ${nm(last)}`]];
+  const max = Math.max(...sal, 1), H = 190;
+  const bars = lab.map((l, i) => { const hi = i === lab.length - 1; return `<div class="bar-col"><div class="v ${hi ? 'hi' : ''}">₱${(sal[i] / 1000).toFixed(1)}k</div><div class="bar ${hi ? 'hi' : ''}" style="height:${Math.max(2, Math.round(sal[i] / max * H))}px"></div><div class="m">${l}</div><div class="o">${ord[i]} orders</div></div>`; }).join('');
+  const tot = {}; sel.forEach(k => Object.entries((d.items || {})[k] || {}).forEach(([n, q]) => tot[n] = (tot[n] || 0) + q));
+  const best = Object.entries(tot).sort((a, b) => b[1] - a[1]).slice(0, 5), bm = best.length ? best[0][1] : 1;
+  const aS = sumA(sel.map(k => (ads[k] || [0, 0])[0])), aO = sumA(sel.map(k => (ads[k] || [0, 0])[1]));
+  const cpo = k => ads[k] && ads[k][1] ? ads[k][0] / ads[k][1] : null, cL = cpo(last), cP = cpo(prev), cm = Math.max(cL || 0, cP || 0, 1);
+  const al = [];
+  if (prev && cl > cp && cl >= 2) al.push(['Canceled orders went up', `${cl} in ${nm(last)}, up from ${cp} in ${nm(prev)}.`, 'Prepare customer replies', '#/replies?issue=other']);
+  if (cL && cP && cL > cP * 1.1) al.push(['Your Grab ads cost more per order', `${pr(cL)} per order in ${nm(last)}, up from ${pr(cP)} in ${nm(prev)}.`, 'Check if your ads still pay off', '#/roi']);
+  if (prev && rl > rq && rl >= 2) al.push(['Refunds went up', `${rl} in ${nm(last)}, up from ${rq} in ${nm(prev)}.`, 'Reply to refund requests', '#/replies?issue=refund']);
+  const dl = (a, b) => `<span class="${a > b ? 'down' : 'up'}">${a >= b ? '▲' : '▼'} ${Math.abs(a - b)}</span>`;
+  return `<div class="kpis">${kp.map(k => `<div class="kpi"><small>${k[0]}</small><b>${k[1]}</b><span>${k[2]}</span></div>`).join('')}
+  <div class="kpi"><small>Canceled orders in ${nm(last)}</small><b>${cl}</b><span>${prev ? `${cl >= cp ? 'Up' : 'Down'} from ${cp} · ${dl(cl, cp)}` : 'No earlier month yet'}</span></div></div>
+  <div class="dash-main"><div class="card chart-card"><div class="chart-top"><h2>Sales by ${wk ? 'week' : 'month'}</h2><small>Completed orders under each ${wk ? 'week' : 'month'}</small></div><div class="chart-scroll"><div class="bars" role="img" aria-label="Sales chart">${bars}</div></div></div>
+  <aside class="attn"><h2>Needs your attention</h2>${al.length ? al.map(a => `<div class="it"><b>${a[0]}</b><p>${a[1]}</p><a href="${a[3]}">${a[2]} ${ic('arrow')}</a></div>`).join('') : '<div class="it"><b>Nothing needs your attention right now</b><p>Check again after your next report is loaded.</p></div>'}</aside></div>
+  <div class="dash-bottom">
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Best sellers</h2><small style="color:var(--muted)">Items sold</small></div><div class="rank">${best.length ? best.map((b, i) => `<div class="r"><div class="rt"><span>${i + 1} · ${esc(b[0])}</span><span>${b[1]}</span></div><div class="track"><i style="width:${(b[1] / bm * 100).toFixed(1)}%"></i></div></div>`).join('') : '<p class="hint">Best sellers need a report that lists item names. The GrabMerchant transaction report does not include them.</p>'}</div></div>
+  <div class="card"><h2>Grab ads</h2>${aS || aO ? `<div class="ads3"><div><small>Spent</small><b>${pr(aS)}</b></div><div><small>Orders from ads</small><b>${aO}</b></div><div><small>Cost per order</small><b>${aO ? pr(aS / aO) : '—'}</b></div></div>` : '<p class="hint" style="margin:12px 0">No Grab ads report loaded yet.</p>'}${cL && cP ? `<small style="color:var(--muted)">Cost per order from ads</small><div class="cmp" style="margin-top:12px"><div class="ct"><span>${nm(prev)}</span><span>${pr(cP)}</span></div><div class="track"><i style="width:${(cP / cm * 100).toFixed(0)}%"></i></div></div><div class="cmp"><div class="ct"><span style="font-weight:800">${nm(last)}</span><span class="${cL > cP ? 'red' : ''}">${pr(cL)} ${cL > cP ? '▲' : ''}</span></div><div class="track"><i class="hi" style="width:${(cL / cm * 100).toFixed(0)}%"></i></div></div>` : ''}<a class="more" href="#/roi">Open the ROI Calculator ${ic('arrow')}</a></div>
+  <div class="card"><h2>Cancellations &amp; refunds</h2>${prev ? `<table class="t"><thead><tr><th scope="col">Type</th><th scope="col">${nm(prev)}</th><th scope="col">${nm(last)}</th><th scope="col">Change</th></tr></thead><tbody><tr><td>Canceled orders</td><td>${cp}</td><td><b>${cl}</b></td><td>${dl(cl, cp)}</td></tr><tr><td>Refunds</td><td>${rq}</td><td><b>${rl}</b></td><td>${dl(rl, rq)}</td></tr><tr class="tot"><td>Total</td><td>${cp + rq}</td><td>${cl + rl}</td><td>${dl(cl + rl, cp + rq)}</td></tr></tbody></table>` : '<p class="hint" style="margin-top:12px">Needs at least two months of data.</p>'}<a class="more" href="#/replies?issue=other">Reply to an upset customer ${ic('arrow')}</a></div></div>
+  <div class="note-bar"><b>Need newer numbers?</b> &nbsp;<a class="link-u" href="#/upload">Upload your latest Grab report</a>, or send it to the BizGuard team at ${esc(CONFIG.email)} or on Messenger: ${esc(CONFIG.messenger)}.</div>`;
+}
+function dashboard(q) {
+  const prev = q.get('preview'), bid = prev || (session() === 'owner' ? store.get('bg_owner', null) : null);
+  const biz = bid ? (store.get('bg_biz', BIZ0).find(b => b.id === bid) || null) : null;
+  const L = biz && biz.data && biz.data.sales && Object.keys(biz.data.sales.months).length ? biz.data : null;
+  app.innerHTML = `${prev && biz ? `<div class="preview-bar"><div class="container"><span>Previewing ${esc(biz.name)}'s dashboard (sample data)</span><a href="#/admin">Back to owner data</a></div></div>` : ''}
+  ${appHeader('dashboard')}
+  <main class="page"><div class="container">
+    <div class="page-head"><div>
+      <div class="eyebrow-s">${esc(biz ? biz.name : CONFIG.shop)} · ${biz ? esc(biz.platform).toUpperCase() : 'GRABFOOD'}</div>
+      <h1>Business performance</h1>
+      <div class="subline"><span id="period"></span><span>· updated by the BizGuard team on ${esc(L ? biz.last : CONFIG.updated)}</span>${L || (LIVE && biz) ? '' : '<span class="tag warn">Sample data</span>'}</div></div>
+      <div class="seg" role="group" aria-label="Time range">
+        <button data-range="month">This month</button><button data-range="6m">Last 6 months</button><button data-range="year">This year</button></div>
+    </div>
+    <div id="dbody"></div>
+  </div></main>`;
+  const paint = () => {
+    $('#dbody').innerHTML = L ? dashBodyLive(dashRange, L) : LIVE && biz ? '<div class="card"><h2>No data yet</h2><p class="hint" style="font-size:16px;margin:8px 0 16px">Your dashboard is empty for now. Upload your Grab report to see your numbers.</p><a class="btn btn-green" href="#/upload">Upload your first report</a></div>' : dashBody(dashRange);
+    if (L) $('#dbody').insertAdjacentHTML('afterbegin', staleBanner(biz, prev));
+    $('#period').textContent = L ? livePeriod : LIVE && biz ? '' : DASH[dashRange].period;
+    $$('[data-range]').forEach(b => b.setAttribute('aria-pressed', b.dataset.range === dashRange));
+  };
+  $$('[data-range]').forEach(b => b.addEventListener('click', () => { dashRange = b.dataset.range; paint(); }));
+  paint();
+}
+
+/* ---------- ROI CALCULATOR ---------- */
+const roi = { platform: 'Grab ads', res: null };
+const ROI_EX = { name: 'Example', platform: 'Grab ads', spend: 2500, sales: 9000, cost: 4000, inq: 120, orders: 30 };
+function roiCalc(v) {
+  const net = v.sales - v.cost - v.spend;
+  return {
+    ...v, net, roi: net / v.spend * 100, roas: v.sales / v.spend,
+    cpo: v.orders > 0 ? v.spend / v.orders : null,
+    conv: v.inq > 0 && v.orders != null ? v.orders / v.inq * 100 : null
+  };
+}
+function roiNext(r) {
+  if (r.roi >= 100) return 'Keep this ad running, and compare it with your next campaign to see which one brings orders at a lower cost.';
+  if (r.roi >= 0) return 'This ad is profitable, but the profit is small. Try a small test with a new photo or offer before you spend more.';
+  return 'Pause this ad before you spend more. Check that your price covers your product cost, then try a different offer or audience.';
+}
+function roiResult(r, example) {
+  const neg = r.roi < 0, zero = r.roi === 0;
+  const verdict = neg ? 'Losing money — this ad cost more than it earned' : zero ? 'Break-even — you got your money back, no more' : 'Profitable — this ad paid for itself';
+  const kept = neg ? `you lost <b>${peso(Math.abs(r.net))}</b>` : `you kept <b>${peso(r.net)}</b>`;
+  return `<div class="panel-head"><h2>Your result</h2>${example ? '<span class="tag dark">Example</span>' : ''}</div>
+  <div style="color:#cfe0da">Return on investment</div>
+  <div class="big-roi ${neg ? 'neg' : ''}">${Math.round(r.roi).toLocaleString('en-US')}%</div>
+  <span class="verdict ${neg ? 'neg' : ''}">${verdict}</span>
+  <p style="margin-top:16px;color:#e8f1ee">Every ₱1 you spent on this ad brought back ₱${r.roas.toFixed(2)} in sales. After product costs and the ad itself, ${kept}.</p>
+  <div class="statgrid">
+    <div><small>Net profit</small><b>${peso(r.net)}</b></div>
+    <div><small>Return on ad spend</small><b>${(+r.roas.toFixed(2))}×</b></div>
+    <div><small>Cost per order</small><b>${r.cpo == null ? '—' : peso(+r.cpo.toFixed(2))}</b></div>
+    <div><small>Conversion rate</small><b>${r.conv == null ? '—' : (+r.conv.toFixed(1)) + '%'}</b></div></div>
+  <div class="next-box"><b>What to do next</b><p>${roiNext(r)}</p></div>
+  <div class="row-btns"><button class="btn btn-yellow" data-action="roi-save">Save to my campaigns</button><button class="btn btn-light" data-action="roi-summary">Download summary</button></div>`;
+}
+function savedCampaigns() {
+  const list = store.get('bg_campaigns', []);
+  if (!list.length) return '';
+  return `<div class="card" style="margin-top:16px"><h2>My campaigns</h2><div class="saved-list">${list.map((c, i) => `
+    <div class="saved-row"><div><b>${esc(c.name)}</b><small>${esc(c.platform)} · ROI ${Math.round(c.roi)}% · net ${peso(c.net)} · ${esc(c.date)}</small></div><button class="x" data-action="roi-del" data-i="${i}">Remove</button></div>`).join('')}</div></div>`;
+}
+function roiPage() {
+  app.innerHTML = `${appHeader('roi')}<main class="page"><div class="container">${backLink}
+  <h1>Social Media ROI Calculator</h1>
+  <p class="intro">Find out if a post, boost, or ad campaign earned back what you spent — and how much you actually kept.</p>
+  <div class="split">
+    <div class="card">
+      <div class="step-h"><span class="num">1</span><h2>Campaign details</h2></div>
+      <div class="field"><div class="lbl">Platform</div><div class="chips" role="group" aria-label="Platform">
+        ${['Grab ads', 'Facebook', 'Instagram', 'TikTok', 'Other'].map(p => `<button type="button" class="chip" data-plat="${p}" aria-pressed="${p === roi.platform}">${p}</button>`).join('')}</div></div>
+      <div class="field"><label class="lbl" for="r-name">Campaign name</label><input class="input" id="r-name" placeholder="e.g. Payday boost"></div>
+      <div class="step-h" style="margin-top:28px"><span class="num">2</span><h2>Money in and out</h2></div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="r-spend">Ad spend</label><div class="money"><span>₱</span><input class="input" id="r-spend" inputmode="decimal" placeholder="e.g. 2,500"></div><div class="hint">Boosts, ads, and creator fees for this campaign</div><div class="err" id="e-spend" hidden></div></div>
+        <div class="field"><label class="lbl" for="r-sales">Sales from this campaign</label><div class="money"><span>₱</span><input class="input" id="r-sales" inputmode="decimal" placeholder="e.g. 9,000"></div><div class="hint">Only orders that came from this post or ad</div><div class="err" id="e-sales" hidden></div></div>
+      </div>
+      <div class="grid2"><div class="field"><label class="lbl" for="r-cost">Product cost of those sales</label><div class="money"><span>₱</span><input class="input" id="r-cost" inputmode="decimal" placeholder="e.g. 4,000"></div><div class="hint">What the items cost you to make or buy</div><div class="err" id="e-cost" hidden></div></div></div>
+      <div class="step-h" style="margin-top:28px"><span class="num">3</span><h2>Customers</h2></div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="r-inq">Inquiries or messages</label><input class="input" id="r-inq" inputmode="numeric" placeholder="e.g. 120"><div class="hint">People who asked or messaged because of this ad</div></div>
+        <div class="field"><label class="lbl" for="r-ord">Orders</label><input class="input" id="r-ord" inputmode="numeric" placeholder="e.g. 30"><div class="hint">How many of them actually bought</div></div>
+      </div>
+      <div class="row-btns" style="margin-top:8px"><button class="btn btn-green btn-lg" data-action="roi-calc">Calculate</button><button class="btn btn-outline btn-lg" data-action="roi-clear">Clear</button></div>
+    </div>
+    <div>
+      <div class="panel-dark" id="rres" aria-live="polite">${roiResult(roiCalc(ROI_EX), true)}</div>
+      <div class="card" style="margin-top:16px"><h2>How BizGuard calculates this</h2><ul class="formula">
+        <li><b>Net profit</b><span>Sales − Product cost − Ad spend</span></li>
+        <li><b>ROI</b><span>Net profit ÷ Ad spend × 100</span></li>
+        <li><b>Return on ad spend</b><span>Sales ÷ Ad spend</span></li>
+        <li><b>Cost per order</b><span>Ad spend ÷ Orders</span></li>
+        <li><b>Conversion rate</b><span>Orders ÷ Inquiries × 100</span></li></ul></div>
+      <div id="rsaved">${savedCampaigns()}</div>
+    </div>
+  </div></div></main>`;
+  roi.res = null;
+  loadSaved().then(() => { const e = $('#rsaved'); if (e) e.innerHTML = savedCampaigns(); });
+  $$('[data-plat]').forEach(b => b.addEventListener('click', () => {
+    roi.platform = b.dataset.plat; $$('[data-plat]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  }));
+}
+
+/* ---------- COMPLAINT REPLIES ---------- */
+const ISSUES = [['late', 'Late delivery'], ['damaged', 'Damaged or broken item'], ['wrong', 'Wrong item sent'], ['refund', 'Refund request'], ['bad', 'Bad comment or review'], ['other', 'Something else']];
+const TONES = [['apologetic', 'Apologetic'], ['friendly', 'Friendly'], ['firm', 'Firm but polite']];
+const IS = {
+  late: { sorry: 'your order is taking longer than expected', extra: "We know you've been waiting.", ack: 'the delay with your order', noun: 'delivery delays', q: 'Could you send us your order number?', f: "We'll check the status with the courier and update you today.", def: "We'll update you the same day.",
+    steps: [['Reply to the public comment instead of deleting it.', 1], ['Send the private message and ask for the order number.'], ['Check the parcel status with your courier and update the customer the same day.'], ['If the parcel is lost or damaged, offer a resend or refund based on your shop policy.'], ["Keep screenshots of the chat and the courier's updates."]],
+    avoid: "arguing in the comments, blaming the customer, or promising a delivery date the courier hasn't confirmed." },
+  damaged: { sorry: 'your order arrived damaged', extra: "That's not the experience we want you to have.", ack: 'the damaged item', noun: 'damaged orders', q: 'Could you send us a photo of the item and your order number?', f: "We'll check it right away.", def: "Once we've checked, we'll tell you how we'll make it right.",
+    steps: [['Reply to the public comment instead of deleting it.', 1], ['Ask for a photo of the item and the packaging, plus the order number.'], ['Check the order record and your stock.'], ['Offer a replacement or refund based on your shop policy.'], ['Keep the photos and the chat. Review how you pack that item.']],
+    avoid: 'blaming the courier in public, asking for proof again and again, or promising a replacement before you have checked your stock.' },
+  wrong: { sorry: 'we sent the wrong item', extra: "That's our mistake.", ack: 'the wrong item', noun: 'order mistakes', q: 'Could you send us a photo of what you received and your order number?', f: "We'll check it right away.", def: "Once we've checked, we'll tell you how we'll fix it.",
+    steps: [['Reply to the public comment instead of deleting it.', 1], ['Ask for a photo of what arrived and the order number.'], ['Compare it with the order record to confirm the mistake.'], ['Send the right item or refund, based on your shop policy.'], ['Note what went wrong so it does not happen again.']],
+    avoid: "denying the mistake before you've checked, blaming the customer, or asking them to pay for the fix." },
+  refund: { sorry: 'for the trouble with your order', extra: 'We want to sort this out.', ack: 'your refund request', noun: 'refund requests', q: "Could you confirm your order number and why you're asking for a refund?", f: "We'll review it and reply today.", def: "We'll tell you our decision as soon as we've reviewed it.",
+    steps: [['Reply to the public comment instead of deleting it.', 1], ['Confirm the order number and the reason.'], ['Check your shop policy and the Grab refund rules.'], ['Tell the customer the decision and when to expect it.'], ['Record the refund so you can see it on your dashboard.']],
+    avoid: "ignoring the request, promising a refund your policy doesn't allow, or arguing about who is right." },
+  bad: { sorry: "that your experience with us wasn't good", extra: "We'd like to understand what happened.", ack: 'your experience', noun: 'customer feedback', q: 'Could you tell us what happened?', f: "We'd like to understand it and fix it.", def: "We'd like to make this right.",
+    steps: [['Wait a little before replying. Read the comment twice.', 1], ['Reply once in public, briefly and politely.', 1], ['Move the details to a private message.'], ['Fix the problem, then tell the customer what you did.'], ['Thank them if they choose to update their review on their own.']],
+    avoid: 'deleting the comment, arguing in public, or offering a gift in exchange for removing a review.' },
+  other: { sorry: 'for the trouble you had', extra: 'We want to help.', ack: 'this', noun: 'every concern', q: 'Could you tell us a bit more, and share your order number if you have one?', f: "We'll get back to you as soon as we can.", def: "We'll reply as soon as we've looked into it.",
+    steps: [['Reply to the public comment instead of deleting it.', 1], ['Send a private message and ask for the details.'], ['Check what happened with your own records.'], ['Tell the customer what you found and what you can do.'], ['Keep screenshots of the chat.']],
+    avoid: 'arguing in the comments, blaming the customer, or promising something you cannot deliver.' }
+};
+function genReplies(s) {
+  const I = IS[s.issue], n = (s.name || '').trim() || 'there';
+  const ord = (s.order || '').trim().replace(/^#/, ''), ref = ord ? ` (order #${ord})` : '';
+  const offer = (s.offer || '').trim().replace(/[.\s]+$/, '');
+  const offerLine = offer ? `Here's what we can do: ${offer.charAt(0).toLowerCase() + offer.slice(1)}.` : I.def;
+  const v = s.variant;
+  const close = { apologetic: ['Thank you for your patience.', 'Thank you for giving us the chance to fix this.'], friendly: ['Thanks for your patience!', 'Thanks for bearing with us!'], firm: ['We appreciate your patience while we look into this.', "We'll update you as soon as we've checked."] }[s.tone][v];
+  const bridge = v ? "Please check your inbox. We've messaged you so we can fix this quickly." : "We've sent you a private message so we can sort this out right away.";
+  let pub, priv;
+  if (s.short) {
+    const o = { apologetic: "we're sorry about this", friendly: 'thanks for telling us', firm: 'thank you for raising this' }[s.tone];
+    pub = `Hi ${n}, ${o}. We've messaged you privately to fix this.`;
+    const po = { apologetic: 'sorry for the trouble', friendly: 'thanks for messaging us', firm: 'thank you for contacting us' }[s.tone];
+    priv = `Hi ${n}, ${po}${ref}. ${I.q}`;
+  } else {
+    const open = {
+      apologetic: `Hi ${n}, we're really sorry ${I.sorry}. ${I.extra}`,
+      friendly: `Hi ${n}, thanks for letting us know about ${I.ack}! ${I.extra}`,
+      firm: `Hi ${n}, thank you for bringing this to us. We take ${I.noun} seriously.`
+    }[s.tone];
+    pub = `${open} ${bridge} ${close}`;
+    const po = {
+      apologetic: `Hi ${n}, thank you for reaching out, and sorry again for the trouble${ref}.`,
+      friendly: `Hi ${n}, thanks for messaging us${ref}!`,
+      firm: `Hi ${n}, thank you for contacting us${ref}. We'd like to resolve this quickly.`
+    }[s.tone];
+    priv = `${po} ${I.q} ${I.f} ${offerLine} ${close}`;
+  }
+  if (s.ai) { pub = s.ai.pub || pub; priv = s.ai.priv || priv; }
+  const upd = `Hi ${n}, here's an update${ref}: [WHAT YOU FOUND]. [WHAT YOU WILL DO NEXT]. ${close}`;
+  return s.channel === 'public'
+    ? [{ label: '1 · Post this under the comment', text: pub, first: true, btn: 'Copy reply' }, { label: '2 · Then send this as a private message', text: priv, btn: 'Copy message' }]
+    : [{ label: '1 · Send this as a private message', text: priv, first: true, btn: 'Copy message' }, { label: "2 · After you've checked, send this update", text: upd, btn: 'Copy update' }];
+}
+const rp = { issue: 'late', channel: 'public', tone: 'apologetic' };
+const RP_EX = { issue: 'late', channel: 'public', tone: 'apologetic', name: 'Ana', order: '', offer: 'resend your order at no extra cost', variant: 0, short: false };
+let shown = { ...RP_EX }, shownIsExample = true, outs = [];
+
+async function regen(first) {
+  shown.ai = null;
+  if (shown.text && LIVE && TOKEN) {
+    const o = $('#rpout'); if (o) o.setAttribute('aria-busy', 'true');
+    try { shown.ai = await api('reply', { s: { issue: shown.issue, channel: shown.channel, tone: shown.tone, name: shown.name, order: shown.order, offer: shown.offer, text: shown.text, short: shown.short, variant: shown.variant } }); }
+    catch (e) { if (first) toast(e.message); }
+    if (o) o.removeAttribute('aria-busy');
+  }
+  repliesPanel(); if (first && shown.ai) toast("Replies written from the customer's message");
+}
+function repliesPanel() {
+  outs = genReplies(shown);
+  const I = IS[shown.issue];
+  $('#rpout').innerHTML = `<div class="panel-head"><h2>Your replies</h2>${shownIsExample ? '<span class="tag dark">Example</span>' : ''}</div>${shown.ai ? '<p style="color:#cfe0da;font-size:14px">Written from the customer\'s message. Read it before you send it.</p>' : ''}
+  ${outs.map((o, i) => `<div class="rlabel">${o.label}</div><div class="bubble">${esc(o.text)}</div>
+    <div class="row-btns"><button class="btn ${i === 0 ? 'btn-yellow' : 'btn-light'}" data-action="rp-copy" data-i="${i}">${ic('copy')}${o.btn}</button>
+    ${o.first ? `<button class="btn btn-light" data-action="rp-short">${shown.short ? 'Use the full version' : 'Make it shorter'}</button><button class="btn btn-light" data-action="rp-alt">Try another version</button>` : ''}</div>`).join('')}`;
+  const steps = I.steps.filter(s => shown.channel === 'public' || !s[1]);
+  $('#rpnext').innerHTML = `<h2>Next steps</h2><ol class="nsteps">${steps.map(s => `<li><span>${esc(s[0])}</span></li>`).join('')}</ol>`;
+  $('#rpavoid').innerHTML = `${ic('warn')}<div><b>Avoid:</b> ${esc(I.avoid)}</div>`;
+}
+function repliesPage(q) {
+  const qi = q.get('issue'); if (qi && IS[qi]) rp.issue = qi;
+  const chips = (arr, key) => arr.map(([k, l]) => `<button type="button" class="chip" data-k="${key}" data-v="${k}" aria-pressed="${rp[key] === k}">${l}</button>`).join('');
+  app.innerHTML = `${appHeader('replies')}<main class="page"><div class="container">${backLink}
+  <h1>Crisis &amp; Complaint Response Generator</h1>
+  <p class="intro">Reply to an upset customer quickly and calmly — in your comments or in private messages.</p>
+  <div class="split">
+    <div class="card">
+      <div class="step-h"><span class="num">1</span><h2>What happened?</h2></div><div class="chips">${chips(ISSUES, 'issue')}</div>
+      <div class="step-h" style="margin-top:26px"><span class="num">2</span><h2>Where are you replying?</h2></div>
+      <div class="chips">${chips([['public', 'Public comment'], ['private', 'Private message']], 'channel')}</div>
+      <div class="step-h" style="margin-top:26px"><span class="num">3</span><h2>The details</h2></div>
+      <div class="field"><label class="lbl" for="p-text">Paste what the customer wrote</label><textarea class="input" id="p-text" placeholder="e.g. Ordered last week and still nothing. Ang tagal! Never ordering here again."></textarea></div>
+      <div class="grid2"><div class="field"><label class="lbl" for="p-name">Customer's name</label><input class="input" id="p-name" placeholder="e.g. Ana"></div>
+      <div class="field"><label class="lbl" for="p-order">Order number <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input class="input" id="p-order" placeholder="e.g. 1042"></div></div>
+      <div class="field"><label class="lbl" for="p-offer">What can you offer? <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input class="input" id="p-offer" placeholder="e.g. Resend the order at no extra cost"><div class="hint">Only offer what your shop policy allows</div></div>
+      <div class="step-h" style="margin-top:26px"><span class="num">4</span><h2>Tone</h2></div><div class="chips">${chips(TONES, 'tone')}</div>
+      <button class="btn btn-green btn-lg" style="margin-top:26px" data-action="rp-write">Write my reply</button>
+    </div>
+    <div>
+      <div class="panel-dark" id="rpout" aria-live="polite"></div>
+      <div class="card" style="margin-top:16px" id="rpnext"></div>
+      <div class="avoid" id="rpavoid"></div>
+    </div>
+  </div></div></main>`;
+  $$('[data-k]').forEach(b => b.addEventListener('click', () => {
+    rp[b.dataset.k] = b.dataset.v;
+    $$(`[data-k="${b.dataset.k}"]`).forEach(x => x.setAttribute('aria-pressed', x === b));
+  }));
+  repliesPanel();
+}
+
+/* ---------- CREATOR CHECKLIST ---------- */
+const CG = [
+  { n: 'Audience fit', k: 'a', items: [
+    ['Most of their followers are in my target area or market', 'Ask for a screenshot of their audience insights: location and age.', 'Ask for a screenshot of their audience insights'],
+    ['Their content fits my products and brand', 'Would your customers follow this person?', 'Check that their content fits your brand'],
+    ['Their comments look real', 'Watch out for comments that are only emojis, the same words repeated, or sudden jumps in followers.', 'Look through their comments for real conversation']] },
+  { n: 'Track record', k: 't', items: [
+    ['No recent scandals or offensive posts', 'Scroll back through their older posts and comments, not just the latest ones.', 'Scroll back through their older posts and comments'],
+    ['They have done paid brand posts before and delivered on time', 'Ask which brands they have worked with.', 'Ask which brands they have posted for'],
+    ['Another seller can vouch for them', 'Message one or two brands they have posted for.', 'Contact one of those brands']] },
+  { n: 'Agreement & payment', k: 'g', items: [
+    ['We agreed in writing on what they will post and when', 'A chat message is fine if it lists the number of posts, the format, and the date.', 'Agree in writing on what they will post and when'],
+    ['Payment is split — part before, the rest after posting', 'Avoid paying the full amount before anything is posted.', 'Split the payment: part before, the rest after posting'],
+    ['It is clear whether I can reuse their photos or videos', 'Agree on this before they post, not after.', 'Agree on reusing their photos and videos']] },
+  { n: 'Product & posting', k: 'p', items: [
+    ['Products are sent with tracking', 'Keep the tracking number until the post is live.', 'Send products with tracking'],
+    ['They will show the product honestly, including how to order', "No claims your product can't back up.", 'Agree they will show the product honestly'],
+    ['The post will be labeled as an ad or paid partnership', 'Hidden ads can hurt trust in both of you.', 'Agree the post will be labeled as an ad']] }
+];
+const cr = { checked: new Set(['a0', 'a1', 'a2', 't0', 'g0', 'g1', 'p0', 'p1', 'p2']), example: true, platform: 'TikTok' };
+function creatorEval() {
+  const passed = cr.checked.size, lvl = passed >= 11 ? 'low' : passed >= 8 ? 'medium' : 'high';
+  const fix = [];
+  CG.forEach(g => g.items.forEach((it, i) => { if (!cr.checked.has(g.k + i)) fix.push(it[2]); }));
+  return { passed, lvl, fix };
+}
+function creatorPanel() {
+  const { passed, lvl, fix } = creatorEval();
+  const msg = { low: 'This creator looks like a safe partner. Still keep your agreement and tracking records.', medium: 'This creator could work, but fix the unchecked items before you pay.', high: "Don't pay yet. Too many checks are open. Fix these items or choose another creator." }[lvl];
+  $('#risk').innerHTML = `<div class="panel-head"><h2>Risk check</h2>${cr.example ? '<span class="tag dark">Example</span>' : ''}</div>
+  <div class="score">${passed} of 12</div><div style="color:#cfe0da">checks passed</div>
+  <div class="meter"><i style="width:${passed / 12 * 100}%"></i></div>
+  <div class="levels" aria-hidden="true"><i class="l ${lvl === 'low' ? 'on' : ''}"></i><i class="m ${lvl === 'medium' ? 'on' : ''}"></i><i class="h ${lvl === 'high' ? 'on' : ''}"></i></div>
+  <div class="levels-l"><span class="${lvl === 'low' ? 'on' : ''}">Low</span><span class="${lvl === 'medium' ? 'on' : ''}">Medium</span><span class="${lvl === 'high' ? 'on' : ''}">High</span></div>
+  <div class="lvl-h ${lvl}">${lvl.charAt(0).toUpperCase() + lvl.slice(1)} risk</div><p style="color:#e8f1ee">${msg}</p>
+  ${fix.length ? `<div class="fix"><b>Fix these first</b><ul>${fix.slice(0, 4).map(f => `<li>${esc(f)}</li>`).join('')}</ul>${fix.length > 4 ? `<p style="margin-top:8px;color:#cfe0da;font-size:14px">and ${fix.length - 4} more in the checklist</p>` : ''}</div>` : '<div class="fix"><b>Nothing left to fix</b><ul><li>Keep your chat and tracking records until the post is live.</li></ul></div>'}
+  <div class="row-btns"><button class="btn btn-yellow" data-action="cr-save">Save this check</button><button class="btn btn-light" data-action="cr-print">Print checklist</button></div>
+  <div class="legend">Low risk: 11–12 passed · Medium: 8–10 · High: 7 or fewer</div>`;
+  CG.forEach(g => { const c = g.items.filter((_, i) => cr.checked.has(g.k + i)).length; $(`#cnt-${g.k}`).textContent = `${c} of 3`; });
+}
+function creatorSaved() {
+  const l = store.get('bg_checks', []);
+  $('#csaved').innerHTML = l.length ? `<div class="card" style="margin-top:16px"><h2>Saved checks</h2><div class="saved-list">${l.map((c, i) => `<div class="saved-row"><div><b>${esc(c.name)}</b><small>${esc(c.platform)} · ${c.passed} of 12 · ${c.lvl} risk · ${esc(c.date)}</small></div><button class="x" data-action="cr-del" data-i="${i}">Remove</button></div>`).join('')}</div></div>` : '';
+}
+function creatorPage() {
+  app.innerHTML = `${appHeader('creator')}<main class="page"><div class="container">${backLink}
+  <h1>Creator Vetting &amp; Risk Checklist</h1>
+  <p class="intro">Before you send free products or pay for a post, check that the creator is a safe partner for your brand.</p>
+  <div class="card" style="margin-top:28px"><h2>Creator details</h2>
+    <div class="c3">
+      <div><label class="lbl" for="c-name">Name or handle</label><input class="input" id="c-name" placeholder="e.g. @creatorname"></div>
+      <div><label class="lbl" for="c-fol">Followers</label><input class="input" id="c-fol" inputmode="numeric" placeholder="e.g. 15,000"></div>
+      <div><label class="lbl" for="c-rate">Their rate per post</label><div class="money"><span>₱</span><input class="input" id="c-rate" inputmode="decimal" placeholder="e.g. 3,000"></div></div></div>
+    <div class="field" style="margin:18px 0 0"><div class="lbl">Platform</div><div class="chips" role="group" aria-label="Platform">
+      ${['Facebook', 'Instagram', 'TikTok', 'Other'].map(p => `<button type="button" class="chip" data-cp="${p}" aria-pressed="${p === cr.platform}">${p}</button>`).join('')}</div></div>
+    <div class="hint" id="c-note" style="font-size:14.5px"></div>
+  </div>
+  <div class="split creator">
+    <div class="card checklist"><h2>Checklist <span style="font-weight:400;color:var(--muted)">· tick what is true</span></h2>
+      ${CG.map(g => `<div class="grp"><h3>${g.n}<small id="cnt-${g.k}"></small></h3>${g.items.map((it, i) => `<label class="chk"><input type="checkbox" data-c="${g.k}${i}" ${cr.checked.has(g.k + i) ? 'checked' : ''}><div><b>${esc(it[0])}</b><span>${esc(it[1])}</span></div></label>`).join('')}</div>`).join('')}
+    </div>
+    <div class="sticky"><div class="panel-dark" id="risk" aria-live="polite"></div><div id="csaved"></div></div>
+  </div></div></main>`;
+  const upd = () => {
+    const f = num($('#c-fol').value), r = num($('#c-rate').value);
+    $('#c-note').textContent = f > 0 && r > 0 ? `That is ${peso(Math.round(r / (f / 1000) * 100) / 100)} per 1,000 followers. Compare this with other creators before you agree.` : '';
+  };
+  $('#c-fol').addEventListener('input', upd); $('#c-rate').addEventListener('input', upd);
+  $$('[data-cp]').forEach(b => b.addEventListener('click', () => { cr.platform = b.dataset.cp; $$('[data-cp]').forEach(x => x.setAttribute('aria-pressed', x === b)); }));
+  $$('[data-c]').forEach(c => c.addEventListener('change', () => {
+    cr.example = false; c.checked ? cr.checked.add(c.dataset.c) : cr.checked.delete(c.dataset.c); creatorPanel();
+  }));
+  creatorPanel(); creatorSaved(); loadSaved().then(() => { if ($('#csaved')) creatorSaved(); });
+}
+
+/* ---------- ADMIN ---------- */
+const BIZ0 = [
+  { id: 'A', name: 'Business A', platform: 'GrabFood', cat: 'Food & beverage', last: 'Sep 30', status: 'needs' },
+  { id: 'B', name: 'Business B', platform: 'GrabMart', cat: 'Grocery', last: 'Oct 10', status: 'ok' },
+  { id: 'C', name: 'Business C', platform: 'GrabFood', cat: 'Food & beverage', last: 'Oct 9', status: 'ok' },
+  { id: 'D', name: 'Business D', platform: 'GrabFood', cat: 'Food & beverage', last: '—', status: 'none' },
+  { id: 'E', name: 'Business E', platform: 'GrabMart', cat: 'Grocery', last: 'Oct 8', status: 'ok' }
+];
+const ad = { sel: 'A', type: 'sales', file: null, showRows: false, filter: '', exampleDone: false };
+const EX_FILE = () => ({ name: 'grab-transactions-may-oct.csv', example: true, range: 'May 1 – Oct 31, 2026', count: 763, skipped: false, warn: null,
+  missing: [{ row: 114, text: '2026-06-03, Chicken silog x2, (blank)' }, { row: 340, text: '2026-07-21, Iced coffee, (blank)' }, { row: 655, text: '2026-09-18, Pork sisig rice, (blank)' }] });
+const STAT = { ok: ['Up to date', ''], needs: ['Needs update', 'needs'], none: ['No data yet', 'none'] };
+
+function parseDate(s, df) {
+  s = String(s || '').trim().replace(/^\ufeff/, '');
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]).getTime();
+  m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+  if (!m) return Date.parse(s);
+  const y = m[3].length === 2 ? 2000 + +m[3] : +m[3];
+  return df ? new Date(y, +m[2] - 1, +m[1]).getTime() : new Date(y, +m[1] - 1, +m[2]).getTime();
+}
+function parseCSV(t) {
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (q) { if (c === '"') { if (t[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cur); cur = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(cur); cur = ''; if (row.some(x => x.trim() !== '')) rows.push(row); row = []; }
+    else cur += c;
+  }
+  row.push(cur); if (row.some(x => x.trim() !== '')) rows.push(row);
+  return rows;
+}
+function analyze(rows, type, name) {
+  let assumed = false;
+  if (rows.length && /^\d/.test(String(rows[0][0]).trim()) && !isNaN(parseDate(rows[0][0]))) {
+    const hd = type === 'ads' ? ['Date', 'Campaign', 'Spend', 'Orders'] : ['Date', 'Order ID', 'Status', 'Items', 'Amount'];
+    if (rows[0].length === hd.length) { rows = [hd, ...rows]; assumed = true; }
+  }
+  if (rows.length < 2) return { error: 'This file has no data rows. Check that it is the right report.' };
+  const head = rows[0].map(h => h.trim().toLowerCase()), data = rows.slice(1);
+  let di = head.findIndex(h => /created/.test(h)); if (di < 0) di = head.findIndex(h => /date|time|completed/.test(h) && !/transfer|updat|settle/.test(h));
+  const ai = (() => { for (const w of (type === 'ads' ? ['spend', 'spent', 'cost', 'amount'] : ['net sales', 'amount', 'total', 'sales', 'subtotal', 'price', 'fare'])) { const i = head.findIndex(h => h.includes(w)); if (i >= 0) return i; } return -1; })();
+  const dayFirst = di >= 0 && data.some(r => { const m = String(r[di]).match(/^\s*(\d{1,2})[\/\-.](\d{1,2})[\/\-.]\d{2,4}/); return m && +m[1] > 12; });
+  const missing = [], si0 = head.findIndex(h => /status|state/.test(h));
+  if (ai >= 0) data.forEach((r, i) => { if (num(r[ai] || '') === null && !(si0 >= 0 && /cancel|void|fail|reject|refund|return/i.test(r[si0] || ''))) missing.push({ row: i + 2, text: r.slice(0, 4).join(', ') + ' (no amount)' }); });
+  let range = 'Dates not found', mn = Infinity, mx = -Infinity;
+  if (di >= 0) data.forEach(r => { const t = parseDate(r[di], dayFirst); if (!isNaN(t)) { mn = Math.min(mn, t); mx = Math.max(mx, t); } });
+  if (mn !== Infinity) {
+    const f = (t, y) => new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric', ...(y ? { year: 'numeric' } : {}) });
+    range = `${f(mn)} – ${f(mx, true)}`;
+  }
+  return { name, range, count: data.length, missing, skipped: false, warn: assumed ? 'No header row found, so we assumed these columns: ' + (type === 'ads' ? 'Date, Campaign, Spend, Orders' : 'Date, Order ID, Status, Items, Amount') + '.' : ai < 0 ? "We couldn't find an amount column. Check the column names in the file." : di < 0 ? "We couldn't find a date column. Check the column names in the file." : null, type, agg: di >= 0 && ai >= 0 ? aggregate(data, head, type, di, ai, dayFirst) : null };
+}
+function rollup(ords) {
+  const A = { m: {}, w: {}, it: {}, c: {}, r: {} };
+  ords.forEach(([id, d, st, a, it]) => {
+    const k = d.slice(0, 7), day = +d.slice(8, 10);
+    if (st === 'x') { A.c[k] = (A.c[k] || 0) + 1; return; }
+    if (st === 'r') { A.r[k] = (A.r[k] || 0) + 1; return; }
+    const m = A.m[k] = A.m[k] || [0, 0]; m[0] += a; m[1]++;
+    const w = A.w[k] = A.w[k] || [[0, 0], [0, 0], [0, 0], [0, 0]], b = w[Math.min(3, Math.floor((day - 1) / 7))]; b[0] += a; b[1]++;
+    if (it) { const t = A.it[k] = A.it[k] || {}; it.split(/[;|]/).forEach(p => { const n = p.replace(/\s*x\s*\d+\s*$/i, '').trim(), q = +((p.match(/x\s*(\d+)\s*$/i) || [])[1] || 1); if (n) t[n] = (t[n] || 0) + q; }); }
+  });
+  return A;
+}
+function aggregate(data, head, type, di, ai, df) {
+  const f = (re, ex) => head.findIndex(h => re.test(h) && !(ex && ex.test(h)));
+  const si = f(/status|state/), ii = f(/item|menu|product/, /price|amount|total|cost|qty|quantity|count|id|refund/), oi = f(/orders|conversions/), ti = f(/^type$/), ci = f(/cancellation reason/), ri = f(/reason for refund/);
+  const idi = f(/short order id/) >= 0 ? f(/short order id/) : f(/order id/) >= 0 ? f(/order id/) : f(/transaction id/);
+  const ord = [], seen = {}, am = {};
+  data.forEach(r => {
+    const t = parseDate(r[di], df); if (isNaN(t)) return;
+    const dt = new Date(t), k = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0'), a = num(r[ai] || '');
+    if (type === 'ads') { if (a === null) return; const x = am[k] = am[k] || [0, 0]; x[0] += a; x[1] += oi >= 0 ? (num(r[oi]) || 0) : 0; return; }
+    const st = si >= 0 ? (r[si] || '').toLowerCase() : '', ty = ti >= 0 ? (r[ti] || '').toLowerCase().trim() : '';
+    const code = /cancel|void|fail|reject/.test(st) || (ci >= 0 && (r[ci] || '').trim()) ? 'x' : /refund|return/.test(st) || (ri >= 0 && (r[ri] || '').trim()) ? 'r' : 'c';
+    if (ty && !/grabfood|grabmart|order/.test(ty) && code === 'c') return;
+    if (code === 'c' && a === null) return;
+    const iso = k + '-' + String(dt.getDate()).padStart(2, '0'), items = ii >= 0 ? (r[ii] || '') : '';
+    let id = idi >= 0 && (r[idi] || '').trim() ? r[idi].trim() : null;
+    if (!id) { const b = iso + '|' + a + '|' + items; seen[b] = (seen[b] || 0) + 1; id = b + '|' + seen[b]; }
+    ord.push([id, iso, code, a || 0, items]);
+  });
+  return type === 'ads' ? { m: am, w: {}, it: {}, c: {}, r: {}, ord: [] } : { ...rollup(ord), ord };
+}
+function adminPanel() {
+  const biz = store.get('bg_biz', BIZ0), b = biz.find(x => x.id === ad.sel), f = ad.file, el = $('#lpanel');
+  if (!b) { el.innerHTML = '<h2>Load data</h2><p class="hint" style="font-size:16px">Add a business first, then load its Grab reports here.</p>'; return; }
+  const noun = ad.type === 'ads' ? 'ad records' : 'transactions';
+  let fileHtml = '';
+  if (f) {
+    const m = f.missing.length;
+    fileHtml = `<div class="filename"><span>${esc(f.name)}</span>${f.example ? '<span class="tag">Example</span>' : ''}</div>
+    <ul class="checks"><li class="ok">${ic('checkc')}<span>${esc(f.range)}</span></li>
+    <li class="ok">${ic('checkc')}<span>${f.count.toLocaleString('en-US')} ${noun} read</span></li>
+    ${f.warn ? `<li class="bad">${ic('warn')}<span>${esc(f.warn)}</span></li>` : ''}
+    ${m && !f.skipped ? `<li class="bad">${ic('warn')}<span><b>${m} row${m > 1 ? 's have' : ' has'} no amount.</b> Fix ${m > 1 ? 'them' : 'it'} in the file or skip ${m > 1 ? 'them' : 'it'}.</span></li>` : ''}
+    ${m && f.skipped ? `<li class="ok">${ic('checkc')}<span>${m} row${m > 1 ? 's' : ''} skipped</span></li>` : ''}</ul>
+    ${ad.showRows && m ? `<div class="rowlist">${f.missing.slice(0, 20).map(r => `<div>Row ${r.row}: ${esc(r.text)}</div>`).join('')}${m > 20 ? `<div>…and ${m - 20} more</div>` : ''}</div>` : ''}
+    ${m ? `<div class="row-btns"><button class="btn btn-outline btn-sm" data-action="ad-rows">${ad.showRows ? 'Hide rows' : 'Show rows'}</button><button class="btn btn-outline btn-sm" data-action="ad-skip">${f.skipped ? 'Undo skip' : 'Skip them'}</button></div>` : ''}`;
+  }
+  el.innerHTML = `<div class="eyebrow-s">Load data</div><h2>${esc(b.name)}</h2>
+  <div class="lbl" style="margin-top:6px">Report type</div>
+  <div class="chips" role="group" aria-label="Report type"><button class="chip" data-action="ad-type" data-t="sales" aria-pressed="${ad.type === 'sales'}">Sales transactions</button><button class="chip" data-action="ad-type" data-t="ads" aria-pressed="${ad.type === 'ads'}">Grab ads report</button></div>
+  <div class="drop" id="drop">${ic('upload')}<b>Drop the owner's Grab report here</b><button class="btn btn-outline btn-sm" data-action="ad-choose">Choose file</button>
+    <input type="file" id="fin" accept=".csv,.xlsx,.xls,text/csv" hidden></div>
+  <div id="ferr" class="err" role="alert" hidden></div>
+  ${fileHtml}
+  <div class="divider"></div>
+  <button class="btn btn-green btn-block" data-action="ad-publish" ${f ? '' : 'disabled'}>Publish to owner's dashboard</button>
+  <button class="btn btn-outline btn-block" style="margin-top:10px" data-action="ad-preview">Preview dashboard</button>
+  <p class="hint" style="margin-top:12px">The owner sees the new data as soon as you publish.</p>
+  <div class="row-btns" style="margin-top:14px"><button class="btn btn-outline btn-sm" data-action="ad-edit">Edit business</button><button class="btn btn-outline btn-sm" data-action="ad-reset">Reset password</button><button class="btn btn-outline btn-sm" data-action="ad-del">Delete business</button></div>`;
+  const fin = $('#fin'), drop = $('#drop');
+  fin.addEventListener('change', () => readFile(fin.files[0]));
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('over'); readFile(e.dataTransfer.files[0]); });
+}
+function readAny(file) {
+  return new Promise((ok, no) => {
+    const x = /\.xlsx?$/i.test(file.name), r = new FileReader();
+    r.onerror = () => no(new Error('We could not read that file. Try saving it again.'));
+    r.onload = () => {
+      if (!x) return ok(String(r.result));
+      try {
+        if (typeof XLSX === 'undefined') throw 0;
+        const wb = XLSX.read(new Uint8Array(r.result), { type: 'array', cellDates: true, dateNF: 'yyyy-mm-dd' });
+        const sn = wb.SheetNames.find(n => /transaction/i.test(n)) || wb.SheetNames.find(n => { const c = XLSX.utils.sheet_to_csv(wb.Sheets[n]).split('\n')[0].toLowerCase(); return /date|created/.test(c) && /amount|total|sales/.test(c); }) || wb.SheetNames[0];
+        ok(XLSX.utils.sheet_to_csv(wb.Sheets[sn], { dateNF: 'yyyy-mm-dd' }));
+      } catch (e) { no(new Error('We could not open that Excel file. Save it as CSV and try again.')); }
+    };
+    x ? r.readAsArrayBuffer(file) : r.readAsText(file);
+  });
+}
+function readFile(file) {
+  if (!file) return;
+  const err = $('#ferr'), bad = m => { err.textContent = m; err.hidden = false; };
+  if (!/\.(csv|xlsx?)$/i.test(file.name)) return bad('Choose a CSV or Excel file.');
+  readAny(file).then(t => { const res = analyze(parseCSV(t), ad.type, file.name); if (res.error) return bad(res.error); ad.file = res; ad.showRows = false; adminPanel(); }).catch(e => bad(e.message));
+}
+function adminList() {
+  const biz = store.get('bg_biz', BIZ0), q = ad.filter.toLowerCase();
+  const list = biz.filter(b => (b.name + b.platform + b.cat).toLowerCase().includes(q));
+  $('#bcount').textContent = biz.length;
+  $('#btbody').innerHTML = list.length ? list.map(b => `<tr class="${b.id === ad.sel ? 'sel' : ''}"><td><b>${esc(b.name)}</b><small>${esc(b.platform)} · ${esc(b.cat)}</small></td><td>${esc(b.last)}</td><td><span class="status ${STAT[b.status][1]}">${STAT[b.status][0]}</span>${b.resetReq ? ' <span class="status needs">Password reset requested</span>' : ''}</td>
+    <td><button class="btn btn-sm ${b.id === ad.sel ? 'btn-green' : 'btn-outline'}" data-action="ad-select" data-id="${b.id}">Load data</button></td></tr>`).join('')
+    : `<tr><td colspan="4" style="color:var(--muted)">${biz.length ? 'No businesses match your search.' : 'No businesses yet. Click Add business to start.'}</td></tr>`;
+}
+function admin() {
+  if (!ad.file && ad.sel === 'A' && !ad.exampleDone && !LIVE) ad.file = EX_FILE();
+  app.innerHTML = `<header class="app-header"><div class="container"><div class="left"><a class="logo" href="#/admin">${ic('logo')}BizGuard</a><span class="badge-admin">ADMIN</span></div>
+    <div class="admin-who"><span>${esc(CONFIG.admin)}</span><button class="btn btn-light" data-action="logout">Log out</button></div></div></header>
+  <main class="page"><div class="container">
+    <div class="page-head"><div><h1>Owner data</h1><p class="intro">Load each owner's Grab reports so their dashboard stays up to date.</p></div>
+      <button class="btn btn-green btn-lg" data-action="ad-add">${ic('plus')}Add business</button></div>
+    <div class="admin-grid">
+      <div class="card"><div class="biz-top"><h2 style="font-size:19px">Businesses · <span id="bcount"></span></h2>
+        <label class="sr" for="bq">Search businesses</label><input class="input" id="bq" placeholder="Search businesses"></div>
+        <table class="biz-table"><thead><tr><th scope="col">Business</th><th scope="col">Last update</th><th scope="col">Status</th><th scope="col"><span class="sr">Action</span></th></tr></thead><tbody id="btbody"></tbody></table></div>
+      <div class="load-panel" id="lpanel"></div>
+    </div></div></main>`;
+  $('#bq').value = ad.filter;
+  $('#bq').addEventListener('input', e => { ad.filter = e.target.value; adminList(); });
+  adminList(); adminPanel();
+}
+
+/* ---------- OWNER UPLOAD ---------- */
+const up = { type: 'sales', file: null, rows: false };
+function staleBanner(b, preview) {
+  if (preview || session() !== 'owner' || !b || !b.lastAt) return '';
+  const d = Math.floor((Date.now() - Date.parse(b.lastAt)) / 864e5);
+  return d >= 7 ? `<div class="note-bar" style="margin:0 0 16px;background:var(--warn-bg);color:var(--warn-ink)"><b>Your numbers are ${d} days old.</b> &nbsp;<a class="link-u" href="#/upload">Upload your latest Grab report</a></div>` : '';
+}
+function upPanel() {
+  const f = up.file, m = f ? f.missing.length : 0, noun = up.type === 'ads' ? 'ad records' : 'transactions';
+  $('#upanel').innerHTML = `<div class="step-h"><span class="num">1</span><h2>Which report is it?</h2></div>
+  <div class="chips" role="group" aria-label="Report type"><button class="chip" data-action="up-type" data-t="sales" aria-pressed="${up.type === 'sales'}">Sales transactions</button><button class="chip" data-action="up-type" data-t="ads" aria-pressed="${up.type === 'ads'}">Grab ads report</button></div>
+  <div class="step-h" style="margin-top:26px"><span class="num">2</span><h2>Drop the CSV file</h2></div>
+  <div class="drop" id="udrop">${ic('upload')}<b>Drop your Grab report here</b><button class="btn btn-outline btn-sm" data-action="up-choose">Choose file</button><input type="file" id="ufin" accept=".csv,.xlsx,.xls,text/csv" hidden></div>
+  <div id="uerr" class="err" role="alert" hidden></div>
+  ${f ? `<div class="filename"><span>${esc(f.name)}</span></div><ul class="checks"><li class="ok">${ic('checkc')}<span>${esc(f.range)}</span></li><li class="ok">${ic('checkc')}<span>${f.count.toLocaleString('en-US')} ${noun} read</span></li>${f.warn ? `<li class="bad">${ic('warn')}<span>${esc(f.warn)}</span></li>` : ''}${m ? `<li class="bad">${ic('warn')}<span><b>${m} row${m > 1 ? 's have' : ' has'} no amount</b> and will be left out. <button class="link-u" style="border:0;background:none;color:inherit;padding:0" data-action="up-rows">${up.rows ? 'Hide rows' : 'Show rows'}</button></span></li>` : ''}</ul>${up.rows && m ? `<div class="rowlist">${f.missing.slice(0, 20).map(r => `<div>Row ${r.row}: ${esc(r.text)}</div>`).join('')}</div>` : ''}` : ''}
+  <div class="step-h" style="margin-top:26px"><span class="num">3</span><h2>Update my dashboard</h2></div>
+  <button class="btn btn-green btn-lg" data-action="up-publish" ${f && f.agg ? '' : 'disabled'}>Update my dashboard</button>`;
+  const fin = $('#ufin'), dr = $('#udrop');
+  fin.addEventListener('change', () => upRead(fin.files[0]));
+  dr.addEventListener('dragover', e => { e.preventDefault(); dr.classList.add('over'); });
+  dr.addEventListener('dragleave', () => dr.classList.remove('over'));
+  dr.addEventListener('drop', e => { e.preventDefault(); dr.classList.remove('over'); upRead(e.dataTransfer.files[0]); });
+}
+function upRead(file) {
+  if (!file) return;
+  const err = $('#uerr'), bad = m => { err.textContent = m; err.hidden = false; };
+  if (!/\.(csv|xlsx?)$/i.test(file.name)) return bad('Choose a CSV or Excel file.');
+  readAny(file).then(t => {
+    const res = analyze(parseCSV(t), up.type, file.name);
+    if (res.error) return bad(res.error);
+    up.file = res; up.rows = false; upPanel();
+    if (!res.agg) toast(res.warn || 'We could not read this report.');
+  }).catch(e => bad(e.message));
+}
+function uploadPage() {
+  const l = store.get('bg_biz', []), b = l.find(x => x.id === store.get('bg_owner', null)) || l[0];
+  app.innerHTML = `${appHeader('upload')}<main class="page"><div class="container">${backLink}<h1>Upload your Grab report</h1>
+  <p class="intro">Download your weekly report from GrabMerchant and drop the file here. You can upload a CSV or an Excel file.</p>
+  <div class="split"><div class="card" id="upanel"></div><div>
+    <div class="card"><h2>${b ? esc(b.name) : 'Your shop'}</h2><p class="hint" style="font-size:15px;margin-top:6px">${b && b.lastAt ? 'Last updated ' + esc(b.last) : 'No report uploaded yet.'}</p><p class="hint" style="font-size:15px;margin-top:10px">Uploading again replaces the months in the new file. Months that are not in the file stay as they are.</p></div>
+    <div class="card" style="margin-top:16px"><h2>Change password</h2>
+      <div class="field" style="margin-top:14px"><label class="lbl" for="pw-old">Current password</label><input class="input" id="pw-old" type="password" autocomplete="current-password"></div>
+      <div class="field"><label class="lbl" for="pw-new">New password</label><input class="input" id="pw-new" type="password" autocomplete="new-password"><div class="hint">At least 6 characters</div></div>
+      <div class="err" id="pw-err" hidden></div><button class="btn btn-outline" data-action="up-chpw">Change password</button></div>
+  </div></div></div></main>`;
+  up.file = null; up.rows = false; upPanel();
+}
+
+/* ---------- actions ---------- */
+const actions = {
+  logout() { TOKEN = null; store.set('bg_campaigns', []); store.set('bg_checks', []); store.set('bg_token', null); store.set('bg_session', null); go('#/'); },
+  forgot(el, e) {
+    e.preventDefault();
+    openModal('Forgot your password?', `<p class="hint" style="font-size:16px;margin-bottom:14px">Enter your email or mobile number. The BizGuard team will see your request and give you a new password.</p><div class="field"><label class="lbl" for="fp-id">Email or mobile number</label><input class="input" id="fp-id"></div><div class="err" id="fp-err" hidden></div><div class="row-btns"><button class="btn btn-green" data-action="forgot-send">Send request</button><button class="btn btn-outline" data-action="modal-close">Cancel</button></div>`);
+  },
+  async 'forgot-send'() {
+    const id = $('#fp-id').value.trim(), er = $('#fp-err');
+    if (!id) { er.textContent = 'Enter your email or mobile number.'; er.hidden = false; return; }
+    try { await api('forgot', { id }); closeModal(); toast('Request sent. The BizGuard team will contact you.'); } catch (x) { er.textContent = x.message; er.hidden = false; }
+  },
+  'roi-calc'() {
+    const g = id => num($(id).value), v = { spend: g('#r-spend'), sales: g('#r-sales'), cost: g('#r-cost') };
+    let bad = false;
+    [['spend', 'Enter your ad spend, e.g. 2,500.', v.spend > 0], ['sales', 'Enter your sales from this campaign, e.g. 9,000. Use 0 if none.', v.sales !== null && v.sales >= 0], ['cost', 'Enter the product cost, e.g. 4,000. Use 0 if none.', v.cost !== null && v.cost >= 0]]
+      .forEach(([k, m, ok]) => { const e = $('#e-' + k); e.hidden = ok; e.textContent = m; if (!ok) bad = true; });
+    if (bad) { toast('Check the highlighted fields'); return; }
+    const orders = g('#r-ord'), inq = g('#r-inq');
+    const res = roiCalc({ ...v, name: $('#r-name').value.trim() || 'Untitled campaign', platform: roi.platform, orders, inq });
+    roi.res = res; $('#rres').innerHTML = roiResult(res, false);
+    if (window.innerWidth < 980) $('#rres').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+  'roi-clear'() {
+    ['#r-name', '#r-spend', '#r-sales', '#r-cost', '#r-inq', '#r-ord'].forEach(i => $(i).value = '');
+    $$('[id^="e-"]').forEach(e => e.hidden = true);
+    roi.res = null; $('#rres').innerHTML = roiResult(roiCalc(ROI_EX), true);
+  },
+  'roi-save'() {
+    if (!roi.res) return toast('Calculate your own campaign first.');
+    const l = store.get('bg_campaigns', []);
+    l.unshift({ name: roi.res.name, platform: roi.res.platform, roi: roi.res.roi, net: roi.res.net, date: today() });
+    store.set('bg_campaigns', l.slice(0, 20)); pushSaved('campaigns'); $('#rsaved').innerHTML = savedCampaigns(); toast('Saved to my campaigns');
+  },
+  'roi-del'(el) { const l = store.get('bg_campaigns', []); l.splice(+el.dataset.i, 1); store.set('bg_campaigns', l); pushSaved('campaigns'); $('#rsaved').innerHTML = savedCampaigns(); },
+  'roi-summary'() {
+    if (!roi.res) return toast('Calculate your own campaign first.');
+    const r = roi.res, t = `BizGuard campaign summary\nCampaign: ${r.name} (${r.platform})\nAd spend: ${peso(r.spend)}\nSales: ${peso(r.sales)}\nProduct cost: ${peso(r.cost)}\nNet profit: ${peso(r.net)}\nROI: ${Math.round(r.roi)}%\nReturn on ad spend: ${r.roas.toFixed(2)}x\nCost per order: ${r.cpo == null ? '—' : peso(+r.cpo.toFixed(2))}\nConversion rate: ${r.conv == null ? '—' : r.conv.toFixed(1) + '%'}`;
+    const m = openModal('Campaign summary', `<pre>${esc(t)}</pre><div class="row-btns"><button class="btn btn-green" data-action="sum-copy">Copy summary</button><button class="btn btn-outline" data-action="sum-dl">Download .txt</button><button class="btn btn-outline" data-action="modal-close">Close</button></div>`);
+    m.dataset.text = t;
+  },
+  'sum-copy'() { copyText($('#modal').dataset.text); },
+  'sum-dl'() {
+    try {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([$('#modal').dataset.text], { type: 'text/plain' })); a.download = 'bizguard-summary.txt';
+      document.body.appendChild(a); a.click(); a.remove(); toast('Downloading…');
+    } catch (e) { toast('Download is not available here. Use Copy summary instead.'); }
+  },
+  'modal-close': closeModal,
+  async 'rp-write'() {
+    shown = { ...rp, name: $('#p-name').value, order: $('#p-order').value, offer: $('#p-offer').value, text: $('#p-text').value.trim(), variant: 0, short: false };
+    shownIsExample = false; await regen(true);
+    if (window.innerWidth < 980) $('#rpout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+  'rp-copy'(el) { copyText(outs[+el.dataset.i].text); },
+  async 'rp-short'() { shown.short = !shown.short; await regen(); },
+  async 'rp-alt'() { shown.variant = shown.variant ? 0 : 1; await regen(); },
+  'cr-save'() {
+    const { passed, lvl } = creatorEval();
+    if (cr.example) return toast('Tick the checks for your own creator first.');
+    const l = store.get('bg_checks', []);
+    l.unshift({ name: $('#c-name').value.trim() || 'Unnamed creator', platform: cr.platform, passed, lvl, date: today() });
+    store.set('bg_checks', l.slice(0, 20)); pushSaved('checks'); creatorSaved(); toast('Check saved');
+  },
+  'cr-del'(el) { const l = store.get('bg_checks', []); l.splice(+el.dataset.i, 1); store.set('bg_checks', l); pushSaved('checks'); creatorSaved(); },
+  'cr-print'() { try { window.print(); } catch (e) { toast('Printing is not available here. Use your browser menu to print.'); } },
+  'ad-select'(el) { ad.sel = el.dataset.id; ad.file = ad.sel === 'A' && !ad.exampleDone && !LIVE ? EX_FILE() : null; ad.showRows = false; adminList(); adminPanel(); },
+  'ad-type'(el) { ad.type = el.dataset.t; ad.file = null; adminPanel(); },
+  'ad-choose'() { $('#fin').click(); },
+  'ad-rows'() { ad.showRows = !ad.showRows; adminPanel(); },
+  'ad-skip'() { ad.file.skipped = !ad.file.skipped; adminPanel(); },
+  async 'ad-publish'() {
+    const f = ad.file; if (!f) return;
+    if (f.missing.length && !f.skipped) return toast(`Fix the ${f.missing.length} row${f.missing.length > 1 ? 's' : ''} in the file or skip ${f.missing.length > 1 ? 'them' : 'it'} first.`);
+    if (LIVE && f.example) return toast('This is only an example. Choose a real Grab report.');
+    if (LIVE && !f.agg) return toast("We couldn't find the date and amount columns, so nothing was published.");
+    if (LIVE) {
+      try { await api('publish', { bizId: ad.sel, type: f.type, agg: f.agg }); await refresh(); } catch (e) { return toast(e.message); }
+      const nb = store.get('bg_biz', []).find(x => x.id === ad.sel); ad.file = null; adminList(); adminPanel(); return toast(`Published to ${nb ? nb.name : 'the owner'}'s dashboard`);
+    }
+    const biz = store.get('bg_biz', BIZ0), b = biz.find(x => x.id === ad.sel);
+    if (f.agg) { const d = b.data = b.data || {}, A = f.agg; if (f.type === 'ads') d.ads = A.m; else { d.sales = { months: A.m, weeks: A.w }; d.items = A.it; d.canc = A.c; d.ref = A.r; } }
+    b.last = today(); b.status = 'ok';
+    store.set('bg_biz', biz); if (ad.sel === 'A') ad.exampleDone = true;
+    ad.file = null; adminList(); adminPanel(); toast(`Published to ${b.name}'s dashboard`);
+  },
+  'up-type'(el) { up.type = el.dataset.t; up.file = null; upPanel(); },
+  'up-choose'() { $('#ufin').click(); },
+  'up-rows'() { up.rows = !up.rows; upPanel(); },
+  async 'up-publish'() {
+    const f = up.file; if (!f || !f.agg) return;
+    try { await api('publish', { type: f.type, agg: f.agg }); await refresh(); up.file = null; toast('Your dashboard is updated'); go('#/dashboard'); } catch (e) { toast(e.message); }
+  },
+  async 'up-chpw'() {
+    const er = $('#pw-err');
+    try { await api('chpw', { old: $('#pw-old').value, pw: $('#pw-new').value }); $('#pw-old').value = $('#pw-new').value = ''; er.hidden = true; toast('Password changed'); } catch (x) { er.textContent = x.message; er.hidden = false; }
+  },
+  'ad-edit'() {
+    const b = store.get('bg_biz', []).find(x => x.id === ad.sel); if (!LIVE || !b) return toast('This needs the server.');
+    const o = (v, c) => `<option ${v === c ? 'selected' : ''}>${v}</option>`;
+    openModal('Edit business', `<div class="field"><label class="lbl" for="eb-name">Business name</label><input class="input" id="eb-name" value="${esc(b.name)}"></div>
+    <div class="field"><label class="lbl" for="eb-login">Owner's email or mobile number</label><input class="input" id="eb-login" value="${esc(b.login || '')}"></div>
+    <div class="grid2"><div class="field"><label class="lbl" for="eb-plat">Platform</label><select class="input" id="eb-plat">${o('GrabFood', b.platform)}${o('GrabMart', b.platform)}</select></div>
+    <div class="field"><label class="lbl" for="eb-cat">Type</label><select class="input" id="eb-cat">${['Food & beverage', 'Grocery', 'Other'].map(v => `<option ${v === b.cat ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></div></div>
+    <div class="err" id="eb-err" hidden></div><div class="row-btns" style="margin-top:12px"><button class="btn btn-green" data-action="ad-edit-save">Save changes</button><button class="btn btn-outline" data-action="modal-close">Cancel</button></div>`);
+  },
+  async 'ad-edit-save'() {
+    const er = $('#eb-err');
+    try { await api('edit', { bizId: ad.sel, name: $('#eb-name').value, login: $('#eb-login').value, platform: $('#eb-plat').value, cat: $('#eb-cat').value }); await refresh(); closeModal(); adminList(); adminPanel(); toast('Changes saved'); }
+    catch (x) { er.textContent = x.message; er.hidden = false; }
+  },
+  async 'ad-reset'() {
+    if (!LIVE) return toast('This needs the server.');
+    const pw = prompt('New password for this owner (at least 6 characters):'); if (!pw) return;
+    try { await api('reset', { bizId: ad.sel, pw }); toast('Password changed'); } catch (e) { toast(e.message); }
+  },
+  async 'ad-del'() {
+    if (!LIVE) return toast('This needs the server.');
+    if (!confirm('Delete this business and all its data? This cannot be undone.')) return;
+    try { await api('del', { bizId: ad.sel }); await refresh(); const l = store.get('bg_biz', []); ad.sel = l[0] ? l[0].id : ''; ad.file = null; adminList(); adminPanel(); toast('Business deleted'); } catch (e) { toast(e.message); }
+  },
+  'ad-preview'() { go('#/dashboard?preview=' + ad.sel); },
+  'ad-add'() {
+    openModal('Add business', `<div class="field"><label class="lbl" for="nb-name">Business name</label><input class="input" id="nb-name" placeholder="e.g. Aling Rosa's Carinderia"></div>
+    <div class="grid2"><div class="field"><label class="lbl" for="nb-plat">Platform</label><select class="input" id="nb-plat"><option>GrabFood</option><option>GrabMart</option></select></div>
+    <div class="field"><label class="lbl" for="nb-cat">Type</label><select class="input" id="nb-cat"><option>Food &amp; beverage</option><option>Grocery</option><option>Other</option></select></div></div>
+    <div class="field"><label class="lbl" for="nb-login">Owner's email or mobile number</label><input class="input" id="nb-login" placeholder="e.g. 0917 123 4567" autocomplete="off"></div>
+    <div class="field"><label class="lbl" for="nb-pw">Owner's password</label><input class="input" id="nb-pw" autocomplete="off" placeholder="At least 6 characters"><div class="hint">Give this to the owner. They use it to log in.</div></div>
+    <div class="err" id="nb-err" hidden></div>
+    <div class="row-btns" style="margin-top:12px"><button class="btn btn-green" data-action="ad-add-save">Add business</button><button class="btn btn-outline" data-action="modal-close">Cancel</button></div>`);
+  },
+  async 'ad-add-save'() {
+    const name = $('#nb-name').value.trim(), login = $('#nb-login').value.toLowerCase().replace(/\s+/g, ''), pw = $('#nb-pw').value, er = $('#nb-err');
+    const bad = !name ? 'Enter the business name.' : LIVE && !login ? "Enter the owner's email or mobile number." : LIVE && pw.length < 6 ? 'The password needs at least 6 characters.' : LIVE && store.get('bg_biz', BIZ0).some(x => x.login === login) ? 'That email or mobile number is already used.' : '';
+    if (bad) { er.textContent = bad; er.hidden = false; return; }
+    if (LIVE) {
+      try { const j = await api('add', { name, platform: $('#nb-plat').value, cat: $('#nb-cat').value, login, pw }); await refresh(); ad.sel = j.id; }
+      catch (e) { er.textContent = e.message; er.hidden = false; return; }
+      ad.file = null; closeModal(); adminList(); adminPanel(); toast(`${name} added`); return;
+    }
+    const biz = store.get('bg_biz', BIZ0); const id = 'N' + Date.now(), salt = id + Math.random().toString(36).slice(2);
+    biz.push({ id, name, platform: $('#nb-plat').value, cat: $('#nb-cat').value, last: '—', status: 'none', login, salt, hash: pw ? await sha(salt + pw) : '' });
+    store.set('bg_biz', biz); ad.sel = id; ad.file = null; closeModal(); adminList(); adminPanel(); toast(`${name} added`);
+  }
+};
+
+/* ---------- router ---------- */
+const app = $('#app');
+let pendingScroll = null;
+function parseHash() { const h = location.hash.replace(/^#/, '') || '/'; const [path, qs] = h.split('?'); return { path, q: new URLSearchParams(qs || '') }; }
+const PROTECTED = ['/dashboard', '/roi', '/replies', '/creator', '/upload', '/admin'];
+const TITLES = { '/': 'BizGuard — see how your Grab store is really doing', '/login': 'Log in · BizGuard', '/dashboard': 'Dashboard · BizGuard', '/roi': 'ROI Calculator · BizGuard', '/replies': 'Complaint Replies · BizGuard', '/creator': 'Creator Checklist · BizGuard', '/admin': 'Owner data · BizGuard', '/upload': 'Upload report · BizGuard' };
+function render() {
+  const { path, q } = parseHash(), s = session();
+  closeModal();
+  if (PROTECTED.includes(path) && !s) { store.set('bg_next', location.hash); return go('#/login'); }
+  if (path === '/admin' && s !== 'admin') return go('#/dashboard');
+  if (path === '/upload' && s === 'admin') return go('#/admin');
+  if (path === '/login' && s) return go(s === 'admin' ? '#/admin' : '#/dashboard');
+  const routes = { '/': () => { app.innerHTML = landing(); }, '/login': login, '/dashboard': () => dashboard(q), '/roi': roiPage, '/replies': () => repliesPage(q), '/creator': creatorPage, '/upload': uploadPage, '/admin': admin };
+  (routes[path] || routes['/'])();
+  document.title = TITLES[path] || TITLES['/'];
+  if (pendingScroll) { const id = pendingScroll; pendingScroll = null; setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView(); }, 0); }
+  else window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => {
+  const sc = e.target.closest('[data-scroll]');
+  if (sc) {
+    e.preventDefault();
+    if (parseHash().path !== '/') { pendingScroll = sc.dataset.scroll; go('#/'); }
+    else { const el = document.getElementById(sc.dataset.scroll); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+    return;
+  }
+  const a = e.target.closest('[data-action]');
+  if (a && actions[a.dataset.action]) actions[a.dataset.action](a, e);
+});
+window.addEventListener('hashchange', render);
+render();
+(async () => {
+  try {
+    const p = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"op":"ping"}' });
+    if (!p.ok) return;
+    LIVE = true; mem.bg_biz = [];
+    if (TOKEN) { if (!await refresh()) store.set('bg_session', null); }
+    render();
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

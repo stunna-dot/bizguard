@@ -49,6 +49,13 @@ Forgot password: the owner sends a request from the login page; the shop shows a
 Admin can rename a shop or change its login with Edit business.
 Saved campaigns and creator checks are stored on the owner's account, so they appear on any device. The admin can still upload for a shop.
 
+## Real GrabMerchant reports
+The GrabMerchant .xlsx report has several sheets (Summary, Transactions, Transfers, Guide). BizGuard reads the Transactions sheet.
+Sales use the Net Sales column (the sale amount before Grab's commission), dates come from Created On, and orders are told apart by Short Order ID.
+Because of that, uploading overlapping reports (for example daily files, or a weekly file that repeats a day) does not double count: each order is stored once, and a newer upload of the same order replaces the older one.
+Rows whose Type is not GrabFood or GrabMart are skipped. A row counts as canceled if Status says cancel or the Cancellation Reason is filled in, and as refunded if Status says refund or Reason for Refund is filled in.
+The transaction report has no menu items, so Best sellers stays empty with GrabMerchant files.
+
 ## CSV columns the site looks for
 Sales: a date column, an amount (or total/sales) column, a status column
 (words like cancelled or refunded), an item column. Items can be "Chicken silog x2;Iced coffee".

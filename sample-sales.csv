@@ -1,0 +1,665 @@
+Date,Order ID,Status,Items,Amount
+2026-05-11,1001,Completed,Pancit canton x1,89
+2026-05-04,1002,Completed,Halo-halo x1;Chicken silog x1,190
+2026-05-03,1003,Completed,Chicken silog x2,98
+2026-05-04,1004,Completed,Halo-halo x1,126
+2026-05-02,1005,Completed,Chicken silog x1,113
+2026-05-18,1006,Completed,Halo-halo x2,125
+2026-05-06,1007,Completed,Halo-halo x1,113
+2026-05-23,1008,Completed,Halo-halo x1,129
+2026-05-22,1009,Completed,Pancit canton x2;Iced coffee x2;Pork sisig rice x2,285
+2026-05-23,1010,Completed,Chicken silog x2,128
+2026-05-11,1011,Completed,Pancit canton x1;Iced coffee x1;Halo-halo x2,260
+2026-05-05,1012,Completed,Pancit canton x1;Chicken silog x2,201
+2026-05-20,1013,Completed,Halo-halo x1;Pancit canton x1,192
+2026-05-22,1014,Completed,Chicken silog x2,131
+2026-05-27,1015,Completed,Iced coffee x2;Pancit canton x1,189
+2026-05-20,1016,Completed,Pancit canton x1,98
+2026-05-05,1017,Completed,Pork sisig rice x2;Pancit canton x1;Halo-halo x1,313
+2026-05-09,1018,Completed,Pancit canton x2,111
+2026-05-22,1019,Completed,Pork sisig rice x1;Halo-halo x1,209
+2026-05-08,1020,Completed,Pancit canton x1,101
+2026-05-05,1021,Completed,Halo-halo x2;Iced coffee x1,197
+2026-05-21,1022,Completed,Chicken silog x2;Pancit canton x2;Iced coffee x2,280
+2026-05-21,1023,Completed,Chicken silog x1;Pork sisig rice x1,233
+2026-05-11,1024,Cancelled,Chicken silog x1;Halo-halo x1;Pancit canton x2,
+2026-05-28,1025,Completed,Halo-halo x2,99
+2026-05-12,1026,Completed,Iced coffee x1;Pancit canton x2;Chicken silog x2,285
+2026-05-03,1027,Completed,Chicken silog x2,111
+2026-05-23,1028,Completed,Halo-halo x1,103
+2026-05-17,1029,Completed,Pork sisig rice x2;Chicken silog x1,221
+2026-05-06,1030,Completed,Pork sisig rice x1;Iced coffee x1,200
+2026-05-24,1031,Completed,Pork sisig rice x2,132
+2026-05-01,1032,Completed,Pancit canton x1;Iced coffee x2,188
+2026-05-24,1033,Completed,Iced coffee x1;Chicken silog x1,184
+2026-05-11,1034,Completed,Pancit canton x1,115
+2026-05-12,1035,Completed,Chicken silog x1;Halo-halo x2;Pork sisig rice x1,322
+2026-05-11,1036,Completed,Pancit canton x2,110
+2026-05-03,1037,Completed,Pork sisig rice x1;Halo-halo x1;Chicken silog x2,304
+2026-05-20,1038,Completed,Iced coffee x1;Pork sisig rice x1,185
+2026-05-24,1039,Completed,Chicken silog x1;Pork sisig rice x1;Pancit canton x1,306
+2026-05-17,1040,Completed,Halo-halo x2,106
+2026-05-27,1041,Completed,Chicken silog x2,124
+2026-05-27,1042,Completed,Pancit canton x1;Pork sisig rice x1;Iced coffee x2,281
+2026-05-25,1043,Completed,Pork sisig rice x1,140
+2026-05-04,1044,Completed,Chicken silog x2;Iced coffee x1;Pancit canton x1,270
+2026-05-02,1045,Cancelled,Halo-halo x2,
+2026-05-03,1046,Completed,Iced coffee x2;Pork sisig rice x2,217
+2026-05-16,1047,Completed,Pork sisig rice x1;Iced coffee x2;Pancit canton x1,296
+2026-05-15,1048,Completed,Chicken silog x2;Pork sisig rice x1,218
+2026-05-26,1049,Completed,Pork sisig rice x2,119
+2026-05-05,1050,Completed,Pork sisig rice x2;Chicken silog x2,215
+2026-05-27,1051,Completed,Pork sisig rice x2,142
+2026-05-14,1052,Completed,Iced coffee x2,80
+2026-05-01,1053,Completed,Halo-halo x2;Pancit canton x1,199
+2026-05-20,1054,Completed,Halo-halo x1;Chicken silog x1,191
+2026-05-09,1055,Completed,Pork sisig rice x2,118
+2026-05-28,1056,Refunded,Iced coffee x2;Pancit canton x2;Chicken silog x1,
+2026-05-23,1057,Completed,Pancit canton x1,102
+2026-05-21,1058,Completed,Iced coffee x1,113
+2026-05-03,1059,Completed,Chicken silog x1;Pancit canton x2,215
+2026-05-09,1060,Refunded,Pork sisig rice x1;Chicken silog x1;Iced coffee x1,
+2026-05-07,1061,Completed,Iced coffee x2;Pork sisig rice x2,217
+2026-05-09,1062,Completed,Chicken silog x1;Iced coffee x1,171
+2026-05-18,1063,Completed,Halo-halo x2,105
+2026-05-04,1064,Completed,Pancit canton x2;Halo-halo x2;Iced coffee x1,264
+2026-05-27,1065,Completed,Pork sisig rice x1;Pancit canton x1;Halo-halo x1,289
+2026-05-09,1066,Completed,Pork sisig rice x1;Chicken silog x2,237
+2026-05-10,1067,Completed,Pork sisig rice x2;Iced coffee x1;Chicken silog x1,297
+2026-05-09,1068,Completed,Iced coffee x1;Halo-halo x1,184
+2026-05-06,1069,Completed,Iced coffee x2,80
+2026-05-17,1070,Completed,Pork sisig rice x1;Halo-halo x1;Iced coffee x2,280
+2026-05-19,1071,Completed,Pancit canton x1,104
+2026-05-08,1072,Completed,Halo-halo x1,128
+2026-05-11,1073,Completed,Pancit canton x1;Pork sisig rice x1;Halo-halo x2,317
+2026-05-17,1074,Completed,Halo-halo x1;Chicken silog x1;Iced coffee x1,262
+2026-05-12,1075,Refunded,Pancit canton x2,
+2026-05-01,1076,Completed,Halo-halo x2;Pork sisig rice x1;Pancit canton x2,289
+2026-05-17,1077,Completed,Chicken silog x2;Halo-halo x2;Iced coffee x1,276
+2026-05-25,1078,Completed,Pork sisig rice x2,141
+2026-05-03,1079,Completed,Iced coffee x1;Chicken silog x1,208
+2026-05-09,1080,Completed,Iced coffee x2;Pork sisig rice x1;Chicken silog x2,297
+2026-05-04,1081,Completed,Pork sisig rice x2;Pancit canton x2;Halo-halo x2,314
+2026-05-18,1082,Cancelled,Iced coffee x1,
+2026-05-15,1083,Completed,Halo-halo x2,107
+2026-05-07,1084,Completed,Halo-halo x1,99
+2026-05-09,1085,Completed,Pork sisig rice x1;Iced coffee x2,199
+2026-05-16,1086,Completed,Chicken silog x1;Pork sisig rice x2,233
+2026-05-24,1087,Completed,Pancit canton x2,109
+2026-05-27,1088,Completed,Chicken silog x2;Iced coffee x2,177
+2026-06-07,1089,Completed,Chicken silog x2;Iced coffee x1;Pork sisig rice x2,304
+2026-06-19,1090,Completed,Iced coffee x2,92
+2026-06-09,1091,Completed,Chicken silog x2,135
+2026-06-08,1092,Completed,Pancit canton x1;Iced coffee x2,187
+2026-06-26,1093,Completed,Pancit canton x1;Pork sisig rice x1;Iced coffee x2,298
+2026-06-05,1094,Completed,Iced coffee x1;Pancit canton x1;Chicken silog x2,281
+2026-06-10,1095,Completed,Iced coffee x1;Pancit canton x2,190
+2026-06-13,1096,Completed,Pork sisig rice x1,114
+2026-06-26,1097,Completed,Halo-halo x2;Pork sisig rice x2,228
+2026-06-18,1098,Completed,Pork sisig rice x1,121
+2026-06-03,1099,Completed,Pork sisig rice x2;Iced coffee x1,186
+2026-06-14,1100,Completed,Pancit canton x2;Pork sisig rice x2,216
+2026-06-16,1101,Completed,Halo-halo x1;Iced coffee x1,170
+2026-06-08,1102,Completed,Pancit canton x2;Halo-halo x2,176
+2026-06-14,1103,Completed,Pancit canton x1;Halo-halo x2;Chicken silog x2,298
+2026-06-04,1104,Completed,Pork sisig rice x1,143
+2026-06-04,1105,Completed,Pancit canton x1;Chicken silog x1;Iced coffee x1,269
+2026-06-02,1106,Completed,Iced coffee x2;Pork sisig rice x2;Halo-halo x1,281
+2026-06-17,1107,Completed,Pork sisig rice x1;Pancit canton x1;Halo-halo x1,319
+2026-06-15,1108,Completed,Iced coffee x2;Pork sisig rice x1,220
+2026-06-14,1109,Completed,Iced coffee x1;Chicken silog x2;Pancit canton x2,260
+2026-06-22,1110,Completed,Iced coffee x2;Pork sisig rice x1,206
+2026-06-12,1111,Completed,Pancit canton x2;Pork sisig rice x1;Chicken silog x1,321
+2026-06-10,1112,Completed,Pork sisig rice x2,124
+2026-06-10,1113,Completed,Halo-halo x2,129
+2026-06-08,1114,Completed,Pancit canton x1;Chicken silog x2,183
+2026-06-20,1115,Completed,Pancit canton x1,88
+2026-06-15,1116,Completed,Iced coffee x1;Chicken silog x2;Pancit canton x1,266
+2026-06-17,1117,Completed,Pancit canton x2;Chicken silog x2;Pork sisig rice x2,318
+2026-06-01,1118,Completed,Iced coffee x1,97
+2026-06-04,1119,Completed,Pork sisig rice x2;Pancit canton x2;Halo-halo x1,288
+2026-06-07,1120,Completed,Halo-halo x1;Pancit canton x2,198
+2026-06-16,1121,Completed,Pancit canton x1,125
+2026-06-02,1122,Completed,Chicken silog x1;Pancit canton x1,196
+2026-06-03,1123,Completed,Iced coffee x2;Halo-halo x1;Pork sisig rice x2,295
+2026-06-10,1124,Completed,Halo-halo x1,91
+2026-06-04,1125,Completed,Pancit canton x2;Halo-halo x2,206
+2026-06-16,1126,Completed,Chicken silog x2,104
+2026-06-11,1127,Completed,Pancit canton x1;Iced coffee x1,185
+2026-06-08,1128,Completed,Chicken silog x2;Halo-halo x2,195
+2026-06-04,1129,Completed,Iced coffee x1,88
+2026-06-16,1130,Completed,Pancit canton x1;Pork sisig rice x2;Chicken silog x2,329
+2026-06-08,1131,Completed,Halo-halo x2;Chicken silog x2;Pork sisig rice x2,318
+2026-06-09,1132,Completed,Pancit canton x1,96
+2026-06-05,1133,Completed,Halo-halo x2;Pork sisig rice x1,225
+2026-06-08,1134,Cancelled,Halo-halo x1;Pork sisig rice x2;Iced coffee x1,
+2026-06-27,1135,Completed,Pancit canton x2,87
+2026-06-08,1136,Completed,Chicken silog x1,133
+2026-06-19,1137,Completed,Chicken silog x2,127
+2026-06-15,1138,Completed,Iced coffee x2;Chicken silog x1;Pancit canton x1,278
+2026-06-02,1139,Completed,Iced coffee x1,113
+2026-06-07,1140,Completed,Iced coffee x2,98
+2026-06-10,1141,Completed,Pork sisig rice x1,141
+2026-06-03,1142,Completed,Chicken silog x1;Pancit canton x1,190
+2026-06-09,1143,Completed,Iced coffee x2;Halo-halo x1,184
+2026-06-12,1144,Completed,Pancit canton x2;Chicken silog x1,205
+2026-06-07,1145,Completed,Pancit canton x1,112
+2026-06-03,1146,Cancelled,Halo-halo x2;Iced coffee x1,
+2026-06-18,1147,Completed,Pancit canton x1,121
+2026-06-12,1148,Completed,Halo-halo x2;Pork sisig rice x2;Chicken silog x1,328
+2026-06-03,1149,Completed,Pancit canton x2,97
+2026-06-27,1150,Completed,Pancit canton x2,88
+2026-06-21,1151,Completed,Chicken silog x1;Pork sisig rice x2,244
+2026-06-27,1152,Completed,Pork sisig rice x1;Halo-halo x2,233
+2026-06-12,1153,Cancelled,Pork sisig rice x1,
+2026-06-18,1154,Completed,Chicken silog x2;Iced coffee x2;Halo-halo x2,286
+2026-06-08,1155,Cancelled,Pancit canton x2;Iced coffee x2,
+2026-06-20,1156,Completed,Pancit canton x2;Pork sisig rice x2,206
+2026-06-13,1157,Completed,Chicken silog x1,117
+2026-06-03,1158,Completed,Halo-halo x1;Chicken silog x1,190
+2026-06-11,1159,Completed,Halo-halo x2;Chicken silog x1;Pancit canton x1,274
+2026-06-24,1160,Refunded,Chicken silog x2;Pork sisig rice x2;Halo-halo x1,
+2026-06-12,1161,Completed,Iced coffee x2;Pork sisig rice x2;Pancit canton x1,286
+2026-06-16,1162,Completed,Halo-halo x2,129
+2026-06-11,1163,Completed,Chicken silog x1;Pork sisig rice x2,215
+2026-06-09,1164,Completed,Iced coffee x2;Pancit canton x1;Chicken silog x1,295
+2026-06-28,1165,Completed,Halo-halo x2;Chicken silog x2,208
+2026-06-12,1166,Completed,Pork sisig rice x1;Iced coffee x2;Halo-halo x1,286
+2026-06-02,1167,Completed,Halo-halo x2;Iced coffee x2,165
+2026-06-08,1168,Completed,Iced coffee x2,101
+2026-06-02,1169,Completed,Pancit canton x1,124
+2026-06-01,1170,Completed,Chicken silog x2,114
+2026-06-12,1171,Completed,Pork sisig rice x2;Pancit canton x1;Iced coffee x1,293
+2026-06-16,1172,Completed,Pork sisig rice x1,125
+2026-06-15,1173,Completed,Chicken silog x1,112
+2026-06-09,1174,Completed,Chicken silog x2,133
+2026-06-15,1175,Completed,Halo-halo x1;Pancit canton x1;Chicken silog x1,273
+2026-06-13,1176,Completed,Pork sisig rice x1,113
+2026-06-04,1177,Completed,Halo-halo x1,99
+2026-06-17,1178,Completed,Halo-halo x1;Pancit canton x2;Iced coffee x1,269
+2026-06-24,1179,Completed,Halo-halo x2;Chicken silog x2,214
+2026-06-21,1180,Completed,Pork sisig rice x1;Halo-halo x2,214
+2026-06-04,1181,Completed,Iced coffee x2;Chicken silog x2,203
+2026-06-10,1182,Completed,Pork sisig rice x1;Chicken silog x1;Iced coffee x2,295
+2026-06-07,1183,Completed,Iced coffee x1,99
+2026-06-08,1184,Completed,Halo-halo x2;Pancit canton x1,176
+2026-06-24,1185,Completed,Halo-halo x2,103
+2026-06-19,1186,Cancelled,Halo-halo x1,
+2026-06-04,1187,Completed,Halo-halo x1,112
+2026-06-23,1188,Completed,Chicken silog x1,103
+2026-07-21,1189,Completed,Chicken silog x1,99
+2026-07-25,1190,Completed,Pork sisig rice x2;Chicken silog x1,220
+2026-07-04,1191,Completed,Chicken silog x1,135
+2026-07-16,1192,Completed,Pork sisig rice x1,123
+2026-07-11,1193,Cancelled,Iced coffee x2;Chicken silog x2,
+2026-07-25,1194,Cancelled,Iced coffee x2;Pancit canton x1,
+2026-07-17,1195,Completed,Iced coffee x2,78
+2026-07-07,1196,Completed,Chicken silog x2;Iced coffee x1;Halo-halo x1,278
+2026-07-02,1197,Completed,Iced coffee x2,81
+2026-07-26,1198,Completed,Pancit canton x2,117
+2026-07-06,1199,Completed,Pork sisig rice x2;Halo-halo x1,207
+2026-07-25,1200,Completed,Pancit canton x1,125
+2026-07-04,1201,Completed,Pancit canton x2;Chicken silog x1,203
+2026-07-09,1202,Completed,Halo-halo x2;Pork sisig rice x1,229
+2026-07-20,1203,Completed,Halo-halo x2;Chicken silog x1;Pork sisig rice x2,330
+2026-07-06,1204,Completed,Pancit canton x1;Iced coffee x1,181
+2026-07-23,1205,Completed,Halo-halo x1,107
+2026-07-23,1206,Completed,Pork sisig rice x2;Halo-halo x2;Chicken silog x1,310
+2026-07-07,1207,Completed,Chicken silog x1;Pork sisig rice x1,229
+2026-07-05,1208,Completed,Iced coffee x2;Pancit canton x1,166
+2026-07-04,1209,Completed,Pork sisig rice x2;Pancit canton x1,195
+2026-07-26,1210,Completed,Pork sisig rice x2;Iced coffee x1,194
+2026-07-24,1211,Completed,Chicken silog x2;Pork sisig rice x2,219
+2026-07-21,1212,Completed,Halo-halo x1;Pork sisig rice x1;Iced coffee x2,302
+2026-07-21,1213,Completed,Chicken silog x2;Pancit canton x1;Halo-halo x2,297
+2026-07-01,1214,Completed,Pancit canton x2;Pork sisig rice x1;Iced coffee x2,301
+2026-07-04,1215,Completed,Iced coffee x1,85
+2026-07-07,1216,Cancelled,Iced coffee x2;Chicken silog x1;Halo-halo x2,
+2026-07-26,1217,Completed,Halo-halo x2;Iced coffee x2,178
+2026-07-06,1218,Completed,Halo-halo x2;Chicken silog x1,201
+2026-07-13,1219,Completed,Chicken silog x1,121
+2026-07-21,1220,Completed,Iced coffee x1;Halo-halo x2;Chicken silog x2,293
+2026-07-26,1221,Completed,Pancit canton x1;Pork sisig rice x1,199
+2026-07-21,1222,Completed,Pancit canton x1,94
+2026-07-21,1223,Completed,Pancit canton x1;Iced coffee x2,182
+2026-07-08,1224,Cancelled,Pancit canton x2;Iced coffee x1,
+2026-07-24,1225,Completed,Iced coffee x2;Pork sisig rice x2,215
+2026-07-20,1226,Completed,Chicken silog x2;Iced coffee x2;Halo-halo x1,265
+2026-07-11,1227,Completed,Halo-halo x2,130
+2026-07-22,1228,Completed,Pork sisig rice x1,128
+2026-07-04,1229,Completed,Pork sisig rice x2;Halo-halo x2;Chicken silog x1,308
+2026-07-26,1230,Completed,Pork sisig rice x2;Chicken silog x1;Iced coffee x2,293
+2026-07-24,1231,Completed,Chicken silog x2;Halo-halo x2,199
+2026-07-16,1232,Completed,Halo-halo x2;Chicken silog x2,194
+2026-07-08,1233,Completed,Pork sisig rice x1;Chicken silog x2,234
+2026-07-16,1234,Completed,Iced coffee x2;Pancit canton x2;Pork sisig rice x1,281
+2026-07-21,1235,Completed,Chicken silog x1;Halo-halo x2;Iced coffee x1,292
+2026-07-25,1236,Completed,Chicken silog x1,121
+2026-07-11,1237,Completed,Iced coffee x2,105
+2026-07-18,1238,Completed,Iced coffee x2,96
+2026-07-18,1239,Completed,Iced coffee x2,97
+2026-07-13,1240,Completed,Halo-halo x2;Iced coffee x1,196
+2026-07-11,1241,Completed,Iced coffee x2,83
+2026-07-21,1242,Completed,Chicken silog x2,130
+2026-07-18,1243,Completed,Chicken silog x1;Pancit canton x1;Pork sisig rice x1,302
+2026-07-16,1244,Completed,Chicken silog x1;Pancit canton x1;Iced coffee x1,257
+2026-07-15,1245,Completed,Pork sisig rice x1;Chicken silog x1;Iced coffee x2,286
+2026-07-21,1246,Completed,Iced coffee x1,94
+2026-07-09,1247,Completed,Pork sisig rice x1;Pancit canton x2,196
+2026-07-21,1248,Completed,Chicken silog x1;Pancit canton x1;Iced coffee x2,291
+2026-07-13,1249,Completed,Chicken silog x2;Halo-halo x1,215
+2026-07-18,1250,Completed,Chicken silog x2,108
+2026-07-21,1251,Completed,Pancit canton x1,85
+2026-07-04,1252,Completed,Pork sisig rice x1,118
+2026-07-09,1253,Completed,Halo-halo x1;Pork sisig rice x1;Pancit canton x2,294
+2026-07-03,1254,Completed,Halo-halo x2;Pancit canton x2,178
+2026-07-01,1255,Completed,Chicken silog x1,119
+2026-07-24,1256,Completed,Pork sisig rice x1;Pancit canton x2;Iced coffee x2,306
+2026-07-16,1257,Completed,Pork sisig rice x2;Halo-halo x1;Chicken silog x2,325
+2026-07-26,1258,Completed,Iced coffee x2;Halo-halo x2,168
+2026-07-21,1259,Completed,Halo-halo x1;Iced coffee x1;Pancit canton x2,287
+2026-07-08,1260,Completed,Pancit canton x1;Halo-halo x2,193
+2026-07-11,1261,Completed,Iced coffee x1;Pancit canton x1,178
+2026-07-26,1262,Completed,Pork sisig rice x2;Iced coffee x2;Pancit canton x1,304
+2026-07-26,1263,Completed,Pork sisig rice x2;Halo-halo x1,225
+2026-07-07,1264,Completed,Halo-halo x2;Chicken silog x2,219
+2026-07-26,1265,Completed,Chicken silog x2;Pork sisig rice x2,238
+2026-07-17,1266,Completed,Pork sisig rice x1;Halo-halo x1;Chicken silog x1,313
+2026-07-19,1267,Completed,Pancit canton x1;Pork sisig rice x1,226
+2026-07-04,1268,Cancelled,Pancit canton x1;Chicken silog x2,
+2026-07-09,1269,Completed,Halo-halo x1;Chicken silog x1;Pancit canton x2,307
+2026-07-09,1270,Completed,Pancit canton x2;Chicken silog x1,196
+2026-07-11,1271,Cancelled,Pork sisig rice x2,
+2026-07-02,1272,Completed,Iced coffee x1;Pancit canton x2;Pork sisig rice x1,275
+2026-07-19,1273,Completed,Chicken silog x2,106
+2026-07-06,1274,Completed,Pork sisig rice x1;Halo-halo x1,216
+2026-07-02,1275,Completed,Chicken silog x2;Halo-halo x1;Pork sisig rice x1,304
+2026-07-01,1276,Completed,Iced coffee x2,81
+2026-07-12,1277,Completed,Pancit canton x2;Chicken silog x2,204
+2026-07-08,1278,Completed,Chicken silog x2,107
+2026-07-06,1279,Completed,Chicken silog x2,103
+2026-07-04,1280,Completed,Chicken silog x2;Halo-halo x2,205
+2026-07-16,1281,Completed,Iced coffee x1,96
+2026-07-02,1282,Completed,Pancit canton x1,113
+2026-07-09,1283,Completed,Pancit canton x1;Pork sisig rice x1,212
+2026-07-10,1284,Completed,Pork sisig rice x2;Iced coffee x1,205
+2026-08-16,1285,Completed,Pork sisig rice x1,150
+2026-08-22,1286,Completed,Halo-halo x2,108
+2026-08-25,1287,Completed,Iced coffee x2,91
+2026-08-08,1288,Completed,Pancit canton x2,111
+2026-08-02,1289,Completed,Iced coffee x1;Pork sisig rice x2;Halo-halo x2,307
+2026-08-01,1290,Completed,Iced coffee x2;Pork sisig rice x1;Pancit canton x2,283
+2026-08-06,1291,Completed,Pork sisig rice x1,121
+2026-08-03,1292,Completed,Halo-halo x2,107
+2026-08-05,1293,Completed,Pork sisig rice x1;Iced coffee x1;Chicken silog x2,283
+2026-08-12,1294,Completed,Iced coffee x1;Pancit canton x1,186
+2026-08-16,1295,Completed,Iced coffee x1,86
+2026-08-12,1296,Completed,Pork sisig rice x2,146
+2026-08-01,1297,Completed,Halo-halo x1;Pancit canton x1,197
+2026-08-27,1298,Completed,Pancit canton x2;Chicken silog x1,211
+2026-08-01,1299,Completed,Halo-halo x1;Pork sisig rice x1;Chicken silog x1,334
+2026-08-04,1300,Completed,Iced coffee x1;Chicken silog x1,182
+2026-08-27,1301,Completed,Halo-halo x1;Pancit canton x2;Iced coffee x1,272
+2026-08-23,1302,Completed,Chicken silog x2,102
+2026-08-19,1303,Completed,Iced coffee x1;Chicken silog x2;Pancit canton x1,289
+2026-08-28,1304,Completed,Pork sisig rice x2,135
+2026-08-27,1305,Completed,Pancit canton x2,123
+2026-08-17,1306,Completed,Pancit canton x1,108
+2026-08-08,1307,Completed,Pancit canton x2;Iced coffee x1,180
+2026-08-22,1308,Completed,Pork sisig rice x1;Pancit canton x2,201
+2026-08-03,1309,Completed,Pancit canton x1;Pork sisig rice x1,203
+2026-08-13,1310,Completed,Chicken silog x1;Halo-halo x2,224
+2026-08-18,1311,Completed,Halo-halo x1,106
+2026-08-01,1312,Completed,Pork sisig rice x2;Chicken silog x1,224
+2026-08-06,1313,Completed,Chicken silog x2,100
+2026-08-18,1314,Completed,Pancit canton x1,117
+2026-08-10,1315,Completed,Halo-halo x2;Iced coffee x1,170
+2026-08-10,1316,Completed,Halo-halo x2;Pork sisig rice x1,235
+2026-08-15,1317,Completed,Iced coffee x2;Pancit canton x1;Pork sisig rice x1,291
+2026-08-17,1318,Completed,Pancit canton x2;Halo-halo x1;Chicken silog x1,290
+2026-08-16,1319,Completed,Iced coffee x2;Pork sisig rice x1,186
+2026-08-03,1320,Completed,Iced coffee x1;Pancit canton x2;Halo-halo x2,272
+2026-08-04,1321,Completed,Pork sisig rice x2;Halo-halo x2;Pancit canton x1,297
+2026-08-28,1322,Completed,Halo-halo x2;Chicken silog x2,225
+2026-08-23,1323,Completed,Pancit canton x1,85
+2026-08-18,1324,Completed,Chicken silog x1;Pancit canton x2;Pork sisig rice x2,329
+2026-08-13,1325,Completed,Pancit canton x2;Iced coffee x2,182
+2026-08-18,1326,Completed,Pancit canton x2;Iced coffee x2;Chicken silog x2,274
+2026-08-10,1327,Completed,Pancit canton x2,122
+2026-08-27,1328,Completed,Iced coffee x2;Pork sisig rice x1,212
+2026-08-01,1329,Completed,Chicken silog x2,131
+2026-08-10,1330,Cancelled,Iced coffee x2;Pancit canton x2;Halo-halo x2,
+2026-08-22,1331,Completed,Pancit canton x1;Chicken silog x1,186
+2026-08-17,1332,Completed,Halo-halo x1;Pork sisig rice x2,231
+2026-08-25,1333,Completed,Halo-halo x1;Iced coffee x1;Pancit canton x2,270
+2026-08-03,1334,Completed,Halo-halo x1;Pork sisig rice x2,221
+2026-08-17,1335,Completed,Pork sisig rice x1;Iced coffee x1,211
+2026-08-21,1336,Completed,Halo-halo x1;Chicken silog x2;Pork sisig rice x1,295
+2026-08-23,1337,Completed,Chicken silog x1;Iced coffee x1;Pork sisig rice x1,292
+2026-08-25,1338,Completed,Halo-halo x1;Iced coffee x1;Pancit canton x2,288
+2026-08-06,1339,Completed,Halo-halo x1;Chicken silog x1;Pancit canton x1,303
+2026-08-15,1340,Completed,Pancit canton x1;Chicken silog x2;Iced coffee x1,270
+2026-08-06,1341,Refunded,Iced coffee x1,
+2026-08-07,1342,Completed,Halo-halo x1;Pancit canton x1,189
+2026-08-19,1343,Completed,Pancit canton x1,124
+2026-08-08,1344,Cancelled,Pork sisig rice x1,
+2026-08-28,1345,Completed,Iced coffee x2;Pancit canton x2,164
+2026-08-13,1346,Completed,Halo-halo x2;Pork sisig rice x2;Pancit canton x2,286
+2026-08-08,1347,Completed,Pork sisig rice x1,132
+2026-08-01,1348,Completed,Pancit canton x1;Iced coffee x2,194
+2026-08-11,1349,Completed,Chicken silog x2;Halo-halo x2,220
+2026-08-07,1350,Completed,Iced coffee x1;Halo-halo x2,167
+2026-08-01,1351,Completed,Pork sisig rice x1;Halo-halo x1,212
+2026-08-27,1352,Completed,Halo-halo x2,119
+2026-08-26,1353,Completed,Pork sisig rice x2,132
+2026-08-13,1354,Completed,Halo-halo x2;Pork sisig rice x2,232
+2026-08-28,1355,Completed,Pork sisig rice x2;Iced coffee x2,219
+2026-08-20,1356,Completed,Pork sisig rice x1;Halo-halo x2;Chicken silog x2,296
+2026-08-19,1357,Completed,Iced coffee x1,99
+2026-08-23,1358,Completed,Pork sisig rice x2,122
+2026-08-04,1359,Completed,Halo-halo x2,122
+2026-08-07,1360,Completed,Iced coffee x1,89
+2026-08-27,1361,Completed,Pancit canton x2;Iced coffee x2;Pork sisig rice x1,287
+2026-08-12,1362,Completed,Iced coffee x2;Pancit canton x1;Chicken silog x2,277
+2026-08-04,1363,Completed,Iced coffee x1,92
+2026-08-24,1364,Completed,Chicken silog x2,97
+2026-08-14,1365,Completed,Iced coffee x1,99
+2026-08-18,1366,Completed,Pork sisig rice x2;Halo-halo x2,227
+2026-08-19,1367,Completed,Chicken silog x2;Halo-halo x1,222
+2026-08-02,1368,Completed,Chicken silog x1,115
+2026-08-12,1369,Completed,Chicken silog x2;Pancit canton x1;Iced coffee x2,288
+2026-08-14,1370,Completed,Iced coffee x1;Pancit canton x1,187
+2026-08-28,1371,Completed,Pancit canton x1,87
+2026-08-27,1372,Completed,Iced coffee x1;Pork sisig rice x1;Halo-halo x2,290
+2026-08-06,1373,Completed,Iced coffee x1;Pancit canton x1,200
+2026-08-05,1374,Completed,Pancit canton x1;Halo-halo x1;Chicken silog x2,278
+2026-08-12,1375,Completed,Iced coffee x1;Pork sisig rice x1;Halo-halo x2,315
+2026-08-18,1376,Completed,Pork sisig rice x2;Halo-halo x2,213
+2026-08-10,1377,Cancelled,Iced coffee x2,
+2026-08-09,1378,Completed,Pork sisig rice x2;Chicken silog x2,212
+2026-08-15,1379,Completed,Halo-halo x2;Iced coffee x1,200
+2026-08-01,1380,Completed,Pancit canton x2;Chicken silog x2,186
+2026-08-14,1381,Completed,Pork sisig rice x1;Iced coffee x2,190
+2026-08-21,1382,Completed,Iced coffee x1;Pork sisig rice x1;Chicken silog x1,305
+2026-08-10,1383,Completed,Pork sisig rice x1;Halo-halo x2,239
+2026-08-06,1384,Completed,Iced coffee x2;Halo-halo x1;Chicken silog x2,276
+2026-08-02,1385,Completed,Halo-halo x2,93
+2026-08-16,1386,Completed,Pancit canton x2;Pork sisig rice x1,204
+2026-08-06,1387,Completed,Pancit canton x2,90
+2026-08-28,1388,Cancelled,Pancit canton x1;Pork sisig rice x2,
+2026-08-20,1389,Refunded,Pancit canton x1;Pork sisig rice x1;Halo-halo x2,
+2026-08-01,1390,Completed,Pork sisig rice x2;Halo-halo x1;Pancit canton x2,321
+2026-08-19,1391,Completed,Pancit canton x1,119
+2026-08-15,1392,Completed,Halo-halo x2;Pork sisig rice x1,203
+2026-08-11,1393,Completed,Iced coffee x2;Pancit canton x1;Pork sisig rice x2,291
+2026-08-21,1394,Completed,Pork sisig rice x1,138
+2026-08-05,1395,Completed,Halo-halo x2;Iced coffee x2;Pancit canton x1,286
+2026-08-09,1396,Completed,Pork sisig rice x1,122
+2026-09-04,1397,Completed,Iced coffee x1,87
+2026-09-09,1398,Completed,Pancit canton x2;Pork sisig rice x1;Iced coffee x1,302
+2026-09-19,1399,Completed,Pancit canton x1,113
+2026-09-17,1400,Completed,Halo-halo x1;Chicken silog x2;Iced coffee x2,294
+2026-09-07,1401,Cancelled,Pancit canton x2;Chicken silog x1;Halo-halo x2,
+2026-09-02,1402,Completed,Halo-halo x1,119
+2026-09-23,1403,Completed,Pancit canton x1,124
+2026-09-07,1404,Completed,Chicken silog x2;Iced coffee x2;Halo-halo x1,276
+2026-09-12,1405,Completed,Halo-halo x2;Iced coffee x1;Pancit canton x2,256
+2026-09-11,1406,Completed,Chicken silog x1;Halo-halo x2;Iced coffee x2,272
+2026-09-01,1407,Completed,Pancit canton x2;Chicken silog x1;Halo-halo x1,286
+2026-09-18,1408,Cancelled,Pancit canton x2;Pork sisig rice x2,
+2026-09-11,1409,Completed,Pancit canton x2,87
+2026-09-02,1410,Completed,Pork sisig rice x2,140
+2026-09-23,1411,Completed,Pancit canton x1;Pork sisig rice x2,216
+2026-09-10,1412,Completed,Halo-halo x1,103
+2026-09-12,1413,Cancelled,Pancit canton x2;Iced coffee x2;Halo-halo x2,
+2026-09-19,1414,Completed,Iced coffee x1;Pork sisig rice x1,214
+2026-09-20,1415,Completed,Pork sisig rice x1,127
+2026-09-03,1416,Completed,Iced coffee x1;Halo-halo x1;Pancit canton x1,262
+2026-09-21,1417,Completed,Chicken silog x1;Iced coffee x1;Pork sisig rice x1,299
+2026-09-11,1418,Completed,Iced coffee x2;Pork sisig rice x2;Pancit canton x1,291
+2026-09-26,1419,Completed,Halo-halo x1;Iced coffee x1,187
+2026-09-07,1420,Completed,Pancit canton x2,113
+2026-09-25,1421,Completed,Pork sisig rice x1;Chicken silog x2,224
+2026-09-19,1422,Completed,Iced coffee x1;Chicken silog x1;Pancit canton x2,292
+2026-09-15,1423,Completed,Pancit canton x2;Chicken silog x2,191
+2026-09-09,1424,Cancelled,Chicken silog x2;Pork sisig rice x1;Iced coffee x1,
+2026-09-15,1425,Completed,Halo-halo x2,122
+2026-09-07,1426,Cancelled,Chicken silog x1,
+2026-09-03,1427,Completed,Iced coffee x1;Pork sisig rice x2;Chicken silog x1,320
+2026-09-01,1428,Completed,Iced coffee x2,76
+2026-09-13,1429,Completed,Iced coffee x2;Pork sisig rice x1;Chicken silog x1,320
+2026-09-25,1430,Cancelled,Halo-halo x2;Pancit canton x2,
+2026-09-11,1431,Completed,Iced coffee x2;Chicken silog x1;Pork sisig rice x1,281
+2026-09-05,1432,Completed,Chicken silog x2;Iced coffee x2;Pork sisig rice x1,318
+2026-09-08,1433,Completed,Halo-halo x2;Iced coffee x1;Pancit canton x2,285
+2026-09-15,1434,Completed,Iced coffee x2;Halo-halo x1;Pancit canton x2,250
+2026-09-04,1435,Completed,Iced coffee x1;Pork sisig rice x2;Halo-halo x1,276
+2026-09-04,1436,Completed,Halo-halo x1,125
+2026-09-09,1437,Completed,Iced coffee x1;Pork sisig rice x1;Chicken silog x2,295
+2026-09-28,1438,Completed,Pork sisig rice x2;Iced coffee x2,198
+2026-09-01,1439,Completed,Chicken silog x1,120
+2026-09-12,1440,Completed,Pork sisig rice x2,136
+2026-09-13,1441,Completed,Pork sisig rice x1;Chicken silog x2;Halo-halo x2,310
+2026-09-07,1442,Completed,Pancit canton x2;Iced coffee x2,173
+2026-09-26,1443,Completed,Pancit canton x2,93
+2026-09-10,1444,Completed,Iced coffee x1,106
+2026-09-08,1445,Completed,Iced coffee x2,88
+2026-09-26,1446,Completed,Iced coffee x1,103
+2026-09-28,1447,Completed,Iced coffee x1,82
+2026-09-01,1448,Completed,Iced coffee x1,107
+2026-09-04,1449,Completed,Pancit canton x2,90
+2026-09-21,1450,Completed,Pancit canton x1;Iced coffee x1;Chicken silog x1,257
+2026-09-20,1451,Completed,Halo-halo x2,96
+2026-09-02,1452,Completed,Chicken silog x1;Halo-halo x2,193
+2026-09-01,1453,Completed,Pork sisig rice x1,150
+2026-09-17,1454,Completed,Halo-halo x2,121
+2026-09-03,1455,Cancelled,Pork sisig rice x1;Halo-halo x2,
+2026-09-09,1456,Cancelled,Chicken silog x1,
+2026-09-26,1457,Completed,Iced coffee x2;Halo-halo x1;Chicken silog x2,294
+2026-09-11,1458,Completed,Pancit canton x2;Iced coffee x2;Pork sisig rice x2,294
+2026-09-13,1459,Completed,Pancit canton x1;Pork sisig rice x1,233
+2026-09-09,1460,Completed,Halo-halo x1;Pancit canton x1;Chicken silog x1,309
+2026-09-23,1461,Completed,Pancit canton x2,113
+2026-09-11,1462,Completed,Halo-halo x2;Chicken silog x2,217
+2026-09-18,1463,Completed,Pork sisig rice x2;Pancit canton x1,220
+2026-09-09,1464,Completed,Iced coffee x1;Chicken silog x2;Halo-halo x2,290
+2026-09-12,1465,Completed,Halo-halo x1;Pancit canton x1;Iced coffee x1,283
+2026-09-07,1466,Completed,Pork sisig rice x1;Iced coffee x1;Chicken silog x2,291
+2026-09-27,1467,Completed,Chicken silog x2;Iced coffee x2;Pork sisig rice x1,306
+2026-09-09,1468,Completed,Chicken silog x2;Iced coffee x2,198
+2026-09-09,1469,Completed,Iced coffee x1;Pancit canton x2,200
+2026-09-26,1470,Completed,Halo-halo x1,90
+2026-09-12,1471,Completed,Halo-halo x2;Pork sisig rice x2,224
+2026-09-18,1472,Completed,Chicken silog x2,98
+2026-09-10,1473,Completed,Halo-halo x2;Iced coffee x1;Pork sisig rice x2,303
+2026-09-21,1474,Completed,Chicken silog x1;Pork sisig rice x2,223
+2026-09-12,1475,Cancelled,Pancit canton x2,
+2026-09-25,1476,Completed,Pancit canton x2;Halo-halo x2,190
+2026-09-19,1477,Completed,Halo-halo x1,127
+2026-09-22,1478,Completed,Iced coffee x1,80
+2026-09-13,1479,Completed,Halo-halo x2;Pancit canton x1,181
+2026-09-15,1480,Completed,Pancit canton x2;Halo-halo x1,179
+2026-09-16,1481,Completed,Halo-halo x1,104
+2026-09-13,1482,Completed,Chicken silog x2;Iced coffee x2;Pancit canton x2,262
+2026-09-28,1483,Completed,Halo-halo x1,96
+2026-09-28,1484,Completed,Halo-halo x2,93
+2026-09-07,1485,Completed,Iced coffee x2;Pancit canton x1;Chicken silog x2,258
+2026-09-05,1486,Completed,Iced coffee x1;Pork sisig rice x1,219
+2026-09-09,1487,Completed,Iced coffee x2,91
+2026-09-10,1488,Completed,Pancit canton x1;Halo-halo x2;Iced coffee x2,265
+2026-09-26,1489,Refunded,Halo-halo x2;Iced coffee x1,
+2026-09-18,1490,Completed,Iced coffee x2;Pancit canton x1;Halo-halo x2,271
+2026-09-23,1491,Completed,Chicken silog x1;Iced coffee x2;Halo-halo x2,262
+2026-09-26,1492,Completed,Iced coffee x1;Pork sisig rice x2,210
+2026-09-15,1493,Completed,Pork sisig rice x1,121
+2026-09-21,1494,Completed,Chicken silog x1,99
+2026-09-16,1495,Completed,Chicken silog x1,126
+2026-09-24,1496,Completed,Iced coffee x1;Pork sisig rice x1;Halo-halo x1,308
+2026-09-04,1497,Completed,Chicken silog x1,121
+2026-09-27,1498,Cancelled,Pancit canton x1;Halo-halo x1,
+2026-09-27,1499,Completed,Iced coffee x2;Pork sisig rice x1,204
+2026-09-11,1500,Completed,Pork sisig rice x1;Halo-halo x2;Iced coffee x1,295
+2026-09-21,1501,Completed,Pork sisig rice x1;Chicken silog x2,214
+2026-09-14,1502,Completed,Pancit canton x1;Chicken silog x2,187
+2026-09-07,1503,Completed,Halo-halo x2;Chicken silog x2;Pork sisig rice x1,326
+2026-09-03,1504,Completed,Pancit canton x2,104
+2026-09-18,1505,Completed,Pork sisig rice x1,140
+2026-09-25,1506,Completed,Halo-halo x2,92
+2026-09-04,1507,Completed,Iced coffee x1,84
+2026-09-02,1508,Completed,Iced coffee x2,103
+2026-09-11,1509,Completed,Iced coffee x2;Pork sisig rice x1;Chicken silog x2,286
+2026-09-04,1510,Cancelled,Halo-halo x2,
+2026-09-02,1511,Completed,Halo-halo x1;Chicken silog x2;Pork sisig rice x2,299
+2026-09-22,1512,Completed,Pork sisig rice x1;Iced coffee x2;Chicken silog x1,310
+2026-09-09,1513,Completed,Chicken silog x1,102
+2026-09-09,1514,Completed,Halo-halo x2;Chicken silog x1;Pork sisig rice x1,331
+2026-09-17,1515,Completed,Iced coffee x2;Pork sisig rice x2,220
+2026-09-05,1516,Cancelled,Halo-halo x1,
+2026-09-02,1517,Completed,Halo-halo x1;Pork sisig rice x1,210
+2026-09-09,1518,Completed,Pancit canton x2,124
+2026-09-10,1519,Completed,Chicken silog x1;Halo-halo x1;Iced coffee x1,298
+2026-09-17,1520,Completed,Chicken silog x2;Pork sisig rice x1;Halo-halo x1,308
+2026-09-23,1521,Completed,Iced coffee x2,80
+2026-09-15,1522,Completed,Pork sisig rice x2;Chicken silog x2;Halo-halo x1,300
+2026-09-05,1523,Completed,Halo-halo x2;Pork sisig rice x1;Chicken silog x1,307
+2026-09-22,1524,Completed,Chicken silog x2;Halo-halo x1,216
+2026-10-11,1525,Completed,Halo-halo x1,102
+2026-10-02,1526,Completed,Pancit canton x2;Chicken silog x1,211
+2026-10-24,1527,Completed,Pork sisig rice x2;Iced coffee x1,214
+2026-10-26,1528,Completed,Halo-halo x2;Pork sisig rice x2;Pancit canton x1,289
+2026-10-26,1529,Completed,Pork sisig rice x1;Halo-halo x2,235
+2026-10-16,1530,Completed,Chicken silog x2;Pancit canton x2;Iced coffee x2,280
+2026-10-08,1531,Cancelled,Iced coffee x1;Pancit canton x2;Pork sisig rice x2,
+2026-10-04,1532,Completed,Pancit canton x2;Halo-halo x2,184
+2026-10-07,1533,Completed,Iced coffee x2,104
+2026-10-10,1534,Completed,Chicken silog x1;Iced coffee x2,196
+2026-10-26,1535,Cancelled,Chicken silog x1,
+2026-10-27,1536,Completed,Pancit canton x2,106
+2026-10-12,1537,Completed,Pork sisig rice x2,149
+2026-10-13,1538,Completed,Pancit canton x1;Iced coffee x1,185
+2026-10-01,1539,Completed,Chicken silog x1,124
+2026-10-22,1540,Completed,Iced coffee x2;Chicken silog x1,186
+2026-10-03,1541,Completed,Halo-halo x2;Iced coffee x2;Pork sisig rice x2,294
+2026-10-21,1542,Cancelled,Pancit canton x2;Chicken silog x2;Iced coffee x2,
+2026-10-27,1543,Completed,Chicken silog x2;Pancit canton x1;Pork sisig rice x2,292
+2026-10-16,1544,Completed,Chicken silog x2,104
+2026-10-19,1545,Cancelled,Chicken silog x2;Pancit canton x1;Halo-halo x2,
+2026-10-18,1546,Completed,Chicken silog x2;Pancit canton x2,197
+2026-10-27,1547,Completed,Pancit canton x2;Chicken silog x1;Iced coffee x1,288
+2026-10-02,1548,Completed,Iced coffee x1,94
+2026-10-19,1549,Completed,Pancit canton x1;Iced coffee x2,179
+2026-10-16,1550,Completed,Halo-halo x2,118
+2026-10-22,1551,Completed,Iced coffee x2;Pancit canton x2,190
+2026-10-07,1552,Completed,Pancit canton x1;Halo-halo x2;Iced coffee x1,259
+2026-10-18,1553,Completed,Halo-halo x1;Pancit canton x2,200
+2026-10-13,1554,Completed,Iced coffee x2;Chicken silog x1;Pork sisig rice x1,314
+2026-10-19,1555,Completed,Iced coffee x2;Halo-halo x1,169
+2026-10-04,1556,Completed,Pancit canton x1;Chicken silog x1;Pork sisig rice x1,315
+2026-10-26,1557,Completed,Iced coffee x2;Pancit canton x2;Pork sisig rice x2,281
+2026-10-05,1558,Completed,Halo-halo x2;Pancit canton x1;Iced coffee x1,271
+2026-10-14,1559,Completed,Halo-halo x1,126
+2026-10-19,1560,Completed,Pancit canton x2;Pork sisig rice x1,204
+2026-10-28,1561,Completed,Halo-halo x1,108
+2026-10-24,1562,Completed,Pancit canton x2;Iced coffee x2;Chicken silog x1,293
+2026-10-17,1563,Completed,Halo-halo x1;Pork sisig rice x2,206
+2026-10-19,1564,Cancelled,Iced coffee x1,
+2026-10-27,1565,Completed,Pork sisig rice x2;Chicken silog x1,233
+2026-10-02,1566,Completed,Halo-halo x1;Chicken silog x2,192
+2026-10-10,1567,Completed,Iced coffee x1;Halo-halo x1;Pancit canton x1,268
+2026-10-26,1568,Completed,Halo-halo x1;Chicken silog x1;Pancit canton x2,297
+2026-10-21,1569,Completed,Chicken silog x2;Halo-halo x2,217
+2026-10-14,1570,Completed,Chicken silog x2,129
+2026-10-09,1571,Completed,Pancit canton x1,112
+2026-10-22,1572,Completed,Halo-halo x2;Pancit canton x1;Chicken silog x1,295
+2026-10-25,1573,Completed,Chicken silog x1,123
+2026-10-26,1574,Completed,Pork sisig rice x2;Iced coffee x1;Chicken silog x1,284
+2026-10-14,1575,Completed,Halo-halo x2,125
+2026-10-06,1576,Completed,Iced coffee x1;Halo-halo x1;Pork sisig rice x1,297
+2026-10-01,1577,Completed,Pancit canton x1;Chicken silog x1;Pork sisig rice x2,320
+2026-10-03,1578,Completed,Iced coffee x1;Pancit canton x1,193
+2026-10-17,1579,Completed,Pork sisig rice x2;Iced coffee x1,197
+2026-10-27,1580,Completed,Pancit canton x2;Halo-halo x1;Chicken silog x1,270
+2026-10-24,1581,Completed,Halo-halo x1;Pancit canton x1;Chicken silog x2,272
+2026-10-19,1582,Completed,Chicken silog x2;Iced coffee x2;Pork sisig rice x1,280
+2026-10-12,1583,Completed,Chicken silog x1;Halo-halo x1,213
+2026-10-19,1584,Completed,Pancit canton x1;Chicken silog x2;Iced coffee x1,280
+2026-10-28,1585,Completed,Pork sisig rice x2;Pancit canton x1;Iced coffee x1,301
+2026-10-03,1586,Cancelled,Pork sisig rice x2;Halo-halo x1;Chicken silog x1,
+2026-10-07,1587,Completed,Chicken silog x2,98
+2026-10-08,1588,Completed,Chicken silog x1;Pancit canton x1;Pork sisig rice x2,291
+2026-10-04,1589,Completed,Chicken silog x1;Pork sisig rice x2;Halo-halo x1,327
+2026-10-13,1590,Completed,Chicken silog x1,130
+2026-10-03,1591,Completed,Halo-halo x1;Chicken silog x2;Iced coffee x2,285
+2026-10-18,1592,Completed,Pork sisig rice x2;Chicken silog x1;Pancit canton x1,303
+2026-10-04,1593,Cancelled,Chicken silog x1;Iced coffee x1;Pancit canton x1,
+2026-10-09,1594,Completed,Iced coffee x1;Halo-halo x2,203
+2026-10-11,1595,Cancelled,Chicken silog x1,
+2026-10-22,1596,Completed,Halo-halo x2;Pork sisig rice x2;Iced coffee x2,314
+2026-10-07,1597,Completed,Chicken silog x1;Halo-halo x1;Pancit canton x2,273
+2026-10-10,1598,Cancelled,Iced coffee x2;Pork sisig rice x2,
+2026-10-13,1599,Completed,Pork sisig rice x2,120
+2026-10-21,1600,Cancelled,Pancit canton x1;Iced coffee x1;Pork sisig rice x2,
+2026-10-08,1601,Completed,Iced coffee x1;Halo-halo x2;Chicken silog x1,294
+2026-10-02,1602,Completed,Pancit canton x2;Iced coffee x1,194
+2026-10-15,1603,Completed,Pork sisig rice x1,144
+2026-10-14,1604,Completed,Chicken silog x2;Pork sisig rice x1;Halo-halo x2,322
+2026-10-06,1605,Completed,Pancit canton x2;Pork sisig rice x2;Iced coffee x1,291
+2026-10-01,1606,Completed,Pork sisig rice x2,149
+2026-10-21,1607,Cancelled,Halo-halo x1;Pork sisig rice x1;Iced coffee x2,
+2026-10-24,1608,Completed,Halo-halo x1,94
+2026-10-05,1609,Completed,Chicken silog x2;Pancit canton x2;Iced coffee x1,261
+2026-10-13,1610,Completed,Pork sisig rice x1;Pancit canton x2,216
+2026-10-07,1611,Completed,Pancit canton x1,91
+2026-10-26,1612,Completed,Iced coffee x1;Halo-halo x1,169
+2026-10-06,1613,Completed,Halo-halo x2;Iced coffee x1;Pancit canton x1,259
+2026-10-27,1614,Completed,Pancit canton x2,90
+2026-10-08,1615,Completed,Chicken silog x2,95
+2026-10-05,1616,Completed,Iced coffee x1;Pork sisig rice x2,201
+2026-10-06,1617,Completed,Chicken silog x2;Pork sisig rice x2;Halo-halo x1,309
+2026-10-08,1618,Cancelled,Iced coffee x2;Pork sisig rice x2,
+2026-10-22,1619,Completed,Iced coffee x2;Pork sisig rice x1,215
+2026-10-04,1620,Completed,Pancit canton x2,90
+2026-10-16,1621,Completed,Pork sisig rice x2;Halo-halo x2,203
+2026-10-03,1622,Completed,Iced coffee x2;Pancit canton x1,181
+2026-10-03,1623,Completed,Pork sisig rice x1;Pancit canton x2;Iced coffee x1,273
+2026-10-17,1624,Completed,Pork sisig rice x1,142
+2026-10-07,1625,Completed,Chicken silog x2,111
+2026-10-15,1626,Completed,Pork sisig rice x2;Chicken silog x1;Halo-halo x1,312
+2026-10-12,1627,Completed,Chicken silog x2,125
+2026-10-17,1628,Completed,Halo-halo x1,120
+2026-10-02,1629,Completed,Pork sisig rice x1;Pancit canton x2;Iced coffee x1,294
+2026-10-11,1630,Completed,Chicken silog x1;Iced coffee x1;Pancit canton x1,293
+2026-10-24,1631,Completed,Pancit canton x1,87
+2026-10-05,1632,Completed,Iced coffee x2,112
+2026-10-03,1633,Completed,Chicken silog x1;Pork sisig rice x2,235
+2026-10-16,1634,Completed,Halo-halo x1;Pancit canton x1,187
+2026-10-07,1635,Completed,Pancit canton x1;Iced coffee x2,162
+2026-10-11,1636,Completed,Chicken silog x1;Iced coffee x1,170
+2026-10-26,1637,Completed,Halo-halo x2;Pancit canton x2,183
+2026-10-18,1638,Completed,Iced coffee x2,84
+2026-10-17,1639,Completed,Halo-halo x2,93
+2026-10-14,1640,Completed,Chicken silog x2,121
+2026-10-19,1641,Completed,Pork sisig rice x2;Halo-halo x2;Iced coffee x1,278
+2026-10-27,1642,Completed,Chicken silog x2,99
+2026-10-06,1643,Completed,Pancit canton x1,118
+2026-10-10,1644,Completed,Halo-halo x1;Chicken silog x2;Pork sisig rice x2,328
+2026-10-07,1645,Completed,Chicken silog x2;Iced coffee x1,186
+2026-10-14,1646,Completed,Halo-halo x1;Iced coffee x1,204
+2026-10-07,1647,Completed,Iced coffee x2;Chicken silog x2;Pork sisig rice x1,309
+2026-10-26,1648,Completed,Pancit canton x1,98
+2026-10-13,1649,Completed,Pork sisig rice x2,133
+2026-10-16,1650,Cancelled,Pork sisig rice x1;Halo-halo x2,
+2026-10-05,1651,Completed,Halo-halo x1;Pancit canton x2,212
+2026-10-11,1652,Completed,Halo-halo x2;Iced coffee x2;Pork sisig rice x1,305
+2026-10-22,1653,Completed,Pork sisig rice x1;Pancit canton x2;Halo-halo x1,325
+2026-10-19,1654,Completed,Iced coffee x2,91
+2026-10-03,1655,Cancelled,Pancit canton x1;Chicken silog x2;Halo-halo x2,
+2026-10-01,1656,Completed,Chicken silog x1,95
+2026-10-06,1657,Completed,Pork sisig rice x1;Chicken silog x1,210
+2026-10-07,1658,Completed,Pancit canton x2,89
+2026-10-11,1659,Completed,Pancit canton x2;Halo-halo x2,178
+2026-10-09,1660,Completed,Iced coffee x1,79
+2026-10-23,1661,Completed,Pork sisig rice x2;Iced coffee x2,194
+2026-10-18,1662,Completed,Pork sisig rice x2,134
+2026-10-01,1663,Cancelled,Iced coffee x1,
+2026-10-19,1664,Completed,Pork sisig rice x2,139
