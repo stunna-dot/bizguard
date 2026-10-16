@@ -1137,51 +1137,55 @@ function admin() {
 }
 
 /* ---------- OWNER UPLOAD ---------- */
-const up = { type: 'sales', file: null, rows: false };
+const up = { type: 'sales', files: [], rows: false };
 function staleBanner(b, preview) {
   if (preview || session() !== 'owner' || !b || !b.lastAt) return '';
   const d = Math.floor((Date.now() - Date.parse(b.lastAt)) / 864e5);
   return d >= 7 ? `<div class="note-bar" style="margin:0 0 16px;background:var(--warn-bg);color:var(--warn-ink)"><b>Your numbers are ${d} days old.</b> &nbsp;<a class="link-u" href="#/upload">Upload your latest Grab report</a></div>` : '';
 }
 function upPanel() {
-  const f = up.file, m = f ? f.missing.length : 0, noun = up.type === 'ads' ? 'ad records' : 'transactions';
+  const fs = up.files, ok = fs.filter(x => x.res && x.res.agg), noun = up.type === 'ads' ? 'ad records' : 'transactions';
+  const miss = ok.flatMap(x => x.res.missing.map(r => ({ ...r, file: x.name }))), orders = ok.reduce((n, x) => n + x.res.count, 0);
   $('#upanel').innerHTML = `<div class="step-h"><span class="num">1</span><h2>Which report is it?</h2></div>
   <div class="chips" role="group" aria-label="Report type"><button class="chip" data-action="up-type" data-t="sales" aria-pressed="${up.type === 'sales'}">Sales transactions</button><button class="chip" data-action="up-type" data-t="ads" aria-pressed="${up.type === 'ads'}">Grab ads report</button></div>
-  <div class="step-h" style="margin-top:26px"><span class="num">2</span><h2>Drop the CSV file</h2></div>
-  <div class="drop" id="udrop">${ic('upload')}<b>Drop your Grab report here</b><button class="btn btn-outline btn-sm" data-action="up-choose">Choose file</button><input type="file" id="ufin" accept=".csv,.xlsx,.xls,text/csv" hidden></div>
+  <div class="step-h" style="margin-top:26px"><span class="num">2</span><h2>Drop one or more files (CSV or Excel)</h2></div>
+  <div class="drop" id="udrop">${ic('upload')}<b>Drop your Grab reports here</b><button class="btn btn-outline btn-sm" data-action="up-choose">Choose files</button><input type="file" id="ufin" accept=".csv,.xlsx,.xls,text/csv" multiple hidden></div>
   <div id="uerr" class="err" role="alert" hidden></div>
-  ${f ? `<div class="filename"><span>${esc(f.name)}</span></div><ul class="checks"><li class="ok">${ic('checkc')}<span>${esc(f.range)}</span></li><li class="ok">${ic('checkc')}<span>${f.count.toLocaleString('en-US')} ${noun} read</span></li>${f.warn ? `<li class="bad">${ic('warn')}<span>${esc(f.warn)}</span></li>` : ''}${m ? `<li class="bad">${ic('warn')}<span><b>${m} row${m > 1 ? 's have' : ' has'} no amount</b> and will be left out. <button class="link-u" style="border:0;background:none;color:inherit;padding:0" data-action="up-rows">${up.rows ? 'Hide rows' : 'Show rows'}</button></span></li>` : ''}</ul>${up.rows && m ? `<div class="rowlist">${f.missing.slice(0, 20).map(r => `<div>Row ${r.row}: ${esc(r.text)}</div>`).join('')}</div>` : ''}` : ''}
+  ${fs.length ? `<ul class="checks">${fs.map(x => x.res ? `<li class="${x.res.agg ? 'ok' : 'bad'}">${ic(x.res.agg ? 'checkc' : 'warn')}<span><b>${esc(x.name)}</b> · ${esc(x.res.range)} · ${x.res.count.toLocaleString('en-US')} ${noun}${x.res.warn ? '<br><small>' + esc(x.res.warn) + '</small>' : ''}</span></li>` : `<li class="bad">${ic('warn')}<span><b>${esc(x.name)}</b> · ${esc(x.error)}</span></li>`).join('')}
+    ${ok.length > 1 ? `<li class="ok">${ic('checkc')}<span><b>${ok.length} files ready</b> · ${orders.toLocaleString('en-US')} ${noun} in total</span></li>` : ''}
+    ${miss.length ? `<li class="bad">${ic('warn')}<span><b>${miss.length} row${miss.length > 1 ? 's have' : ' has'} no amount</b> and will be left out. <button class="link-u" style="border:0;background:none;color:inherit;padding:0" data-action="up-rows">${up.rows ? 'Hide rows' : 'Show rows'}</button></span></li>` : ''}</ul>
+    ${up.rows && miss.length ? `<div class="rowlist">${miss.slice(0, 20).map(r => `<div>${esc(r.file)} · row ${r.row}: ${esc(r.text)}</div>`).join('')}</div>` : ''}` : ''}
   <div class="step-h" style="margin-top:26px"><span class="num">3</span><h2>Update my dashboard</h2></div>
-  <button class="btn btn-green btn-lg" data-action="up-publish" ${f && f.agg ? '' : 'disabled'}>Update my dashboard</button>`;
+  <div class="row-btns"><button class="btn btn-green btn-lg" data-action="up-publish" ${ok.length ? '' : 'disabled'}>Update my dashboard</button>${fs.length ? '<button class="btn btn-outline btn-lg" data-action="up-clear">Clear files</button>' : ''}</div>`;
   const fin = $('#ufin'), dr = $('#udrop');
-  fin.addEventListener('change', () => upRead(fin.files[0]));
+  fin.addEventListener('change', () => upReadMany(fin.files));
   dr.addEventListener('dragover', e => { e.preventDefault(); dr.classList.add('over'); });
   dr.addEventListener('dragleave', () => dr.classList.remove('over'));
-  dr.addEventListener('drop', e => { e.preventDefault(); dr.classList.remove('over'); upRead(e.dataTransfer.files[0]); });
+  dr.addEventListener('drop', e => { e.preventDefault(); dr.classList.remove('over'); upReadMany(e.dataTransfer.files); });
 }
-function upRead(file) {
-  if (!file) return;
-  const err = $('#uerr'), bad = m => { err.textContent = m; err.hidden = false; };
-  if (!/\.(csv|xlsx?)$/i.test(file.name)) return bad('Choose a CSV or Excel file.');
-  readAny(file).then(t => {
-    const res = analyze(parseCSV(t), up.type, file.name);
-    if (res.error) return bad(res.error);
-    up.file = res; up.rows = false; upPanel();
-    if (!res.agg) toast(res.warn || 'We could not read this report.');
-  }).catch(e => bad(e.message));
+async function upReadMany(list) {
+  list = [...list]; if (!list.length) return;
+  const rs = await Promise.all(list.map(async f => {
+    if (!/\.(csv|xlsx?)$/i.test(f.name)) return { name: f.name, error: 'Not a CSV or Excel file.' };
+    try { const res = analyze(parseCSV(await readAny(f)), up.type, f.name); return res.error ? { name: f.name, error: res.error } : { name: f.name, res }; }
+    catch (e) { return { name: f.name, error: e.message }; }
+  }));
+  rs.forEach(r => { const i = up.files.findIndex(x => x.name === r.name); if (i >= 0) up.files[i] = r; else up.files.push(r); });
+  up.rows = false; upPanel();
+  if (!rs.some(r => r.res && r.res.agg)) toast('We could not read these files.');
 }
 function uploadPage() {
   const l = store.get('bg_biz', []), b = l.find(x => x.id === store.get('bg_owner', null)) || l[0];
   app.innerHTML = `${appHeader('upload')}<main class="page"><div class="container">${backLink}<h1>Upload your Grab report</h1>
-  <p class="intro">Download your weekly report from GrabMerchant and drop the file here. You can upload a CSV or an Excel file.</p>
+  <p class="intro">Download your weekly report from GrabMerchant and drop your files here. You can upload several CSV or Excel files at once.</p>
   <div class="split"><div class="card" id="upanel"></div><div>
-    <div class="card"><h2>${b ? esc(b.name) : 'Your shop'}</h2><p class="hint" style="font-size:15px;margin-top:6px">${b && b.lastAt ? 'Last updated ' + esc(b.last) : 'No report uploaded yet.'}</p><p class="hint" style="font-size:15px;margin-top:10px">Uploading again replaces the months in the new file. Months that are not in the file stay as they are.</p></div>
+    <div class="card"><h2>${b ? esc(b.name) : 'Your shop'}</h2><p class="hint" style="font-size:15px;margin-top:6px">${b && b.lastAt ? 'Last updated ' + esc(b.last) : 'No report uploaded yet.'}</p><p class="hint" style="font-size:15px;margin-top:10px">Uploading again is safe: new orders are added and orders you already uploaded are updated, never counted twice.</p></div>
     <div class="card" style="margin-top:16px"><h2>Change password</h2>
       <div class="field" style="margin-top:14px"><label class="lbl" for="pw-old">Current password</label><input class="input" id="pw-old" type="password" autocomplete="current-password"></div>
       <div class="field"><label class="lbl" for="pw-new">New password</label><input class="input" id="pw-new" type="password" autocomplete="new-password"><div class="hint">At least 6 characters</div></div>
       <div class="err" id="pw-err" hidden></div><button class="btn btn-outline" data-action="up-chpw">Change password</button></div>
   </div></div></div></main>`;
-  up.file = null; up.rows = false; upPanel();
+  up.files = []; up.rows = false; upPanel();
 }
 
 /* ---------- actions ---------- */
@@ -1270,12 +1274,21 @@ const actions = {
     store.set('bg_biz', biz); if (ad.sel === 'A') ad.exampleDone = true;
     ad.file = null; adminList(); adminPanel(); toast(`Published to ${b.name}'s dashboard`);
   },
-  'up-type'(el) { up.type = el.dataset.t; up.file = null; upPanel(); },
+  'up-type'(el) { up.type = el.dataset.t; up.files = []; upPanel(); },
+  'up-clear'() { up.files = []; up.rows = false; upPanel(); },
   'up-choose'() { $('#ufin').click(); },
   'up-rows'() { up.rows = !up.rows; upPanel(); },
   async 'up-publish'() {
-    const f = up.file; if (!f || !f.agg) return;
-    try { await api('publish', { type: f.type, agg: f.agg }); await refresh(); up.file = null; toast('Your dashboard is updated'); go('#/dashboard'); } catch (e) { toast(e.message); }
+    const ok = up.files.filter(x => x.res && x.res.agg); if (!ok.length) return;
+    try {
+      if (up.type === 'ads') { for (const x of ok) await api('publish', { type: 'ads', agg: x.res.agg }); }
+      else {
+        const all = ok.flatMap(x => x.res.agg.ord);
+        if (!all.length) return toast('No orders found in these files.');
+        for (let i = 0; i < all.length; i += 20000) await api('publish', { type: 'sales', agg: { m: {}, ord: all.slice(i, i + 20000) } });
+      }
+      await refresh(); up.files = []; toast(ok.length > 1 ? `${ok.length} files added to your dashboard` : 'Your dashboard is updated'); go('#/dashboard');
+    } catch (e) { toast(e.message); }
   },
   async 'up-chpw'() {
     const er = $('#pw-err');

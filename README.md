@@ -49,6 +49,8 @@ Forgot password: the owner sends a request from the login page; the shop shows a
 Admin can rename a shop or change its login with Edit business.
 Saved campaigns and creator checks are stored on the owner's account, so they appear on any device. The admin can still upload for a shop.
 
+Several files can be dropped or chosen at once on the Upload report page. Files that cannot be read are marked and skipped; the rest go through with one click. All files in one drop must be the same report type.
+
 ## Real GrabMerchant reports
 The GrabMerchant .xlsx report has several sheets (Summary, Transactions, Transfers, Guide). BizGuard reads the Transactions sheet.
 Sales use the Net Sales column (the sale amount before Grab's commission), dates come from Created On, and orders are told apart by Short Order ID.
