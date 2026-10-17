@@ -331,6 +331,38 @@ table.t tr.tot td{font-weight:800}
 .modal h2{font-size:26px;margin-bottom:18px}
 .modal pre{white-space:pre-wrap;background:var(--surface2);border-radius:12px;padding:16px;font:inherit;font-size:15px;margin:0 0 16px}
 
+/* ---------- animations ---------- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+@keyframes drift{to{background-position:26px 26px}}
+#app>*:not(.app-header){animation:fadeIn .4s ease backwards}
+.hero,.login-wrap{animation:drift 14s linear infinite}
+.hero .pill,.hero h1,.hero .lead,.hero .cta,.sample,.login-card{animation:fadeUp .7s cubic-bezier(.2,.7,.2,1) backwards}
+.hero h1{animation-delay:.08s}.hero .lead{animation-delay:.16s}.hero .cta{animation-delay:.24s}.sample{animation-delay:.2s}
+:is(.kpis,.dash-main,.dash-bottom,.split,.admin-grid)>*{animation:fadeUp .55s cubic-bezier(.2,.7,.2,1) backwards}
+:is(.kpis,.dash-main,.dash-bottom,.split,.admin-grid)>:nth-child(2){animation-delay:.07s}
+:is(.kpis,.dash-main,.dash-bottom,.split,.admin-grid)>:nth-child(3){animation-delay:.14s}
+:is(.kpis,.dash-main,.dash-bottom,.split,.admin-grid)>:nth-child(4){animation-delay:.21s}
+.bar{transform-origin:bottom;animation:growY .8s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:.15s}
+.bar-col:nth-child(2) .bar{animation-delay:.21s}.bar-col:nth-child(3) .bar{animation-delay:.27s}.bar-col:nth-child(4) .bar{animation-delay:.33s}.bar-col:nth-child(5) .bar{animation-delay:.39s}.bar-col:nth-child(6) .bar{animation-delay:.45s}.bar-col:nth-child(7) .bar{animation-delay:.51s}.bar-col:nth-child(8) .bar{animation-delay:.57s}.bar-col:nth-child(9) .bar{animation-delay:.63s}.bar-col:nth-child(10) .bar{animation-delay:.69s}
+.track i,.meter i{transform-origin:left;animation:growX .9s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:.25s}
+.rank .r:nth-child(2) .track i{animation-delay:.33s}.rank .r:nth-child(3) .track i{animation-delay:.41s}.rank .r:nth-child(4) .track i{animation-delay:.49s}.rank .r:nth-child(5) .track i{animation-delay:.57s}
+#rres>*,#rpout>*{animation:fadeUp .4s ease backwards}
+.attn .it{animation:fadeUp .5s ease backwards}.attn .it:nth-of-type(2){animation-delay:.1s}.attn .it:nth-of-type(3){animation-delay:.2s}
+.modal-bg{animation:fadeIn .2s ease}.modal{animation:pop .25s cubic-bezier(.2,.7,.2,1)}
+.btn{transition:filter .15s,background .15s,transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(0) scale(.98)}
+.btn-yellow:hover{box-shadow:0 8px 20px rgba(242,177,62,.35)}.btn-green:hover{box-shadow:0 8px 20px rgba(15,92,75,.3)}
+.tool,.feat,.kpi,.mini-kpi{transition:transform .2s ease,border-color .15s,box-shadow .2s}
+.tool:hover,.feat:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(5,30,25,.12)}.kpi:hover{transform:translateY(-2px)}
+.chip{transition:background .15s,border-color .15s,color .15s,transform .1s}.chip:active{transform:scale(.95)}
+.drop{transition:border-color .15s,background .15s,transform .15s}.drop.over{transform:scale(1.015)}
+.btn .ic,.more .ic,.attn .it a .ic{transition:transform .2s}.btn:hover .ic,.more:hover .ic,.attn .it a:hover .ic{transform:translateX(4px)}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
 @media (max-width:980px){
   .hero-grid,.split,.split.creator,.admin-grid,.dash-main{grid-template-columns:1fr}
   .steps,.tools{grid-template-columns:1fr}
@@ -357,7 +389,7 @@ table.t tr.tot td{font-weight:800}
   body{background:#fff}
   .panel-dark{background:#fff;color:#000;border:1px solid #000}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}.reveal{opacity:1;transform:none}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -692,6 +724,7 @@ function dashboard(q) {
     if (L) $('#dbody').insertAdjacentHTML('afterbegin', staleBanner(biz, prev));
     $('#period').textContent = L ? livePeriod : LIVE && biz ? '' : DASH[dashRange].period;
     $$('[data-range]').forEach(b => b.setAttribute('aria-pressed', b.dataset.range === dashRange));
+    countUp($('#dbody'));
   };
   $$('[data-range]').forEach(b => b.addEventListener('click', () => { dashRange = b.dataset.range; paint(); }));
   paint();
@@ -1192,6 +1225,31 @@ function uploadPage() {
   up.type = 'sales'; up.files = []; up.rows = false; upPanel();
 }
 
+/* ---------- animation helpers ---------- */
+const reduced = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function countUp(root) {
+  if (reduced()) return;
+  $$('.kpi b, .mini-kpi b, .big-roi', root).forEach(el => {
+    const t = el.textContent, m = t.match(/^(\D*)([\d,]+(?:\.\d+)?)(\D*)$/); if (!m) return;
+    const end = parseFloat(m[2].replace(/,/g, '')), dec = (m[2].split('.')[1] || '').length, t0 = performance.now();
+    const step = now => {
+      const p = Math.min(1, (now - t0) / 900), v = end * (1 - Math.pow(1 - p, 3));
+      el.textContent = p < 1 ? m[1] + v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + m[3] : t;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+function reveal() {
+  if (reduced() || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in'); io.unobserve(e.target);
+    setTimeout(() => { e.target.classList.remove('reveal', 'in'); e.target.style.transitionDelay = ''; }, 1000);
+  }), { threshold: 0.12 });
+  $$('.sec .eyebrow, .sec h2, .step, .feat, .tool, .cta-band').forEach((el, i) => { el.classList.add('reveal'); el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+}
+
 /* ---------- actions ---------- */
 const actions = {
   logout() { TOKEN = null; store.set('bg_campaigns', []); store.set('bg_checks', []); store.set('bg_token', null); store.set('bg_session', null); go('#/'); },
@@ -1212,7 +1270,7 @@ const actions = {
     if (bad) { toast('Check the highlighted fields'); return; }
     const orders = g('#r-ord'), inq = g('#r-inq');
     const res = roiCalc({ ...v, name: $('#r-name').value.trim() || 'Untitled campaign', platform: roi.platform, orders, inq });
-    roi.res = res; $('#rres').innerHTML = roiResult(res, false);
+    roi.res = res; $('#rres').innerHTML = roiResult(res, false); countUp($('#rres'));
     if (window.innerWidth < 980) $('#rres').scrollIntoView({ behavior: 'smooth', block: 'start' });
   },
   'roi-clear'() {
@@ -1373,7 +1431,7 @@ function render() {
   if (path === '/admin' && s !== 'admin') return go('#/dashboard');
   if (path === '/upload' && s === 'admin') return go('#/admin');
   if (path === '/login' && s) return go(s === 'admin' ? '#/admin' : '#/dashboard');
-  const routes = { '/': () => { app.innerHTML = landing(); }, '/login': login, '/dashboard': () => dashboard(q), '/roi': roiPage, '/replies': () => repliesPage(q), '/creator': creatorPage, '/upload': uploadPage, '/admin': admin };
+  const routes = { '/': () => { app.innerHTML = landing(); countUp(app); reveal(); }, '/login': login, '/dashboard': () => dashboard(q), '/roi': roiPage, '/replies': () => repliesPage(q), '/creator': creatorPage, '/upload': uploadPage, '/admin': admin };
   (routes[path] || routes['/'])();
   document.title = TITLES[path] || TITLES['/'];
   if (pendingScroll) { const id = pendingScroll; pendingScroll = null; setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView(); }, 0); }
