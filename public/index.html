@@ -363,6 +363,8 @@ table.t tr.tot td{font-weight:800}
 .btn .ic,.more .ic,.attn .it a .ic{transition:transform .2s}.btn:hover .ic,.more:hover .ic,.attn .it a:hover .ic{transform:translateX(4px)}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
+.seg.mini button{padding:6px 12px;font-size:13px}
+.chart-scroll .bars.days{min-width:1100px;gap:6px}.bars.days .v{font-size:10.5px;margin-bottom:6px}.bars.days .m{font-size:12px;margin-top:10px}
 @media (max-width:980px){
   .hero-grid,.split,.split.creator,.admin-grid,.dash-main{grid-template-columns:1fr}
   .steps,.tools{grid-template-columns:1fr}
@@ -665,7 +667,7 @@ function dashBody(r) {
   </div>
   <div class="note-bar"><b>Need newer numbers?</b> &nbsp;Send your latest Grab reports to the BizGuard team at ${esc(CONFIG.email)} or on Messenger: ${esc(CONFIG.messenger)}.</div>`;
 }
-let livePeriod = '';
+let livePeriod = '', chartBy = 'week', liveD = null;
 const pct = (a, b) => b ? (a - b) / b * 100 : 0;
 const arr = p => `<span class="${p >= 0 ? 'up' : 'down'}">${p >= 0 ? '▲' : '▼'} ${Math.abs(p).toFixed(1)}%</span>`;
 const sumA = a => a.reduce((x, y) => x + y, 0), pr = x => peso(Math.round(x));
@@ -674,16 +676,21 @@ function dashBodyLive(r, d) {
   const dt = k => new Date(k + '-15T00:00:00'), nm = k => dt(k).toLocaleString('en-US', { month: 'short' });
   const fu = dt(last).toLocaleString('en-US', { month: 'long', year: 'numeric' });
   const sel = r === 'month' ? [last] : r === 'year' ? keys.filter(k => k.slice(0, 4) === last.slice(0, 4)) : keys.slice(-6);
-  const wk = r === 'month' && S.weeks && S.weeks[last] ? S.weeks[last] : null;
-  const lab = wk ? wk.map((_, i) => 'Week ' + (i + 1)) : sel.map(nm);
-  const sal = wk ? wk.map(w => w[0]) : sel.map(k => S.months[k][0]), ord = wk ? wk.map(w => w[1]) : sel.map(k => S.months[k][1]);
+  const dm = r === 'month' && chartBy === 'day' && S.days && S.days[last] ? S.days[last] : null;
+  const wk = !dm && r === 'month' && S.weeks && S.weeks[last] ? S.weeks[last] : null;
+  const nd = dm ? new Date(+last.slice(0, 4), +last.slice(5), 0).getDate() : 0, dv = i => dm[i + 1] || [0, 0];
+  const lab = dm ? Array.from({ length: nd }, (_, i) => String(i + 1)) : wk ? wk.map((_, i) => 'Week ' + (i + 1)) : sel.map(nm);
+  const sal = dm ? lab.map((_, i) => dv(i)[0]) : wk ? wk.map(w => w[0]) : sel.map(k => S.months[k][0]);
+  const ord = dm ? lab.map((_, i) => dv(i)[1]) : wk ? wk.map(w => w[1]) : sel.map(k => S.months[k][1]);
+  const unit = dm ? 'day' : wk ? 'week' : 'month';
   livePeriod = r === 'month' || sel.length < 2 ? fu : nm(sel[0]) + '–' + fu;
   const tS = sumA(sal), tO = sumA(ord), L = S.months[last], Pm = prev ? S.months[prev] : null;
   const C = d.canc || {}, R = d.ref || {}, ads = d.ads || {}, cl = C[last] || 0, cp = C[prev] || 0, rl = R[last] || 0, rq = R[prev] || 0;
   const sub = (a, b, f) => `${f(a)} in ${nm(last)}${Pm ? ' · ' + arr(pct(a, b)) : ''}`;
   const kp = [['Sales', pr(tS), sub(L[0], Pm && Pm[0], pr)], ['Completed orders', tO.toLocaleString('en-US'), sub(L[1], Pm && Pm[1], x => x)], ['Average order', pr(tS / (tO || 1)), `${pr(L[0] / (L[1] || 1))} in ${nm(last)}`]];
   const max = Math.max(...sal, 1), H = 190;
-  const bars = lab.map((l, i) => { const hi = i === lab.length - 1; return `<div class="bar-col"><div class="v ${hi ? 'hi' : ''}">₱${(sal[i] / 1000).toFixed(1)}k</div><div class="bar ${hi ? 'hi' : ''}" style="height:${Math.max(2, Math.round(sal[i] / max * H))}px"></div><div class="m">${l}</div><div class="o">${ord[i]} orders</div></div>`; }).join('');
+  const hiI = sal.reduce((p, v, i) => v > 0 ? i : p, sal.length - 1);
+  const bars = lab.map((l, i) => { const hi = i === hiI, z = !sal[i], oo = ord[i] + ' order' + (ord[i] === 1 ? '' : 's'); return `<div class="bar-col" title="${dm ? nm(last) + ' ' + l : l}: ${pr(sal[i])} · ${oo}"><div class="v ${hi ? 'hi' : ''}">${z ? '–' : (sal[i] < 1000 ? '₱' + Math.round(sal[i]) : '₱' + (sal[i] / 1000).toFixed(1) + 'k')}</div><div class="bar ${hi ? 'hi' : ''}" style="height:${z ? 2 : Math.max(4, Math.round(sal[i] / max * H))}px"></div><div class="m">${l}</div>${dm ? '' : `<div class="o">${oo}</div>`}</div>`; }).join('');
   const tot = {}; sel.forEach(k => Object.entries((d.items || {})[k] || {}).forEach(([n, q]) => tot[n] = (tot[n] || 0) + q));
   const best = Object.entries(tot).sort((a, b) => b[1] - a[1]).slice(0, 5), bm = best.length ? best[0][1] : 1;
   const aS = sumA(sel.map(k => (ads[k] || [0, 0])[0])), aO = sumA(sel.map(k => (ads[k] || [0, 0])[1]));
@@ -695,7 +702,7 @@ function dashBodyLive(r, d) {
   const dl = (a, b) => `<span class="${a > b ? 'down' : 'up'}">${a >= b ? '▲' : '▼'} ${Math.abs(a - b)}</span>`;
   return `<div class="kpis">${kp.map(k => `<div class="kpi"><small>${k[0]}</small><b>${k[1]}</b><span>${k[2]}</span></div>`).join('')}
   <div class="kpi"><small>Canceled orders in ${nm(last)}</small><b>${cl}</b><span>${prev ? `${cl >= cp ? 'Up' : 'Down'} from ${cp} · ${dl(cl, cp)}` : 'No earlier month yet'}</span></div></div>
-  <div class="dash-main"><div class="card chart-card"><div class="chart-top"><h2>Sales by ${wk ? 'week' : 'month'}</h2><small>Completed orders under each ${wk ? 'week' : 'month'}</small></div><div class="chart-scroll"><div class="bars" role="img" aria-label="Sales chart">${bars}</div></div></div>
+  <div class="dash-main"><div class="card chart-card"><div class="chart-top"><h2>Sales by ${unit}</h2>${r === 'month' && S.days ? `<div class="seg mini" role="group" aria-label="Chart detail"><button data-action="chart-by" data-by="week" aria-pressed="${!dm}">By week</button><button data-action="chart-by" data-by="day" aria-pressed="${!!dm}">By day</button></div>` : `<small>Completed orders under each ${unit}</small>`}</div><div class="chart-scroll"><div class="bars ${dm ? 'days' : ''}" role="img" aria-label="Sales chart">${bars}</div></div></div>
   <aside class="attn"><h2>Needs your attention</h2>${al.length ? al.map(a => `<div class="it"><b>${a[0]}</b><p>${a[1]}</p><a href="${a[3]}">${a[2]} ${ic('arrow')}</a></div>`).join('') : '<div class="it"><b>Nothing needs your attention right now</b><p>Check again after your next report is loaded.</p></div>'}</aside></div>
   <div class="dash-bottom">
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Best sellers</h2><small style="color:var(--muted)">Items sold</small></div><div class="rank">${best.length ? best.map((b, i) => `<div class="r"><div class="rt"><span>${i + 1} · ${esc(b[0])}</span><span>${b[1]}</span></div><div class="track"><i style="width:${(b[1] / bm * 100).toFixed(1)}%"></i></div></div>`).join('') : '<p class="hint">Best sellers need a report that lists item names. The GrabMerchant transaction report does not include them.</p>'}</div></div>
@@ -720,6 +727,7 @@ function dashboard(q) {
     <div id="dbody"></div>
   </div></main>`;
   const paint = () => {
+    liveD = L;
     $('#dbody').innerHTML = L ? dashBodyLive(dashRange, L) : LIVE && biz ? '<div class="card"><h2>No data yet</h2><p class="hint" style="font-size:16px;margin:8px 0 16px">Your dashboard is empty for now. Upload your Grab report to see your numbers.</p><a class="btn btn-green" href="#/upload">Upload your first report</a></div>' : dashBody(dashRange);
     if (L) $('#dbody').insertAdjacentHTML('afterbegin', staleBanner(biz, prev));
     $('#period').textContent = L ? livePeriod : LIVE && biz ? '' : DASH[dashRange].period;
@@ -1337,6 +1345,11 @@ const actions = {
     ad.file = null; adminList(); adminPanel(); toast(`Published to ${b.name}'s dashboard`);
   },
   'up-type'(el) { up.type = el.dataset.t; up.files = []; upPanel(); },
+  'chart-by'(el) {
+    chartBy = el.dataset.by; if (!liveD) return;
+    const t = document.createElement('div'); t.innerHTML = dashBodyLive(dashRange, liveD);
+    const nc = t.querySelector('.chart-card'), oc = $('.chart-card'); if (nc && oc) oc.replaceWith(nc);
+  },
   'up-clear'() { up.files = []; up.rows = false; upPanel(); },
   'up-choose'() { $('#ufin').click(); },
   'up-rows'() { up.rows = !up.rows; upPanel(); },

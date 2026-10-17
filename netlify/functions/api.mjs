@@ -12,13 +12,14 @@ const pub = x => { const { salt, hash: h, ...r } = x; return r; };
 const today = () => new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'Asia/Manila' });
 
 const rollup = ords => {
-  const A = { m: {}, w: {}, it: {}, c: {}, r: {} };
+  const A = { m: {}, w: {}, it: {}, c: {}, r: {}, d: {} };
   for (const [d, st, a, it] of Object.values(ords)) {
     const k = d.slice(0, 7), day = +d.slice(8, 10);
     if (st === 'x') { A.c[k] = (A.c[k] || 0) + 1; continue; }
     if (st === 'r') { A.r[k] = (A.r[k] || 0) + 1; continue; }
     const m = A.m[k] = A.m[k] || [0, 0]; m[0] += a; m[1]++;
     const w = A.w[k] = A.w[k] || [[0, 0], [0, 0], [0, 0], [0, 0]], b = w[Math.min(3, Math.floor((day - 1) / 7))]; b[0] += a; b[1]++;
+    A.d[k] = A.d[k] || {}; const e = A.d[k][day] = A.d[k][day] || [0, 0]; e[0] += a; e[1]++;
     if (it) { const t = A.it[k] = A.it[k] || {}; it.split(/[;|]/).forEach(p => { const n = p.replace(/\s*x\s*\d+\s*$/i, '').trim(), q = +((p.match(/x\s*(\d+)\s*$/i) || [])[1] || 1); if (n) t[n] = (t[n] || 0) + q; }); }
   }
   return A;
@@ -50,7 +51,14 @@ export const make = getS => async req => {
   }
   const me = ck(b.token);
   if (!me) return J(401, { error: 'Please log in again.' });
-  if (b.op === 'list') return J(200, { role: me.role, list: (me.role === 'admin' ? list : list.filter(v => v.id === me.biz)).map(pub) });
+  if (b.op === 'list') {
+    let dirty = false;
+    for (const v of list) if (v.data && v.data.sales && !v.data.sales.days && (me.role === 'admin' || v.id === me.biz)) {
+      const all = await store.get('orders:' + v.id, { type: 'json' }); if (all) { v.data.sales.days = rollup(all).d; dirty = true; }
+    }
+    if (dirty) await save();
+    return J(200, { role: me.role, list: (me.role === 'admin' ? list : list.filter(v => v.id === me.biz)).map(pub) });
+  }
   if (b.op === 'reply') {
     const key = process.env.ANTHROPIC_API_KEY, q = b.s || {};
     if (!key) return J(503, { error: 'AI replies are not set up yet, so template replies were used.' });
@@ -87,7 +95,7 @@ export const make = getS => async req => {
         all[o[0].slice(0, 80)] = [o[1], o[2], +o[3], String(o[4] || '').slice(0, 300)];
       }
       await store.setJSON(k, all);
-      const R = rollup(all); d.sales = { months: R.m, weeks: R.w }; d.items = R.it; d.canc = R.c; d.ref = R.r;
+      const R = rollup(all); d.sales = { months: R.m, weeks: R.w, days: R.d }; d.items = R.it; d.canc = R.c; d.ref = R.r;
       x.last = today(); x.lastAt = new Date().toISOString(); x.status = 'ok'; await save(); return J(200, { ok: true, orders: Object.keys(all).length });
     }
     if (b.type === 'ads') d.ads = { ...d.ads, ...A.m };
